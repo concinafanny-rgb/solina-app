@@ -82,6 +82,7 @@ a{color:var(--terre)}
 .list{display:flex;flex-direction:column;gap:8px}
 .row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;text-align:left;width:100%}
 .row:hover{border-color:var(--taupe)}
+.row[data-open]{cursor:pointer}
 .row .av{width:38px;height:38px;border-radius:50%;background:var(--creme-2);color:var(--terre);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:17px;font-weight:600;flex:none}
 .row .body{flex:1;min-width:0}
 .row .t{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -227,6 +228,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
   .plusgrid{display:none}
 }
 /* Ajouts application */
+[hidden]{display:none!important}
 .wknav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .wknav #wk-titre{font-size:13.5px;color:var(--brun);min-width:170px;text-align:center}
 .wk{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
@@ -275,7 +277,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .canal span{font-size:12px;color:var(--muted)}
 #task-kanban .col,#home-kanban .col{flex:1 1 320px}
 #task-kanban .col[data-tetape="a_faire"],#home-kanban .col[data-tetape="a_faire"]{flex:2 1 420px}
-#t-liens a{text-decoration:none}
+#t-liens a,#f-liens a{text-decoration:none}
 .lienx{color:var(--terre);text-decoration:underline;text-underline-offset:2px;font-weight:500}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .row .av{color:#fff!important;font-weight:500}
@@ -686,6 +688,7 @@ h2,h3{font-weight:500;letter-spacing:0}
         <option value="pas_interesse">Pas intéressé</option>
       </select></div>
     <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"><option value="">Non précisé</option><option>Leboncoin</option><option>AlloVoisins</option><option>Groupes Facebook</option><option>Instagram</option><option>LinkedIn</option><option>Site internet</option><option>Fiche Google</option><option>Bouche à oreille</option><option>Apporteurs d'affaires</option><option>Agences immobilières</option><option>Notaires et conseillers</option><option>Partenaires et artisans</option><option>Réseau CLF</option><option>Événements</option><option>PAP</option><option>Boîtage</option><option>Parrainage clients</option><option>Autre</option></select></div><input type="hidden" id="f-source"></div>
+    <div class="actions" id="f-liens" hidden></div>
     <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Ce qu'il faut retenir : le bien, la situation, ce qui a été dit…"></textarea></div>
     <div class="hr"></div>
     <div class="two">
@@ -834,7 +837,9 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function contactRow(c,extra,avecNotes){
     var st=relanceStatus(c);var sub=[c.categorie,c.ville,c.bien].filter(Boolean).join(' · ');
-    return '<button class="row" data-open="'+esc(c.id)+'"><span class="av" style="background:'+couleurType(c.type)+'">'+esc(initials(c))+'</span><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(sub||TYPES[c.type]||'')+'</span>'+(avecNotes&&c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'</span><span class="r">'+(extra!==undefined?extra:('<span class="pill '+esc(c.type)+'">'+esc(TYPES[c.type]||c.type)+'</span>'+(st?'<br><span class="pill '+st.cls+'" style="margin-top:4px">'+esc(st.txt)+'</span>':'')))+'</span></button>';
+    var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
+    var lien=u?'<br><a class="lienx" style="font-size:12px" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'';
+    return '<div class="row" role="button" tabindex="0" data-open="'+esc(c.id)+'"><span class="av" style="background:'+couleurType(c.type)+'">'+esc(initials(c))+'</span><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(sub||TYPES[c.type]||'')+'</span>'+(avecNotes&&c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+(lien?'<span class="s">'+lien.replace('<br>','')+'</span>':'')+'</span><span class="r">'+(extra!==undefined?extra:('<span class="pill '+esc(c.type)+'">'+esc(TYPES[c.type]||c.type)+'</span>'+(st?'<br><span class="pill '+st.cls+'" style="margin-top:4px">'+esc(st.txt)+'</span>':'')))+'</span></div>';
   }
   function renderHome(){
     $('today-eyebrow').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
@@ -922,7 +927,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     etapes.forEach(function(e){
       var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&filtreCanal(c);}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];
-      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<button class="row"','<button class="row" draggable="true"');}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<div class="row"','<div class="row" draggable="true"');}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       k.appendChild(col);
     });
   }
@@ -991,10 +996,11 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
     $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
     $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';
-    $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;
+    $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();
     $('agenda-note').textContent='';$('agenda-note').className='note';
     toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
   }
+  function majLiensContact(){var n=$('f-notes').value,h='';(n.match(/https?:\/\/[^\s]+/g)||[]).forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});$('f-liens').innerHTML=h;$('f-liens').hidden=!h;}
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
   function toggleEtape(){var t=$('f-type').value;$('field-etape').hidden=(t!=='prospect'&&t!=='prescripteur');}
   function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
@@ -1409,7 +1415,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('input',function(e){if(tableEdit(e,'bien','biens','biens'))return;if(tableEdit(e,'rev','revenus','revenus'))return;if(tableEdit(e,'charge','charges','charges'))return;tableEdit(e,'conso','conso','conso');});
   document.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('table.tbl'))setTimeout(function(){if(!document.activeElement||!document.activeElement.closest('table.tbl'))renderAll();},80);});
   document.addEventListener('click',function(e){
-    if(e.target.closest('a.lienx,#t-liens a'))return;
+    if(e.target.closest('a.lienx,#t-liens a,#f-liens a'))return;
     var cp=e.target.closest('[data-copier]');if(cp){copierMessage(cp);return;}
     var o=e.target.closest('[data-open]');if(o){openSheet(o.dataset.open);return;}
     var d=e.target.closest('[data-done]');if(d){var c=byId(S.contacts,d.dataset.done);if(c){saveContact(Object.assign({},c,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),c.id).then(function(){toast('Relance faite');});}return;}
