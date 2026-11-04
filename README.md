@@ -9,3 +9,7 @@ Le dossier est publié tel quel sur GitHub Pages depuis un dépôt public sépar
     git subtree push --prefix application app main
 
 (le remote `app` pointe vers https://github.com/concinafanny-rgb/solina-app.git). Changer `VERSION` dans `sw.js` à chaque publication pour que les appareils récupèrent la nouvelle version.
+
+## Application Mac
+
+`mac/` contient l'application Mac native (fenêtre WebKit qui embarque ce dossier). Après toute modification de `application/`, relancer `./mac/construire.sh` : elle se réinstalle dans /Applications.

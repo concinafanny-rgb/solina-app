@@ -762,6 +762,10 @@ function formProspect(p){
 function exporterCSV(nom, colonnes, lignes){
   const q = v => { const s = String(v ?? ''); return /[;"\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
   const csv = '﻿' + [colonnes.map(c=>q(c[0])).join(';')].concat(lignes.map(l=>colonnes.map(c=>q(l[c[1]])).join(';'))).join('\r\n');
+  if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.solina){
+    window.webkit.messageHandlers.solina.postMessage({ nom: nom + '-' + aujourdhui() + '.csv', texte: csv });
+    return;
+  }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
   a.download = nom + '-' + aujourdhui() + '.csv';
