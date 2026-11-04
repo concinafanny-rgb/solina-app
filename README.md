@@ -1,6 +1,6 @@
 # Application Solina
 
-Application web installable (Mac et iPhone) : accueil du jour, pipeline, prospects, contacts, planning. Aucune donnée dans ce dossier : l'application lit et écrit `prospection/prospects.json` du dépôt privé `maison-solina` via l'API GitHub, avec une clé d'accès personnelle (fine grained, limitée à ce dépôt, Contents en lecture et écriture) que Fanny colle une fois par appareil. La clé reste sur l'appareil et n'est jamais écrite dans le dépôt.
+Le CRM de Maison Solina, installable (Mac et iPhone) : tableau de bord, contacts, prospection en Kanban, relances et tâches, chiffre d'affaires, simulateurs, charges, consommables, idées, réseaux sociaux. Reprend le CRM construit sur claude.ai. Aucune donnée dans ce dossier : l'application lit et écrit `donnees/crm.json` du dépôt privé `maison-solina` via l'API GitHub, avec une clé d'accès personnelle (fine grained, limitée à ce dépôt, Contents en lecture et écriture) que Fanny colle une fois par appareil. La clé reste sur l'appareil et n'est jamais écrite dans le dépôt.
 
 ## Publication
 
