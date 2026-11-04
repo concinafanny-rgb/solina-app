@@ -228,6 +228,15 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
   .plusgrid{display:none}
 }
 /* Ajouts application */
+.card.cliquable{cursor:pointer;transition:border-color .15s,transform .15s}
+.card.cliquable:hover{border-color:var(--terre);transform:translateY(-1px)}
+.grille-log{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.logc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;text-align:left;width:100%}
+.logc:hover{border-color:var(--taupe)}
+.logc h3{font-size:17px;margin:0 0 2px}
+.logc .s{font-size:12.5px;color:var(--muted)}
+.logc .fait{margin-top:12px;font-size:12.5px;color:var(--brun);border-top:1px solid var(--line);padding-top:10px}
+.logc .fait b{font-weight:500;color:var(--terre)}
 [hidden]{display:none!important}
 .wknav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .wknav #wk-titre{font-size:13.5px;color:var(--brun);min-width:170px;text-align:center}
@@ -374,10 +383,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     <section class="panel" data-panel="accueil">
       <div class="ph"><div class="pl" id="today-eyebrow"></div><h1>Bonjour Fanny</h1></div>
       <div class="grid cards-4">
-        <div class="card"><div class="num" id="k-taches">0</div><div class="lbl">tâches à faire</div></div>
-        <div class="card"><div class="num" id="k-relances">0</div><div class="lbl">relances à faire</div></div>
-        <div class="card"><div class="num" id="k-prospects">0</div><div class="lbl">prospects en cours</div></div>
-        <div class="card"><div class="num" id="k-biens">0</div><div class="lbl">logements actifs</div></div>
+        <div class="card cliquable" data-go="relances"><div class="num" id="k-taches">0</div><div class="lbl">tâches à faire</div></div>
+        <div class="card cliquable" data-go="relances"><div class="num" id="k-relances">0</div><div class="lbl">relances à faire</div></div>
+        <div class="card cliquable" data-go="prospection"><div class="num" id="k-prospects">0</div><div class="lbl">prospects en cours</div></div>
+        <div class="card cliquable" data-go="logements"><div class="num" id="k-biens">0</div><div class="lbl">logements actifs</div></div>
       </div>
       <div class="section">
         <div class="section-head"><h2>Mes tâches</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
@@ -425,9 +434,8 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- RELANCES -->
     <section class="panel" data-panel="relances">
-      <div class="ph"><div class="pl">Suivi</div><h1>Relances et tâches</h1><div class="pd">Les relances viennent des fiches contacts. Les tâches, tu les ajoutes ici et tu les fais glisser d'une colonne à l'autre.</div></div>
-      <div class="section" style="margin-top:0"><div class="section-head"><h2>Relances</h2></div><div id="relance-groups"></div></div>
-      <div class="section">
+      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Tes tâches d'abord, que tu fais glisser de « À faire » à « Faites », puis tes relances, qui viennent des fiches contacts.</div></div>
+      <div class="section" style="margin-top:0">
         <div class="section-head"><h2>Tâches</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
         <form class="addline" id="task-form" style="margin-bottom:10px">
           <input id="task-input" placeholder="Nouvelle tâche…" autocomplete="off">
@@ -436,6 +444,13 @@ h2,h3{font-weight:500;letter-spacing:0}
         </form>
         <div class="kanban" id="task-kanban"></div>
       </div>
+      <div class="section"><div class="section-head"><h2>Relances</h2></div><div id="relance-groups"></div></div>
+    </section>
+
+    <!-- LOGEMENTS -->
+    <section class="panel" data-panel="logements">
+      <div class="phrow"><div class="ph"><div class="pl">Mes logements</div><h1>Logements</h1><div class="pd">Chaque bien, son propriétaire, ses liens et tout ce qu'il y a à faire pour lui.</div></div><button class="btn primary sm" id="log-add">+ Logement</button></div>
+      <div class="grille-log" id="log-list" style="margin-top:18px"></div>
     </section>
 
     <!-- CHIFFRE D'AFFAIRES -->
@@ -724,7 +739,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field"><label for="t-statut">Où j'en suis</label><select id="t-statut"><option value="a_faire">À faire</option><option value="fait">Faite</option></select></div>
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
-    <div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div>
+    <div class="two"><div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div><div class="field"><label for="t-log">Logement</label><select id="t-log"></select></div></div>
     <div class="actions" id="t-liens"></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
     <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
@@ -743,6 +758,36 @@ h2,h3{font-weight:500;letter-spacing:0}
   <div class="actions" style="justify-content:center;margin-top:16px"><button class="btn primary" id="rec-stop">Terminer</button><button class="btn primary" id="rec-save" hidden>Envoyer</button><button class="btn" id="rec-annuler">Annuler</button></div>
 </div></div>
 
+<div class="sheet" id="lsheet" role="dialog" aria-modal="true" aria-labelledby="l-titre-h">
+  <div class="sheet-head"><button class="btn ghost sm" data-lclose>← Retour</button><span class="eyebrow">Logement</span></div>
+  <h2 id="l-titre-h">Logement</h2>
+  <form class="form" id="l-form" style="margin-top:14px">
+    <div class="field"><label for="l-nom">Nom du logement</label><input id="l-nom" required autocomplete="off"></div>
+    <div class="field"><label for="l-adresse">Adresse</label><input id="l-adresse" autocomplete="off"></div>
+    <div class="two">
+      <div class="field"><label for="l-ville">Ville</label><input id="l-ville" autocomplete="off"></div>
+      <div class="field"><label for="l-prop">Propriétaire</label><select id="l-prop"></select></div>
+    </div>
+    <div class="three">
+      <div class="field"><label for="l-type">Type</label><input id="l-type" list="dl-type" autocomplete="off"><datalist id="dl-type"><option value="Studio"><option value="Appartement"><option value="Maison"><option value="Villa"></datalist></div>
+      <div class="field"><label for="l-ch">Chambres</label><input id="l-ch" type="number" min="0"></div>
+      <div class="field"><label for="l-voy">Voyageurs</label><input id="l-voy" type="number" min="0"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="l-annonce">Lien de l'annonce</label><input id="l-annonce" placeholder="https://" autocomplete="off"></div>
+      <div class="field"><label for="l-canva">Lien de la fiche Canva</label><input id="l-canva" placeholder="https://" autocomplete="off"></div>
+    </div>
+    <div class="actions" id="l-liens" hidden></div>
+    <div class="field"><label for="l-notes">Notes</label><textarea id="l-notes" placeholder="Équipements, consignes de ménage, linge, consommables, particularités…"></textarea></div>
+    <p class="note" style="margin:0">Ne note jamais ici un code de boîte à clés, un mot de passe wifi ou un code d'alarme.</p>
+    <div class="hr"></div>
+    <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
+    <div class="list" id="l-taches"></div>
+    <div class="hr"></div>
+    <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-lclose>Annuler</button></div>
+  </form>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -760,18 +805,19 @@ h2,h3{font-weight:500;letter-spacing:0}
     conso:'<svg viewBox="0 0 24 24"><path d="M3 4h2l3 12h11l2-8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>',
     idees:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
+    logements:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Relances et tâches',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Consommables et linge',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Consommables et linge',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
-    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['vocaux','Notes vocales']]],
-    ['Contacts',[['contacts','Contacts'],['prospection','Prospection'],['relances','Relances et tâches']]],
+    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes vocales']]],
+    ['Développement',[['prospection','Prospection']]],
+    ['Mes logements',[['logements','Logements']]],
     ['Finances',[['ca','Chiffre d\'affaires'],['simprop','Simulateur propriétaire'],['charges','Charges']]],
-    ['Opérationnel',[['conso','Consommables et linge'],['idees','Boîte à idées']]],
-    ['Marketing',[['reseaux','Studio réseaux sociaux']]]
+    ['Idées et marketing',[['idees','Boîte à idées'],['reseaux','Studio réseaux sociaux']]]
   ];
-  var TABS=[['accueil','Accueil'],['contacts','Contacts'],['prospection','Prospection'],['relances','Relances'],['plus','Plus']];
+  var TABS=[['accueil','Accueil'],['relances','Tâches'],['contacts','Contacts'],['prospection','Prospection'],['plus','Plus']];
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
@@ -808,7 +854,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     RAIL.forEach(function(sec){
       var h=document.createElement('div');h.className='nsec';h.textContent=sec[0];rail.appendChild(h);
       sec[1].forEach(function(it){var b=document.createElement('button');b.innerHTML=ICONS[it[0]]+'<span>'+it[1]+'</span>';b.dataset.go=it[0];rail.appendChild(b);
-        if(['accueil','contacts','prospection','relances'].indexOf(it[0])<0){var pb=document.createElement('button');pb.innerHTML=ICONS[it[0]]+'<span>'+it[1]+'</span>';pb.dataset.go=it[0];plus.appendChild(pb);}
+        if(TABS.map(function(t){return t[0];}).indexOf(it[0])<0){var pb=document.createElement('button');pb.innerHTML=ICONS[it[0]]+'<span>'+it[1]+'</span>';pb.dataset.go=it[0];plus.appendChild(pb);}
       });
     });
     TABS.forEach(function(n){var t=document.createElement('button');t.innerHTML=ICONS[n[0]]+'<span>'+n[1]+'</span>';t.dataset.go=n[0];tabs.appendChild(t);});
@@ -956,7 +1002,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var T_ETAPES=[['a_faire','À faire'],['fait','Faites']];
   function statutTache(t){var s=t.statut||(t.fait?'fait':'a_faire');return s==='en_cours'?'a_faire':s;}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
-  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
+  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var lg=t.logement?byId(S.biens,t.logement):null;var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||'',lg?lg.nom:''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
   function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
   function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
   function renderTaskBoard(id,maxFaites){
@@ -983,7 +1029,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(fin).catch(function(){copieSecours(m);fin();});}else{copieSecours(m);fin();}}
   function copieSecours(m){var ta=document.createElement('textarea');ta.value=m;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(x){}ta.remove();}
   var tEdit=null;
-  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';majLiensTache();$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
+  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';majLiensTache();$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-log').innerHTML='<option value="">Aucun</option>'+S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}).map(function(b){return '<option value="'+esc(b.id)+'"'+(b.id===(t.logement||tLogDefaut)?' selected':'')+'>'+esc(b.nom)+'</option>';}).join('');tLogDefaut='';$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
   function fermerTache(){$('tsheet').classList.remove('open');document.body.style.overflow='';tEdit=null;}
 
   /* Fiche */
@@ -1069,6 +1115,24 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function lienSur(v){return /^https?:\/\//i.test(v||'')?v:'';}
   function renderLiens(){document.querySelectorAll('[data-lien]').forEach(function(el){if(document.activeElement!==el)el.value=S.params[el.dataset.lien]||'';});document.querySelectorAll('[data-ouvrir]').forEach(function(a){var u=lienSur(S.params[a.dataset.ouvrir]);if(u){a.href=u;a.style.opacity='';a.style.pointerEvents='';}else{a.removeAttribute('href');a.style.opacity='.45';a.style.pointerEvents='none';}});}
+  var lEdit=null,tLogDefaut='';
+  function tachesDuLogement(id){return S.taches.filter(function(t){return t.logement===id&&statutTache(t)!=='fait';}).sort(function(a,b){return (a.date||'9')<(b.date||'9')?-1:1;});}
+  function renderLogements(){
+    var el=$('log-list');if(!el)return;
+    var l=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});
+    el.innerHTML=l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
+      return '<button class="logc" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>';
+  }
+  function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['l-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
+  function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
+  function ouvrirLogement(id){
+    lEdit=id;var b=byId(S.biens,id);if(!b)return;
+    $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
+    $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('l-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';
+    $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
+    majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
+  }
+  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;}
   function renderIdees(){
     var list=S.idees.slice().sort(function(a,b){return (b.createdAt||'')<(a.createdAt||'')?-1:1;});
     $('idea-list').innerHTML=list.map(function(i){return '<div class="idea"><span class="pill">'+esc(i.categorie||'Autre')+'</span><h3>'+esc(i.titre)+'</h3>'+(i.note?'<p>'+esc(i.note)+'</p>':'')+'<div class="foot"><select data-ideastatut="'+esc(i.id)+'"><option'+(i.statut==='Idée'?' selected':'')+'>Idée</option><option'+(i.statut==='À creuser'?' selected':'')+'>À creuser</option><option'+(i.statut==='Lancée'?' selected':'')+'>Lancée</option><option'+(i.statut==='Abandonnée'?' selected':'')+'>Abandonnée</option></select><button class="btn ghost xs" data-delidea="'+esc(i.id)+'">×</button></div></div>';}).join('')||'<div class="empty" style="grid-column:1/-1"><b>La boîte est vide</b>Note ta première idée ci-dessus.</div>';
@@ -1173,7 +1237,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
 
   function renderFinance(){renderBiens();renderCA();renderCharges();}
-  function renderAll(){renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
+  function renderAll(){renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
@@ -1406,10 +1470,17 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('rec-stop').addEventListener('click',arreterMicro);
   $('rec-save').addEventListener('click',enregistrerNote);
   $('rec-annuler').addEventListener('click',annulerMicro);
+  $('l-form').addEventListener('submit',function(e){
+    e.preventDefault();var b=byId(S.biens,lEdit);if(!b)return;var nom=$('l-nom').value.trim();if(!nom){$('l-nom').focus();return;}
+    save('biens',Object.assign({},b,{nom:nom,adresse:$('l-adresse').value.trim(),ville:$('l-ville').value.trim(),proprietaire:$('l-prop').value,typeBien:$('l-type').value.trim(),chambres:$('l-ch').value?num($('l-ch').value):'',voyageurs:$('l-voy').value?num($('l-voy').value):'',lienAnnonce:$('l-annonce').value.trim(),lienCanva:$('l-canva').value.trim(),notes:$('l-notes').value.trim()})).catch(function(){});
+    toast('Logement enregistré');fermerLogement();
+  });
+  ['l-annonce','l-canva'].forEach(function(id){$(id).addEventListener('input',majLiensLog);});
+  $('log-add').addEventListener('click',function(){var id=uid('b');save('biens',{id:id,nom:'Nouveau logement',commission:25,prixNuit:150,occupation:50,moisActifs:12,actif:true}).catch(function(){});ouvrirLogement(id);$('l-nom').select();});
   $('t-form').addEventListener('submit',function(e){
     e.preventDefault();var titre=$('t-titre').value.trim();if(!titre){$('t-titre').focus();return;}
     var ex=tEdit?byId(S.taches,tEdit):null;var st=$('t-statut').value;
-    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,contact:$('t-contact').value,notes:$('t-notes').value.trim()});
+    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,contact:$('t-contact').value,logement:$('t-log').value,notes:$('t-notes').value.trim()});
     if(st!==statutTache(doc))changerStatut(doc,st);else save('taches',doc).catch(function(){});
     toast(ex?'Tâche modifiée':'Tâche ajoutée');fermerTache();
   });
@@ -1475,6 +1546,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     var rl=e.target.closest('[data-relance]');if(rl){openSheet(rl.dataset.relance);return;}
     var tc=e.target.closest('[data-tache]');if(tc){ouvrirTache(tc.dataset.tache);return;}
     if(e.target.closest('[data-newtask]')){ouvrirTache(null);return;}
+    var lg=e.target.closest('[data-log]');if(lg){ouvrirLogement(lg.dataset.log);return;}
+    if(e.target.closest('[data-lclose]')){fermerLogement();return;}
+    if(e.target.closest('[data-tachelog]')){tLogDefaut=lEdit;fermerLogement();ouvrirTache(null);return;}
     if(e.target.closest('[data-tclose]')){fermerTache();return;}
     if(e.target.closest('[data-micro]')){demarrerMicro();return;}
     var trn=e.target.closest('[data-transcrire]');if(trn){transcrireNote(trn.dataset.transcrire,trn);return;}
@@ -1488,13 +1562,13 @@ h2,h3{font-weight:500;letter-spacing:0}
     var is=e.target.closest('[data-ideastatut]');if(is){var i=byId(S.idees,is.dataset.ideastatut);if(i)save('idees',Object.assign({},i,{statut:is.value}));return;}
     var ps=e.target.closest('[data-poststatut]');if(ps){var p=byId(S.posts,ps.dataset.poststatut);if(p)save('posts',Object.assign({},p,{statut:ps.value}));return;}
   });
-  document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('sheet').classList.contains('open'))closeSheet();if($('tsheet').classList.contains('open'))fermerTache();});
+  document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('sheet').classList.contains('open'))closeSheet();if($('tsheet').classList.contains('open'))fermerTache();if($('lsheet').classList.contains('open'))fermerLogement();});
 
   /* ===== Boot ===== */
   buildNav();
   var saved='accueil';try{saved=localStorage.getItem('ms_tab')||'accueil';}catch(e){}
   var h=(location.hash||'').slice(1);if(TITLES[h])saved=h;
-  if(saved==='simca')saved='ca';go(saved);caMois=monthISO();renderAll();spCalc();
+  if(saved==='simca')saved='ca';if(saved==='conso')saved='logements';go(saved);caMois=monthISO();renderAll();spCalc();
 
   try{var copie=localStorage.getItem(CLE_COPIE);if(copie){G.D=normaliserD(JSON.parse(copie));appliquer(G.D);renderAll();}}catch(e){}
   etat(false);
