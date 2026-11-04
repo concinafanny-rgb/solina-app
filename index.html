@@ -276,15 +276,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 #task-kanban .col,#home-kanban .col{flex:1 1 280px}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .row .av{color:#fff!important;font-weight:500}
+#type-chips .chip[data-type]:not([data-type=""]){color:#fff;border-color:transparent}
+#type-chips .chip.active{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--brun)}
+#type-chips .chip[data-type=""].active{box-shadow:none}
+#type-chips .chip[data-type="client"]{background:#C8553D}
+#type-chips .chip[data-type="prospect"]{background:#D9799F}
+#type-chips .chip[data-type="prestataire"]{background:#6E9B6A}
+#type-chips .chip[data-type="prescripteur"]{background:#D4A72C}
+#type-chips .chip[data-type="apporteur"]{background:#8E6BB0}
+#type-chips .chip[data-type="partenaire"]{background:#5B83B0}
+.pill.client{background:#F6DCD6;color:#A8402B}.pill.prospect{background:#F8E1EA;color:#B24F7A}.pill.prestataire{background:#E1ECDF;color:#4F7A4B}.pill.prescripteur{background:#F6EBCB;color:#8C6D12}.pill.apporteur{background:#ECE3F3;color:#6C4D8E}.pill.partenaire{background:#DFE8F2;color:#3F6690}
 .pastille{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0;flex:none}
 .lien-contact{display:flex;align-items:center;font-size:12.5px;color:var(--brun);margin-top:4px}
 .mininote{font-size:12px;color:var(--muted);margin-top:4px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.chip[data-type="prospect"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#C8553D;margin-right:7px;vertical-align:0}
-.chip[data-type="client"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#D9799F;margin-right:7px;vertical-align:0}
-.chip[data-type="prestataire"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#6E9B6A;margin-right:7px;vertical-align:0}
-.chip[data-type="partenaire"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#5B83B0;margin-right:7px;vertical-align:0}
-.chip[data-type="prescripteur"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#D4A72C;margin-right:7px;vertical-align:0}
-.chip[data-type="apporteur"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#8E6BB0;margin-right:7px;vertical-align:0}
 @media (max-width:699px){#task-kanban .col,#home-kanban .col{flex:0 0 82vw}.wknav{width:100%}.wknav #wk-titre{min-width:0;flex:1;white-space:nowrap;font-size:12.5px}.section-head{flex-wrap:wrap}}
 .moisnav{display:flex;align-items:center;gap:12px;margin-top:6px}
 .moisnav h2{min-width:190px;text-align:center}
@@ -394,8 +398,8 @@ h2,h3{font-weight:500;letter-spacing:0}
       </div>
       <div class="chips" id="type-chips">
         <button class="chip active" data-type="">Tous</button>
-        <button class="chip" data-type="prospect">Prospects</button>
         <button class="chip" data-type="client">Clients</button>
+        <button class="chip" data-type="prospect">Prospects</button>
         <button class="chip" data-type="prestataire">Prestataires</button>
         <button class="chip" data-type="prescripteur">Prescripteurs</button>
         <button class="chip" data-type="apporteur">Apporteurs d'affaires</button>
@@ -766,7 +770,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   ];
   var TABS=[['accueil','Accueil'],['contacts','Contacts'],['prospection','Prospection'],['relances','Relances'],['plus','Plus']];
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
-  var COULEURS_TYPE={'prospect': '#C8553D', 'client': '#D9799F', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
+  var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
   var CANAUX=['Leboncoin','AlloVoisins','Groupes Facebook','Instagram','LinkedIn','Site internet','Fiche Google','Bouche à oreille','Apporteurs d\'affaires','Agences immobilières','Notaires et conseillers','Partenaires et artisans','Réseau CLF','Événements','PAP','Boîtage','Parrainage clients','Autre'];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','Rendez vous'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
@@ -1383,8 +1387,15 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.querySelectorAll('[data-param]').forEach(function(el){el.addEventListener('change',function(){S.params[el.dataset.param]=num(el.value);saveParams();renderFinance();});});
 
   // édition en ligne des tableaux
+  function garderFocus(fn){
+    var a=document.activeElement,tr=a&&a.closest?a.closest('tr'):null,cle=null,f=a&&a.dataset?a.dataset.f:null,pos=null;
+    if(tr)for(var i=0;i<tr.attributes.length;i++){var at=tr.attributes[i];if(at.name.indexOf('data-')===0){cle=[at.name,at.value];break;}}
+    try{pos=a.selectionStart;}catch(x){}
+    fn();
+    if(cle&&f){var n=document.querySelector('tr['+cle[0]+'="'+cle[1].replace(/"/g,'\\"')+'"] [data-f="'+f+'"]');if(n){n.focus();try{if(pos!==null&&pos!==undefined)n.setSelectionRange(pos,pos);}catch(x){}}}
+  }
   function tableEdit(e,attr,coll,arrKey){var tr=e.target.closest('tr[data-'+attr+']');if(!tr)return false;var id=tr.getAttribute('data-'+attr);var doc=byId(S[arrKey],id);if(!doc)return true;var f=e.target.dataset.f;if(!f)return true;var val=e.target.type==='number'?num(e.target.value):e.target.value;if(doc[f]===val)return true;doc[f]=val;if(coll==='revenus'&&f==='bienId'){var b=byId(S.biens,val);if(b)doc.pct=num(b.commission);}saveLater(coll,Object.assign({},doc),coll+id);
-    if(coll==='biens'||coll==='revenus'||coll==='charges')renderFinance();else renderConso();return true;}
+    garderFocus(function(){if(coll==='biens'||coll==='revenus'||coll==='charges')renderFinance();else renderConso();});return true;}
   document.addEventListener('input',function(e){if(tableEdit(e,'bien','biens','biens'))return;if(tableEdit(e,'rev','revenus','revenus'))return;if(tableEdit(e,'charge','charges','charges'))return;tableEdit(e,'conso','conso','conso');});
   document.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('table.tbl'))setTimeout(function(){if(!document.activeElement||!document.activeElement.closest('table.tbl'))renderAll();},80);});
   document.addEventListener('click',function(e){
