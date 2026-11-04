@@ -446,12 +446,12 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">commissions ce mois</div></div>
         <div class="card"><div class="num" id="ca-k-annee">0 €</div><div class="lbl">commissions cette année</div></div>
         <div class="card"><div class="num" id="ca-k-loyers">0 €</div><div class="lbl">loyers encaissés ce mois</div></div>
-        <div class="card"><div class="num" id="ca-k-tva" style="font-size:22px;padding-top:6px">—</div><div class="lbl" id="ca-k-tva-l">seuil de TVA</div></div>
+        <div class="card"><div class="num" id="ca-k-tva" style="font-size:22px;padding-top:6px">—</div><div class="lbl" id="ca-k-tva-l">du plafond</div></div>
       </div>
       <div class="section">
         <div class="section-head"><h2 id="ca-mois-titre">Saisie du mois</h2><button class="btn sm" id="ca-add">+ Ligne</button></div>
         <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Commission €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Loyers encaissés = ce que le propriétaire a réellement reçu sur le mois (après frais de plateforme). Les logements viennent du simulateur, plus bas.</p>
+        <p class="note" style="margin-top:8px">Loyers encaissés = ce que le propriétaire a réellement reçu sur le mois. Les logements viennent du simulateur, plus bas.</p>
       </div>
       <div class="section">
         <div class="section-head"><h2>Commissions sur 12 mois</h2></div>
@@ -460,33 +460,29 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="section" style="margin-top:46px">
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2><div class="pd">Ton prévisionnel : chaque logement, ce qu'il rapporte, puis toutes tes charges et les cotisations, jusqu'au net dans ta poche.</div></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
       <div class="section" style="margin-top:18px">
-        <div class="twrap"><table class="tbl" id="biens-table"><thead><tr><th>Logement</th><th>Offre</th><th class="r">Prix / nuit €</th><th class="r">Occupation %</th><th class="r">Mois actifs / an</th><th class="r">Loyers / mois</th><th class="r">Commission / mois</th><th class="r">Commission / an</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Loyers / mois = prix par nuit × 30 nuits × occupation, moins les frais de plateforme. Commission = ton pourcentage sur ces loyers. Un logement inactif compte 0.</p>
+        <div class="twrap"><table class="tbl" id="biens-table"><thead><tr><th>Logement</th><th class="r">Ma commission %</th><th class="r">Prix / nuit €</th><th class="r">Occupation %</th><th class="r">Mois actifs / an</th><th class="r">Loyers / mois</th><th class="r">Commission / mois</th><th class="r">Commission / an</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        <p class="note" style="margin-top:8px">Loyers / mois = prix par nuit × 30 nuits × occupation. Commission = ton pourcentage sur ces loyers. Mets 0 % pour un logement qui ne te rapporte rien.</p>
       </div>
       <div class="grid cards-2 section">
         <div class="card">
           <div class="ctit">Paramètres</div>
           <div class="form">
             <div class="two">
-              <div class="field"><label for="p-plateforme">Frais plateforme %</label><input type="number" step="0.1" id="p-plateforme" data-param="plateforme"></div>
               <div class="field"><label for="p-urssaf">Cotisations URSSAF %</label><input type="number" step="0.1" id="p-urssaf" data-param="urssaf"></div>
+              <div class="field"><label for="p-plafond">Plafond à surveiller €</label><input type="number" id="p-plafond" data-param="plafond"></div>
             </div>
-            <div class="two">
-              <div class="field"><label for="p-tva">Franchise TVA €</label><input type="number" id="p-tva" data-param="tvaSeuil"></div>
-              <div class="field"><label for="p-tvamaj">Seuil majoré €</label><input type="number" id="p-tvamaj" data-param="tvaMajore"></div>
-            </div>
-            <div class="field"><label for="p-micro">Plafond micro €</label><input type="number" id="p-micro" data-param="plafondMicro"></div>
-            <div class="hint">Valeurs 2026 pour une micro entreprise en prestations de services BIC : cotisations 21,2 %, franchise de TVA 37 500 € (41 250 € majoré), plafond 83 600 €. <b>À confirmer avec ton expert-comptable</b>, notamment le classement BIC de ton activité.</div>
+            <div class="hint">Le plafond sert de repère : l'application te montre où tu en es par rapport à lui sur l'année. Les charges viennent de l'onglet Charges.</div>
           </div>
         </div>
         <div class="result">
           <div class="rl">Résultat mensuel prévisionnel</div>
-          <div class="rr"><span>Commissions Maison Solina</span><span id="s-ca">—</span></div>
+          <div class="rr"><span>Chiffre d'affaires du mois</span><span id="s-ca">—</span></div>
           <div class="rr"><span>Cotisations URSSAF</span><span id="s-urssaf">—</span></div>
           <div class="rr"><span>Charges fixes (onglet Charges)</span><span id="s-charges">—</span></div>
           <div class="rr big"><span>Net avant impôt</span><span id="s-net">—</span></div>
-          <div class="rr"><span>Sur l'année</span><span id="s-an">—</span></div>
-          <div class="rr"><span>Seuil TVA</span><span id="s-tva">—</span></div>
+          <div class="rr"><span>Chiffre d'affaires de l'année</span><span id="s-caan">—</span></div>
+          <div class="rr"><span>Net avant impôt sur l'année</span><span id="s-an">—</span></div>
+          <div class="rr"><span>Plafond</span><span id="s-tva">—</span></div>
         </div>
       </div>
     </div>
@@ -782,7 +778,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var CANAUX=['Leboncoin','AlloVoisins','Groupes Facebook','Instagram','LinkedIn','Site internet','Fiche Google','Bouche à oreille','Apporteurs d\'affaires','Agences immobilières','Notaires et conseillers','Partenaires et artisans','Réseau CLF','Événements','PAP','Boîtage','Parrainage clients','Autre'];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','Rendez vous'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','Rendez vous pris'],['visite','Rendez vous fait'],['devis','Proposition envoyée'],['signature','En cours de signature'],['signe','Signé'],['perdu','Perdu'],['pas_interesse','Pas intéressé']];
-  var DEFAULT_PARAMS={plateforme:3,urssaf:21.2,tvaSeuil:37500,tvaMajore:41250,plafondMicro:83600};
+  var DEFAULT_PARAMS={urssaf:21.2,plafond:40000};
   var CHARGE_CATS=['Abonnements et logiciels','Assurance','Véhicule et déplacements','Banque','Marketing et site','Matériel','Comptabilité','Téléphone','Autre'];
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
 
@@ -1018,7 +1014,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
 
   /* ===== Finances ===== */
-  function bienLoyersMois(b){if(b.actif===false)return 0;return num(b.prixNuit)*30*num(b.occupation)/100*(1-num(S.params.plateforme)/100);}
+  function bienLoyersMois(b){if(b.actif===false)return 0;return num(b.prixNuit)*30*num(b.occupation)/100;}
   function bienCommissionMois(b){return bienLoyersMois(b)*num(b.commission)/100;}
   function bienCommissionAn(b){return bienCommissionMois(b)*Math.min(12,Math.max(0,num(b.moisActifs)||12));}
   function chargesMois(){return S.charges.reduce(function(a,c){return a+num(c.montant);},0);}
@@ -1028,7 +1024,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var list=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});
     tb.innerHTML=list.map(function(b){return '<tr data-bien="'+esc(b.id)+'">'+
       '<td><input data-f="nom" value="'+esc(b.nom)+'" placeholder="Nom"></td>'+
-      '<td><select data-f="commission"><option value="25"'+(num(b.commission)===25?' selected':'')+'>Premium 25 %</option><option value="15"'+(num(b.commission)===15?' selected':'')+'>Opérationnel 15 %</option><option value="20"'+(num(b.commission)===20?' selected':'')+'>Investisseur 20 %</option><option value="0"'+(num(b.commission)===0?' selected':'')+'>Inactif 0 %</option></select></td>'+
+      '<td><input class="r" type="number" step="0.5" min="0" max="100" data-f="commission" value="'+esc(b.commission)+'"></td>'+
       '<td><input class="r" type="number" data-f="prixNuit" value="'+esc(b.prixNuit)+'"></td>'+
       '<td><input class="r" type="number" data-f="occupation" value="'+esc(b.occupation)+'"></td>'+
       '<td><input class="r" type="number" data-f="moisActifs" value="'+esc(b.moisActifs||12)+'" min="0" max="12"></td>'+
@@ -1038,9 +1034,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     tf.innerHTML='<tr><td colspan="6">Total commissions</td><td class="r tnum">'+eur(tm)+'</td><td class="r tnum">'+eur(ta)+'</td><td></td></tr>';
     // résultat
     var mois=ta/12,u=mois*num(S.params.urssaf)/100,ch=chargesMois(),net=mois-u-ch;
-    $('s-ca').textContent=eur(mois);$('s-urssaf').textContent='− '+eur(u);$('s-charges').textContent='− '+eur(ch);$('s-net').textContent=eur(net);$('s-an').textContent=eur(net*12)+' net · '+eur(ta)+' de CA';
-    var seuil=num(S.params.tvaSeuil);$('s-tva').textContent=ta>num(S.params.plafondMicro)?'Au-dessus du plafond micro':ta>seuil?'TVA à prévoir au-delà de '+eur(seuil):Math.round(100*ta/seuil)+' % de la franchise ('+eur(seuil)+')';
-    ['plateforme','urssaf','tvaSeuil','tvaMajore','plafondMicro'].forEach(function(k){var el=document.querySelector('[data-param="'+k+'"]');if(el&&document.activeElement!==el)el.value=S.params[k];});
+    $('s-ca').textContent=eur(mois);$('s-urssaf').textContent='− '+eur(u);$('s-charges').textContent='− '+eur(ch);$('s-net').textContent=eur(net);$('s-an').textContent=eur(net*12);$('s-caan').textContent=eur(ta);
+    var plaf=num(S.params.plafond)||40000;$('s-tva').textContent=Math.round(100*ta/plaf)+' % de '+eur(plaf)+(ta>plaf?', plafond dépassé':'');
+    ['urssaf','plafond'].forEach(function(k){var el=document.querySelector('[data-param="'+k+'"]');if(el&&document.activeElement!==el)el.value=S.params[k];});
   }
   function renderCA(){
     if(!caMois)caMois=monthISO();$('ca-mois').value=caMois;$('ca-mois-titre').textContent='Saisie de '+fmtMois(caMois);
@@ -1053,7 +1049,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('ca-k-mois').textContent=eur(tc);$('ca-k-loyers').textContent=eur(tl);
     var year=caMois.slice(0,4);var ty=S.revenus.filter(function(r){return (r.mois||'').slice(0,4)===year;}).reduce(function(a,r){return a+num(r.loyers)*num(r.pct)/100;},0);
     $('ca-k-annee').textContent=eur(ty);
-    var seuil=num(S.params.tvaSeuil);var pct=seuil?Math.round(100*ty/seuil):0;$('ca-k-tva').textContent=pct+' %';$('ca-k-tva-l').textContent='de la franchise TVA ('+eur(seuil)+') en '+year;
+    var plafR=num(S.params.plafond)||40000;$('ca-k-tva').textContent=Math.round(100*ty/plafR)+' %';$('ca-k-tva-l').textContent='du plafond de '+eur(plafR)+' en '+year;
     // 12 derniers mois
     var bars=[],max=1;for(var i=11;i>=0;i--){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);var m=monthISO(d);var v=S.revenus.filter(function(r){return r.mois===m;}).reduce(function(a,r){return a+num(r.loyers)*num(r.pct)/100;},0);bars.push([m,v]);if(v>max)max=v;}
     $('ca-bars').innerHTML=bars.map(function(b){var lab=new Date(b[0]+'-01T00:00:00').toLocaleDateString('fr-FR',{month:'short'});return '<div class="b'+(b[0]===caMois?' cur':'')+'"><b>'+(b[1]?eur(b[1]):'')+'</b><i style="height:'+Math.max(2,Math.round(100*b[1]/max))+'px"></i><em>'+esc(lab)+'</em></div>';}).join('');
