@@ -526,12 +526,12 @@ function vueConnexion(){
       ${S.erreurConnexion ? `<p style="color:var(--retard);margin:0 0 14px;font-size:13px">${esc(S.erreurConnexion)}</p>` : ''}
       <button class="btn" type="submit" style="width:100%;padding:12px">Se connecter</button>
     </form>
-    <details><summary>Comment obtenir ma clé</summary><ol>
-      <li>Sur github.com, ouvre Settings, puis Developer settings, puis Personal access tokens, puis Fine grained tokens.</li>
-      <li>Clique sur Generate new token, nomme la Application Solina, choisis une expiration d'un an.</li>
+    <a class="btn clair" href="https://github.com/settings/personal-access-tokens/new?name=Application%20Solina&description=Application%20Maison%20Solina%20(Mac%20et%20iPhone)&target_name=concinafanny-rgb&expires_in=365&contents=write" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px;padding:12px">Créer ma clé sur GitHub</a>
+    <details><summary>Ce qu'il faut faire sur la page GitHub</summary><ol>
+      <li>Le nom et la durée sont déjà remplis.</li>
       <li>Dans Repository access, choisis Only select repositories, puis maison-solina.</li>
-      <li>Dans Permissions, mets Contents sur Read and write.</li>
-      <li>Clique sur Generate token, copie la clé et colle la ici.</li>
+      <li>Dans Permissions, vérifie que Contents est sur Read and write.</li>
+      <li>Clique sur Generate token en bas, copie la clé et colle la ici.</li>
     </ol></details>
   </div></div>`;
 }
