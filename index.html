@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maison Solina</title>
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Solina">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icone-192.png">
+<link rel="apple-touch-icon" href="icone-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --terra:#975B39;
+  --terra-fonce:#7D4A2E;
+  --terra-voile:#F4E9DF;
+  --sable:#AD896F;
+  --beige:#D8C6B6;
+  --ligne:#EADFD4;
+  --creme:#F8F2EB;
+  --fond:#FCF9F6;
+  --blanc:#FFFFFF;
+  --texte:#2B211B;
+  --doux:#6B5A4D;
+  --pale:#9C8E83;
+  --retard:#A8452B;
+  --rayon:14px;
+  --ombre:0 1px 2px rgba(43,33,27,.04),0 8px 24px rgba(43,33,27,.05);
+  --titre:'Italiana',Georgia,'Times New Roman',serif;
+  --corps:'Poppins',-apple-system,'Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--fond);color:var(--texte);font-family:var(--corps);font-weight:300;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--terra);text-decoration:none}
+a:hover{color:var(--terra-fonce)}
+
+/* En tête */
+header.haut{background:var(--blanc);border-bottom:1px solid var(--ligne);position:sticky;top:0;z-index:20}
+.haut-in{max-width:1280px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;gap:40px}
+.marque{display:flex;flex-direction:column;line-height:1}
+.marque b{font-family:var(--titre);font-weight:400;font-size:28px;letter-spacing:.06em;color:var(--terra)}
+.marque small{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--sable);margin-top:6px}
+nav.onglets{display:flex;gap:6px;flex-wrap:wrap}
+nav.onglets button{background:none;border:0;padding:9px 16px;border-radius:999px;cursor:pointer;color:var(--doux);font-weight:400;letter-spacing:.02em}
+nav.onglets button:hover{color:var(--terra)}
+nav.onglets button.actif{background:var(--terra-voile);color:var(--terra-fonce);font-weight:500}
+.etat-fichier{margin-left:auto;font-size:12px;color:var(--pale);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.etat-fichier i{width:7px;height:7px;border-radius:50%;background:var(--beige);display:inline-block}
+.etat-fichier.ok i{background:var(--terra)}
+
+main{max-width:1280px;margin:0 auto;padding:36px 32px 80px}
+
+/* Bandeau fichier */
+.bandeau{background:var(--creme);border:1px solid var(--ligne);border-radius:var(--rayon);padding:22px 26px;margin-bottom:28px;display:flex;align-items:center;gap:24px}
+.bandeau p{margin:0;color:var(--doux)}
+.bandeau strong{font-weight:500;color:var(--texte);display:block;margin-bottom:2px}
+.bandeau .actions{margin-left:auto;display:flex;gap:10px;flex-shrink:0}
+
+/* Titres */
+h1{font-family:var(--titre);font-weight:400;font-size:40px;letter-spacing:.02em;margin:0 0 4px;color:var(--texte)}
+h2{font-family:var(--titre);font-weight:400;font-size:24px;letter-spacing:.03em;margin:0 0 16px;color:var(--texte)}
+.sous{color:var(--pale);margin:0 0 30px;font-size:13px;letter-spacing:.03em}
+.surtitre{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--sable);font-weight:500}
+
+/* Boutons */
+.btn{border:1px solid var(--terra);background:var(--terra);color:#fff;padding:9px 18px;border-radius:999px;cursor:pointer;font-weight:400;letter-spacing:.02em;font-size:13px;white-space:nowrap;transition:background .15s}
+.btn:hover{background:var(--terra-fonce);border-color:var(--terra-fonce)}
+.btn.clair{background:transparent;color:var(--terra)}
+.btn.clair:hover{background:var(--terra-voile)}
+.btn.discret{background:transparent;border-color:transparent;color:var(--doux)}
+.btn.discret:hover{color:var(--terra);background:var(--creme)}
+.btn.danger{background:transparent;border-color:transparent;color:var(--retard)}
+.btn.danger:hover{background:#F7E6E0}
+.btn.plein-danger{background:var(--retard);border-color:var(--retard)}
+.btn.petit{padding:5px 12px;font-size:12px}
+
+/* Cartes */
+.carte{background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);padding:24px 26px;box-shadow:var(--ombre)}
+.grille-accueil{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;margin-top:24px}
+.chiffres{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.chiffre{background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);padding:18px 22px}
+.chiffre b{display:block;font-family:var(--corps);font-weight:300;font-size:30px;color:var(--terra);line-height:1.1}
+.chiffre span{font-size:12px;color:var(--doux);letter-spacing:.02em}
+
+/* Bandeau statuts */
+.statuts{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.statut-case{background:var(--blanc);border:1px solid var(--ligne);border-radius:12px;padding:14px 14px 12px;cursor:pointer;text-align:left;transition:border-color .15s,transform .15s}
+.statut-case:hover{border-color:var(--beige);transform:translateY(-1px)}
+.statut-case b{display:block;font-family:var(--corps);font-weight:300;font-size:24px;line-height:1.1;color:var(--texte)}
+.statut-case span{font-size:11.5px;color:var(--doux);display:flex;align-items:center;gap:6px}
+.point{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* Listes à faire */
+.liste{list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-top:1px solid var(--ligne)}
+.item:first-child{border-top:0;padding-top:4px}
+.item .corps{flex:1;min-width:0}
+.item .titre{font-weight:400;color:var(--texte)}
+.item .meta{font-size:12px;color:var(--pale);margin-top:2px}
+.item .quand{font-size:12px;color:var(--doux);white-space:nowrap;text-align:right}
+.item .quand.retard{color:var(--retard);font-weight:500}
+.etiquette{display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sable);font-weight:500;margin-right:8px}
+.vide{color:var(--pale);font-size:13px;padding:18px 0;text-align:center}
+.case{width:18px;height:18px;border:1.5px solid var(--beige);border-radius:5px;background:var(--blanc);cursor:pointer;flex-shrink:0;margin-top:3px;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.case:hover{border-color:var(--terra)}
+.case.cochee{background:var(--terra);border-color:var(--terra)}
+.case.cochee::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+
+/* Barre d'outils */
+.outils{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.champ-recherche{flex:1;min-width:220px;max-width:340px;position:relative}
+.champ-recherche input[type=search]{width:100%;padding-left:38px}
+.champ-recherche svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--pale)}
+input[type=text],input[type=password],input[type=tel],input[type=email],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{background:var(--blanc);border:1px solid var(--ligne);border-radius:10px;padding:9px 12px;outline:none;transition:border-color .15s;font-size:13.5px;font-weight:300}
+input:focus,select:focus,textarea:focus{border-color:var(--sable)}
+select{cursor:pointer}
+.outils .droite{margin-left:auto;display:flex;gap:10px}
+
+/* Tableau */
+.tableau{width:100%;border-collapse:separate;border-spacing:0;background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);overflow:hidden}
+.tableau th{text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sable);padding:14px 16px;border-bottom:1px solid var(--ligne);background:var(--fond)}
+.tableau td{padding:14px 16px;border-bottom:1px solid var(--ligne);vertical-align:top}
+.tableau tr:last-child td{border-bottom:0}
+.tableau tbody tr{cursor:pointer;transition:background .1s}
+.tableau tbody tr:hover{background:var(--fond)}
+.tableau .nom{font-weight:400}
+.tableau .fin{color:var(--pale);font-size:12px}
+.pastille{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px 3px 8px;border-radius:999px;background:var(--creme);color:var(--doux);white-space:nowrap}
+.pastille.signe{background:var(--terra);color:#fff}
+.pastille.signe .point{background:#fff!important}
+.compte{font-size:12px;color:var(--pale);margin:12px 4px 0}
+
+/* Pipeline */
+.pipeline{display:grid;grid-template-columns:repeat(8,minmax(140px,1fr));gap:12px;overflow-x:auto;padding-bottom:12px}
+.colonne{background:var(--creme);border-radius:var(--rayon);padding:10px;min-height:420px;transition:background .15s}
+.colonne.survol{background:var(--terra-voile)}
+.colonne h3{font-weight:500;font-size:12px;letter-spacing:.04em;margin:4px 4px 12px;display:flex;align-items:center;gap:7px;color:var(--texte)}
+.colonne h3 em{font-style:normal;margin-left:auto;color:var(--pale);font-weight:400}
+.fiche{background:var(--blanc);border:1px solid var(--ligne);border-radius:10px;padding:12px 13px;margin-bottom:8px;cursor:grab;box-shadow:0 1px 2px rgba(43,33,27,.03)}
+.fiche:hover{border-color:var(--beige)}
+.fiche.glisse{opacity:.45}
+.fiche b{font-weight:400;display:block}
+.fiche small{display:block;color:var(--pale);font-size:11.5px;margin-top:2px}
+.fiche .action{margin-top:8px;padding-top:8px;border-top:1px solid var(--ligne);font-size:11.5px;color:var(--doux)}
+.fiche .action.retard{color:var(--retard)}
+
+/* Contacts */
+.puces{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.puce{border:1px solid var(--ligne);background:var(--blanc);border-radius:999px;padding:6px 14px;font-size:12px;cursor:pointer;color:var(--doux)}
+.puce:hover{border-color:var(--beige)}
+.puce.actif{background:var(--terra);border-color:var(--terra);color:#fff}
+.grille-contacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.contact{background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);padding:18px 20px;cursor:pointer;transition:border-color .15s}
+.contact:hover{border-color:var(--beige)}
+.contact .nom{font-weight:400;font-size:15px}
+.contact .soc{color:var(--pale);font-size:12px}
+.contact .lignes{margin-top:12px;font-size:12.5px;color:var(--doux);display:flex;flex-direction:column;gap:3px}
+.contact .notes{margin-top:10px;font-size:12px;color:var(--pale);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* Planning */
+.semaine-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.semaine-nav .periode{font-family:var(--titre);font-size:22px;margin:0 10px}
+.semaine{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.jour{background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);padding:12px;min-height:260px;display:flex;flex-direction:column}
+.jour.aujourdhui{border-color:var(--terra);box-shadow:0 0 0 1px var(--terra) inset}
+.jour .tete{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.jour .tete span{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sable);font-weight:500}
+.jour .tete b{font-family:var(--corps);font-weight:300;font-size:20px;color:var(--texte)}
+.jour.aujourdhui .tete b{color:var(--terra)}
+.tache{border-radius:8px;padding:8px 9px;margin-bottom:6px;background:var(--creme);font-size:12px;cursor:pointer;display:flex;gap:8px;align-items:flex-start;border-left:2px solid var(--terra)}
+.tache:hover{background:var(--terra-voile)}
+.tache .case{width:15px;height:15px;margin-top:1px;border-radius:4px}
+.tache .case.cochee::after{width:4px;height:7px}
+.tache.faite{opacity:.5}
+.tache.faite .txt{text-decoration:line-through}
+.tache.prospect{background:transparent;border:1px dashed var(--beige);border-left:2px solid var(--sable)}
+.tache .txt{flex:1;min-width:0}
+.tache .txt small{display:block;color:var(--pale);font-size:11px}
+.jour .ajout{margin-top:auto;border:0;background:none;color:var(--pale);font-size:12px;cursor:pointer;padding:6px;border-radius:8px;text-align:left}
+.jour .ajout:hover{color:var(--terra);background:var(--fond)}
+
+/* Fenêtres */
+dialog{border:0;border-radius:18px;padding:0;width:min(680px,94vw);box-shadow:0 30px 80px rgba(43,33,27,.22);color:var(--texte);background:var(--blanc)}
+dialog::backdrop{background:rgba(43,33,27,.28);backdrop-filter:blur(2px)}
+.dlg-tete{padding:26px 30px 6px}
+.dlg-corps{padding:14px 30px 8px;max-height:68vh;overflow:auto}
+.dlg-pied{padding:18px 30px 24px;display:flex;gap:10px;align-items:center;border-top:1px solid var(--ligne);margin-top:10px}
+.dlg-pied .droite{margin-left:auto;display:flex;gap:10px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.form .large{grid-column:1/-1}
+.form label{display:flex;flex-direction:column;gap:5px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sable);font-weight:500}
+.form label input,.form label select,.form label textarea{text-transform:none;letter-spacing:0;color:var(--texte)}
+.form textarea{min-height:96px;resize:vertical}
+.form .avec-bouton{display:flex;gap:8px}
+.form .avec-bouton input{flex:1;min-width:0}
+.separateur{grid-column:1/-1;border-top:1px solid var(--ligne);margin:6px 0 0;padding-top:12px}
+
+/* Notification */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--texte);color:#fff;padding:11px 22px;border-radius:999px;font-size:13px;opacity:0;transition:all .25s;pointer-events:none;z-index:100}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Écran de connexion */
+.connexion{max-width:520px;margin:6vh auto 0;text-align:left}
+.connexion .carte{padding:34px 34px 30px}
+.connexion h1{font-size:36px}
+.connexion input{width:100%;margin:8px 0 16px}
+.connexion details{margin-top:22px;color:var(--doux);font-size:13px}
+.connexion summary{cursor:pointer;color:var(--terra)}
+.connexion ol{padding-left:20px;margin:12px 0 0}
+.connexion li{margin-bottom:6px}
+.chargement{text-align:center;color:var(--pale);padding:20vh 0;font-size:13px;letter-spacing:.08em}
+.reglage-btn{background:none;border:0;cursor:pointer;color:var(--pale);font-size:12px;padding:6px 8px;border-radius:8px}
+.reglage-btn:hover{color:var(--terra);background:var(--creme)}
+
+/* Barre d'onglets du téléphone */
+nav.bas{display:none}
+
+@media (max-width:1100px){
+  .statuts{grid-template-columns:repeat(4,1fr)}
+  .grille-accueil{grid-template-columns:1fr}
+  .semaine{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  body{font-size:15px}
+  header.haut{padding-top:env(safe-area-inset-top)}
+  .haut-in{padding:12px 16px;gap:12px}
+  .marque b{font-size:24px}
+  .marque small{display:none}
+  nav.onglets{display:none}
+  .etat-fichier span{display:none}
+  nav.bas{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--ligne);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  nav.bas button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--pale);padding:6px 0;cursor:pointer}
+  nav.bas button svg{width:22px;height:22px}
+  nav.bas button.actif{color:var(--terra)}
+  main{padding:22px 16px calc(96px + env(safe-area-inset-bottom))}
+  h1{font-size:32px}
+  .sous{margin-bottom:20px}
+  .chiffres{grid-template-columns:repeat(2,1fr);gap:10px}
+  .statuts{display:flex;overflow-x:auto;gap:8px;margin:0 -16px;padding:0 16px 4px;scroll-snap-type:x mandatory}
+  .statut-case{flex:0 0 116px;scroll-snap-align:start}
+  .grille-accueil{gap:16px;margin-top:18px}
+  .carte{padding:20px 18px}
+  .carte > div:first-child{flex-wrap:wrap}
+  .semaine{grid-template-columns:1fr}
+  .jour{min-height:0}
+  .form{grid-template-columns:1fr}
+  input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{font-size:16px}
+  .bandeau{flex-direction:column;align-items:flex-start}
+  .bandeau .actions{margin-left:0}
+  .outils{gap:8px}
+  .outils .droite{margin-left:0;width:100%}
+  .outils .droite .btn{flex:1}
+  .champ-recherche{max-width:none;width:100%}
+  .outils select{flex:1 1 40%;min-width:0}
+  body.connexion-active nav.bas{display:none}
+  .tableau,.tableau tbody,.tableau tr,.tableau td{display:block;width:100%}
+  .tableau{border:0;background:none;box-shadow:none}
+  .tableau thead{display:none}
+  .tableau tbody tr{background:var(--blanc);border:1px solid var(--ligne);border-radius:var(--rayon);margin-bottom:10px;padding:14px 16px;position:relative}
+  .tableau td{border:0;padding:2px 0}
+  .tableau td.cell-statut{position:absolute;top:14px;right:14px;width:auto}
+  .tableau .masquable{display:none}
+  .pipeline{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 12px}
+  .colonne{flex:0 0 78vw;scroll-snap-align:start;min-height:300px}
+  .indice-glisser{display:none}
+  dialog{width:100vw;max-width:100vw;margin:auto 0 0;border-radius:20px 20px 0 0;max-height:94vh}
+  .dlg-tete{padding:22px 20px 4px}
+  .dlg-corps{padding:12px 20px 8px;max-height:64vh}
+  .dlg-pied{padding:14px 20px calc(18px + env(safe-area-inset-bottom))}
+  .connexion{margin-top:2vh}
+  .connexion .carte{padding:26px 22px}
+}
+@media (min-width:721px){ .indice-tactile{display:none} }
+</style>
+</head>
+<body>
+
+<header class="haut">
+  <div class="haut-in">
+    <div class="marque"><b>Maison Solina</b><small>Espace de travail</small></div>
+    <nav class="onglets" id="onglets">
+      <button data-vue="accueil">Accueil</button>
+      <button data-vue="pipeline">Pipeline</button>
+      <button data-vue="prospects">Prospects</button>
+      <button data-vue="contacts">Contacts</button>
+      <button data-vue="planning">Planning</button>
+    </nav>
+    <div class="etat-fichier" id="etatFichier"><i></i><span>Hors connexion</span><button class="reglage-btn" data-act="reglages">Réglages</button></div>
+  </div>
+</header>
+
+<main>
+  <div id="bandeau"></div>
+  <div id="vue"><div class="chargement">Chargement</div></div>
+</main>
+
+<nav class="bas" id="ongletsBas">
+  <button data-vue="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z"/></svg>Accueil</button>
+  <button data-vue="pipeline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="4" width="4.5" height="16" rx="1.5"/><rect x="9.75" y="4" width="4.5" height="11" rx="1.5"/><rect x="16" y="4" width="4.5" height="7" rx="1.5"/></svg>Pipeline</button>
+  <button data-vue="prospects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>Prospects</button>
+  <button data-vue="contacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><circle cx="12" cy="10" r="2.6"/><path d="M8 17c.7-1.9 2.2-2.8 4-2.8s3.3.9 4 2.8"/></svg>Contacts</button>
+  <button data-vue="planning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Planning</button>
+</nav>
+
+<dialog id="dlg"></dialog>
+<dialog id="dlgConfirm"></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* Référentiels */
+const STATUTS = ['À contacter','Contacté','Rendez vous pris','Visite faite','Devis envoyé','Signé','Perdu','Pas intéressé'];
+const COULEURS_STATUT = {'À contacter':'#D8C6B6','Contacté':'#C9AD96','Rendez vous pris':'#B8927A','Visite faite':'#AD896F','Devis envoyé':'#A26A4A','Signé':'#975B39','Perdu':'#C9C1BA','Pas intéressé':'#C9C1BA'};
+const STATUTS_CLOS = ['Signé','Perdu','Pas intéressé'];
+const TYPES_BIEN = ['Studio','Appartement','Maison','Villa'];
+const ORIGINES = ['Leboncoin','AlloVoisins','Formulaire du site','Facebook','Agence partenaire','Bouche à oreille','Autre'];
+const CATEGORIES_CONTACT = ['Ménage','Blanchisserie','Plombier','Électricien','Serrurier','Jardinier','Piscine','Bricolage','Agence partenaire','Photographe','Propriétaire client','Autre'];
+const CATEGORIES_TACHE = ['Ménage','Check in','Check out','Rendez vous','Visite','Relance','Administratif','Autre'];
+const LOGEMENTS = ['Casa Isla','Casa Antala','Casa Nanutu','La Roya','Châteauneuf','Villa La Messuguière'];
+const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+/* État */
+const S = {
+  data: vierge(),
+  sha: null,
+  vueConnexion: false,
+  erreurConnexion: '',
+  connecte: false,
+  bandeau: null,
+  vue: 'accueil',
+  fp: { q:'', statut:'', origine:'', tri:'action' },
+  fc: { q:'', cat:'' },
+  lundi: lundiDe(new Date())
+};
+
+function vierge(){ return { version:1, prospects:[], contacts:[], taches:[] }; }
+function normaliser(d){
+  d = (d && typeof d === 'object') ? d : {};
+  return { version: d.version || 1, prospects: Array.isArray(d.prospects)?d.prospects:[], contacts: Array.isArray(d.contacts)?d.contacts:[], taches: Array.isArray(d.taches)?d.taches:[] };
+}
+
+/* Outils */
+const $ = s => document.querySelector(s);
+function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function nouvelId(p){ return p + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function pad(n){ return String(n).padStart(2,'0'); }
+function iso(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function versDate(s){ if(!s) return null; const [y,m,j] = s.split('-').map(Number); return new Date(y, m-1, j); }
+function aujourdhui(){ return iso(new Date()); }
+function lundiDe(d){ const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const j = (x.getDay()+6)%7; x.setDate(x.getDate()-j); return x; }
+function ajouterJours(d,n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function ecart(s){ const a = versDate(s), b = versDate(aujourdhui()); return Math.round((a-b)/86400000); }
+const MOIS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+function dateCourte(s){ if(!s) return ''; const d = versDate(s); return d.getDate()+' '+MOIS[d.getMonth()]+(d.getFullYear()!==new Date().getFullYear()?' '+d.getFullYear():''); }
+function dateLongue(d){ return d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+function quand(s){
+  if(!s) return '';
+  const e = ecart(s);
+  if(e === 0) return "Aujourd'hui";
+  if(e === -1) return 'Hier, en retard';
+  if(e < 0) return 'En retard de '+(-e)+' j';
+  if(e === 1) return 'Demain';
+  return dateCourte(s);
+}
+function opts(liste, val, vide){ return (vide!==undefined?`<option value="">${esc(vide)}</option>`:'') + liste.map(o=>`<option${o===val?' selected':''}>${esc(o)}</option>`).join(''); }
+function datalist(id, liste){ return `<datalist id="${id}">${liste.map(o=>`<option value="${esc(o)}">`).join('')}</datalist>`; }
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('visible'); clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove('visible'), 2600); }
+function point(statut){ return `<i class="point" style="background:${COULEURS_STATUT[statut]||'#D8C6B6'}"></i>`; }
+function pastille(statut){ return `<span class="pastille${statut==='Signé'?' signe':''}">${point(statut)}${esc(statut||'Sans statut')}</span>`; }
+function bien(p){ return [p.typeBien, p.chambres ? p.chambres+' ch.' : ''].filter(Boolean).join(', '); }
+
+/* Données sur GitHub (dépôt privé maison-solina, fichier prospection/prospects.json) */
+const DEPOT = { proprio:'concinafanny-rgb', nom:'maison-solina', chemin:'prospection/prospects.json', branche:'main' };
+const CLE_JETON = 'solina-jeton', CLE_COPIE = 'solina-copie';
+function jeton(){ try{ return localStorage.getItem(CLE_JETON) || ''; }catch(e){ return ''; } }
+function cache(){ try{ localStorage.setItem(CLE_COPIE, JSON.stringify(S.data)); }catch(e){} }
+function urlFichier(){ return `https://api.github.com/repos/${DEPOT.proprio}/${DEPOT.nom}/contents/${DEPOT.chemin}`; }
+function entetes(){ return { 'Authorization':'Bearer '+jeton(), 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }; }
+function versBase64(txt){ const o = new TextEncoder().encode(txt); let b = ''; for(let i=0;i<o.length;i+=0x8000) b += String.fromCharCode.apply(null, o.subarray(i,i+0x8000)); return btoa(b); }
+function depuisBase64(b){ const s = atob(b.replace(/\s/g,'')); const o = new Uint8Array(s.length); for(let i=0;i<s.length;i++) o[i] = s.charCodeAt(i); return new TextDecoder().decode(o); }
+class ErreurDepot extends Error { constructor(code, msg){ super(msg); this.code = code; } }
+
+async function lireDepot(){
+  let r;
+  try{ r = await fetch(urlFichier()+'?ref='+DEPOT.branche+'&t='+Date.now(), { headers:entetes(), cache:'no-store' }); }
+  catch(e){ throw new ErreurDepot('reseau', 'Pas de connexion internet'); }
+  if(r.status === 401) throw new ErreurDepot('cle', 'Clé refusée par GitHub');
+  if(r.status === 403 || r.status === 404) throw new ErreurDepot('acces', "Cette clé n'a pas accès au dépôt maison-solina");
+  if(!r.ok) throw new ErreurDepot('autre', 'GitHub ne répond pas ('+r.status+')');
+  const j = await r.json();
+  let texte;
+  if(j.content && j.encoding === 'base64') texte = depuisBase64(j.content);
+  else {
+    const b = await fetch(j.git_url, { headers:entetes(), cache:'no-store' }).then(x=>x.json());
+    texte = depuisBase64(b.content);
+  }
+  let data;
+  try{ data = normaliser(texte.trim() ? JSON.parse(texte) : {}); }
+  catch(e){ throw new ErreurDepot('json', 'Le fichier prospects.json contient une erreur'); }
+  return { data, sha:j.sha };
+}
+async function ecrireDepot(data, sha, message){
+  let r;
+  try{
+    r = await fetch(urlFichier(), { method:'PUT', headers:Object.assign({'Content-Type':'application/json'}, entetes()), cache:'no-store',
+      body: JSON.stringify({ message, content: versBase64(JSON.stringify(data, null, 2)+'\n'), sha, branch:DEPOT.branche }) });
+  }catch(e){ throw new ErreurDepot('reseau', 'Pas de connexion internet'); }
+  if(r.status === 409 || r.status === 422) throw new ErreurDepot('conflit', 'Le fichier a changé entre temps');
+  if(r.status === 401) throw new ErreurDepot('cle', 'Clé refusée par GitHub');
+  if(r.status === 403 || r.status === 404) throw new ErreurDepot('acces', "Cette clé ne peut pas écrire dans le dépôt");
+  if(!r.ok) throw new ErreurDepot('autre', 'GitHub ne répond pas ('+r.status+')');
+  return (await r.json()).content.sha;
+}
+
+async function demarrer(){
+  try{ const c = localStorage.getItem(CLE_COPIE); if(c) S.data = normaliser(JSON.parse(c)); }catch(e){}
+  if(!jeton()){ S.vueConnexion = true; rendre(); return; }
+  await actualiser(true);
+}
+async function actualiser(premiere){
+  try{
+    const { data, sha } = await lireDepot();
+    const change = sha !== S.sha;
+    S.data = data; S.sha = sha; S.connecte = true; S.bandeau = null; S.vueConnexion = false;
+    cache();
+    if(change || premiere) rendre();
+    return change;
+  }catch(e){
+    S.connecte = false;
+    if(e.code === 'cle' || e.code === 'acces'){ S.vueConnexion = true; S.erreurConnexion = e.message; }
+    else S.bandeau = e.code === 'json' ? 'erreur' : 'horsligne';
+    rendre();
+    return false;
+  }
+}
+async function connecter(cle){
+  try{ localStorage.setItem(CLE_JETON, cle.trim()); }catch(e){ toast("Impossible d'enregistrer la clé sur cet appareil"); return; }
+  S.erreurConnexion = '';
+  await actualiser(true);
+  if(S.connecte) toast('Connectée à tes données');
+}
+function deconnecter(){
+  try{ localStorage.removeItem(CLE_JETON); localStorage.removeItem(CLE_COPIE); }catch(e){}
+  S.data = vierge(); S.sha = null; S.connecte = false; S.vueConnexion = true; S.bandeau = null;
+  $('#dlg').close(); rendre(); toast('Cet appareil est déconnecté');
+}
+let fileEnregistrement = Promise.resolve();
+function enregistrer(modif, message){
+  const tache = fileEnregistrement.then(()=>enregistrerMaintenant(modif, message || "Mise à jour depuis l'application"));
+  fileEnregistrement = tache.catch(()=>{});
+  return tache;
+}
+async function enregistrerMaintenant(modif, message){
+  if(!S.connecte){
+    await actualiser();
+    if(!S.connecte){ toast('Pas de connexion, réessaie dans un instant'); return false; }
+  }
+  for(let essai = 0; essai < 3; essai++){
+    try{
+      if(essai > 0 || !S.sha){ const f = await lireDepot(); S.data = f.data; S.sha = f.sha; }
+      const copie = JSON.parse(JSON.stringify(S.data));
+      modif(copie);
+      S.sha = await ecrireDepot(copie, S.sha, 'Application : ' + message);
+      S.data = copie; cache(); rendre();
+      return true;
+    }catch(e){
+      if(e.code === 'conflit') continue;
+      console.error(e);
+      toast(e.code === 'reseau' ? "Pas de connexion, rien n'a été enregistré" : 'Enregistrement impossible : '+e.message);
+      return false;
+    }
+  }
+  toast("Enregistrement impossible, réessaie");
+  return false;
+}
+let derniereVerif = 0;
+async function verifierMiseAJour(){
+  if(!jeton() || $('#dlg').open || Date.now() - derniereVerif < 15000) return;
+  derniereVerif = Date.now();
+  if(await actualiser() && S.sha) toast('Données mises à jour');
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible') verifierMiseAJour(); });
+window.addEventListener('focus', verifierMiseAJour);
+window.addEventListener('online', ()=>actualiser());
+
+/* Rendu général */
+function rendre(){
+  document.querySelectorAll('#onglets button, #ongletsBas button').forEach(b=>b.classList.toggle('actif', b.dataset.vue===S.vue));
+  const ef = $('#etatFichier');
+  ef.classList.toggle('ok', S.connecte);
+  ef.querySelector('span').textContent = S.connecte ? 'Synchronisé' : 'Hors connexion';
+  $('#bandeau').innerHTML = S.vueConnexion ? '' : rendreBandeau();
+  document.body.classList.toggle('connexion-active', !!S.vueConnexion);
+  if(S.vueConnexion){ $('#vue').innerHTML = vueConnexion(); return; }
+  const vues = { accueil:vueAccueil, pipeline:vuePipeline, prospects:vueProspects, contacts:vueContacts, planning:vuePlanning };
+  $('#vue').innerHTML = vues[S.vue]();
+  if(S.vue === 'pipeline') brancherGlisser();
+}
+function rendreBandeau(){
+  const b = S.bandeau;
+  if(!b) return '';
+  const textes = {
+    horsligne: ['Pas de connexion', "Tu vois la dernière version enregistrée sur cet appareil. Les modifications reviendront dès que le réseau sera là.", `<button class="btn clair" data-act="actualiser">Réessayer</button>`],
+    erreur: ['Le fichier prospects.json est illisible', "Il contient probablement une faute de syntaxe. Rien n'a été modifié. Demande à Claude de le réparer, puis réessaie.", `<button class="btn clair" data-act="actualiser">Réessayer</button>`]
+  }[b];
+  return `<div class="bandeau"><p><strong>${textes[0]}</strong>${textes[1]}</p><div class="actions">${textes[2]}</div></div>`;
+}
+function vueConnexion(){
+  return `<div class="connexion"><div class="carte">
+    <div class="surtitre">Bienvenue</div>
+    <h1>Maison Solina</h1>
+    <p class="sous" style="margin-bottom:22px">Pour retrouver tes prospects, contacts et planning sur cet appareil, colle ta clé d'accès GitHub. Tu ne le fais qu'une fois par appareil.</p>
+    <form id="fConnexion">
+      <label class="surtitre" for="cle">Clé d'accès</label>
+      <input type="password" id="cle" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_..." required>
+      ${S.erreurConnexion ? `<p style="color:var(--retard);margin:0 0 14px;font-size:13px">${esc(S.erreurConnexion)}</p>` : ''}
+      <button class="btn" type="submit" style="width:100%;padding:12px">Se connecter</button>
+    </form>
+    <details><summary>Comment obtenir ma clé</summary><ol>
+      <li>Sur github.com, ouvre Settings, puis Developer settings, puis Personal access tokens, puis Fine grained tokens.</li>
+      <li>Clique sur Generate new token, nomme la Application Solina, choisis une expiration d'un an.</li>
+      <li>Dans Repository access, choisis Only select repositories, puis maison-solina.</li>
+      <li>Dans Permissions, mets Contents sur Read and write.</li>
+      <li>Clique sur Generate token, copie la clé et colle la ici.</li>
+    </ol></details>
+  </div></div>`;
+}
+function formReglages(){
+  $('#dlg').innerHTML = `
+    <div class="dlg-tete"><div class="surtitre">Réglages</div><h2 style="margin:4px 0 0">Cet appareil</h2></div>
+    <div class="dlg-corps"><p style="margin:0 0 10px;color:var(--doux)">${S.connecte ? 'Connectée au dépôt privé maison-solina. Chaque modification est enregistrée et versionnée sur GitHub.' : 'Cet appareil ne joint pas GitHub pour le moment.'}</p>
+      <p style="margin:0;color:var(--pale);font-size:13px">Si tu perds ce téléphone ou cet ordinateur, supprime la clé Application Solina sur github.com : l'appareil n'aura plus accès à rien.</p></div>
+    <div class="dlg-pied">${jeton()?`<button class="btn danger" data-act="deconnecter">Déconnecter cet appareil</button>`:''}<div class="droite"><button class="btn" data-act="fermer">Fermer</button></div></div>`;
+  $('#dlg').showModal();
+}
+
+/* Accueil */
+function aFaire(limite){
+  const auj = aujourdhui();
+  const items = [];
+  S.data.prospects.forEach(p=>{
+    if(p.dateProchaineAction && !STATUTS_CLOS.includes(p.statut) && (limite ? p.dateProchaineAction <= limite : p.dateProchaineAction <= auj))
+      items.push({ type:'prospect', id:p.id, date:p.dateProchaineAction, titre:p.prochaineAction || 'Recontacter', qui:p.nom, meta:[p.ville, bien(p)].filter(Boolean).join(', '), tel:p.telephone });
+  });
+  S.data.taches.forEach(t=>{
+    if(!t.fait && t.date && (limite ? t.date <= limite : t.date <= auj))
+      items.push({ type:'tache', id:t.id, date:t.date, heure:t.heure, titre:t.titre, qui:nomLie(t.lien), meta:[t.categorie, t.logement].filter(Boolean).join(', ') });
+  });
+  return items.sort((a,b)=> (a.date+(a.heure||'')).localeCompare(b.date+(b.heure||'')));
+}
+function nomLie(lien){
+  if(!lien) return '';
+  const [k,id] = lien.split(':');
+  const x = (k==='p' ? S.data.prospects : S.data.contacts).find(o=>o.id===id);
+  return x ? x.nom : '';
+}
+function ligneAFaire(it){
+  const e = ecart(it.date);
+  const gauche = it.type==='tache'
+    ? `<button class="case" title="Marquer comme fait" data-act="cocher" data-id="${it.id}"></button>`
+    : `<span class="point" style="background:var(--terra);margin-top:8px"></span>`;
+  return `<li class="item">
+    ${gauche}
+    <div class="corps" data-act="${it.type==='tache'?'editerTache':'editerProspect'}" data-id="${it.id}" style="cursor:pointer">
+      <div class="titre"><span class="etiquette">${it.type==='tache'?'Tâche':'Prospect'}</span>${esc(it.titre)}</div>
+      <div class="meta">${esc([it.qui, it.meta].filter(Boolean).join(' · '))}${it.tel?` · <a href="tel:${esc(it.tel.replace(/\s/g,''))}">${esc(it.tel)}</a>`:''}</div>
+    </div>
+    <div class="quand${e<0?' retard':''}">${it.heure?esc(it.heure)+'<br>':''}${quand(it.date)}</div>
+  </li>`;
+}
+function vueAccueil(){
+  const P = S.data.prospects;
+  const auj = new Date();
+  const items = aFaire();
+  const limite = iso(ajouterJours(auj,7));
+  const prochains = aFaire(limite).filter(i=>i.date > aujourdhui());
+  const actifs = P.filter(p=>!STATUTS_CLOS.includes(p.statut)).length;
+  const signes = P.filter(p=>p.statut==='Signé').length;
+  const clos = P.filter(p=>STATUTS_CLOS.includes(p.statut)).length;
+  const mois = iso(auj).slice(0,7);
+  const nouveaux = P.filter(p=>(p.premierContact||'').startsWith(mois)).length;
+  const retard = items.filter(i=>ecart(i.date)<0).length;
+  return `
+    <div class="surtitre">${esc(dateLongue(auj))}</div>
+    <h1>Bonjour Fanny</h1>
+    <p class="sous">${items.length ? `${items.length} action${items.length>1?'s':''} à faire aujourd'hui${retard?`, dont ${retard} en retard`:''}.` : "Rien d'urgent aujourd'hui."}</p>
+
+    <div class="statuts">
+      ${STATUTS.map(s=>`<button class="statut-case" data-act="filtrerStatut" data-statut="${esc(s)}"><b>${P.filter(p=>p.statut===s).length}</b><span>${point(s)}${esc(s)}</span></button>`).join('')}
+    </div>
+
+    <div class="grille-accueil">
+      <section class="carte">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+          <h2>À faire aujourd'hui</h2>
+          <div style="display:flex;gap:8px"><button class="btn clair petit" data-act="nouvelleTache">Nouvelle tâche</button><button class="btn petit" data-act="nouveauProspect">Nouveau prospect</button></div>
+        </div>
+        <ul class="liste">${items.length ? items.map(ligneAFaire).join('') : `<li class="vide">Tout est à jour. Belle journée.</li>`}</ul>
+      </section>
+      <section class="carte">
+        <h2>Les 7 prochains jours</h2>
+        <ul class="liste">${prochains.length ? prochains.map(ligneAFaire).join('') : `<li class="vide">Rien de prévu cette semaine.</li>`}</ul>
+      </section>
+    </div>
+
+    <div class="chiffres">
+      <div class="chiffre"><b>${actifs}</b><span>Prospects en cours</span></div>
+      <div class="chiffre"><b>${nouveaux}</b><span>Nouveaux ce mois ci</span></div>
+      <div class="chiffre"><b>${signes}</b><span>Biens signés</span></div>
+      <div class="chiffre"><b>${clos ? Math.round(signes/clos*100)+' %' : '0 %'}</b><span>Taux de signature</span></div>
+    </div>`;
+}
+
+/* Pipeline */
+function vuePipeline(){
+  const P = S.data.prospects;
+  return `
+    <div class="outils"><div><h1>Pipeline</h1><p class="sous" style="margin:0"><span class="indice-glisser">Fais glisser une fiche pour changer son statut.</span><span class="indice-tactile">Fais défiler les colonnes, touche une fiche pour changer son statut.</span></p></div>
+      <div class="droite"><button class="btn" data-act="nouveauProspect">Nouveau prospect</button></div></div>
+    <div class="pipeline">
+      ${STATUTS.map(s=>{
+        const liste = P.filter(p=>p.statut===s).sort(triAction);
+        return `<div class="colonne" data-statut="${esc(s)}">
+          <h3>${point(s)}${esc(s)}<em>${liste.length}</em></h3>
+          ${liste.map(p=>`<div class="fiche" draggable="true" data-id="${p.id}" data-act="editerProspect">
+            <b>${esc(p.nom)}</b>
+            <small>${esc([p.ville, bien(p)].filter(Boolean).join(', '))}</small>
+            ${p.dateProchaineAction && !STATUTS_CLOS.includes(s) ? `<div class="action${ecart(p.dateProchaineAction)<0?' retard':''}">${quand(p.dateProchaineAction)}${p.prochaineAction?' · '+esc(p.prochaineAction):''}</div>`:''}
+          </div>`).join('')}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+function brancherGlisser(){
+  document.querySelectorAll('.fiche').forEach(f=>{
+    f.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', f.dataset.id); f.classList.add('glisse'); });
+    f.addEventListener('dragend', ()=>f.classList.remove('glisse'));
+  });
+  document.querySelectorAll('.colonne').forEach(c=>{
+    c.addEventListener('dragover', e=>{ e.preventDefault(); c.classList.add('survol'); });
+    c.addEventListener('dragleave', ()=>c.classList.remove('survol'));
+    c.addEventListener('drop', e=>{
+      e.preventDefault(); c.classList.remove('survol');
+      const id = e.dataTransfer.getData('text/plain'), st = c.dataset.statut;
+      const p = S.data.prospects.find(x=>x.id===id);
+      if(!p || p.statut === st) return;
+      enregistrer(d=>{ const x = d.prospects.find(y=>y.id===id); if(x) x.statut = st; }, p.nom+' passe en '+st).then(ok=>ok && toast(p.nom+' : '+st));
+    });
+  });
+}
+
+/* Prospects */
+function triAction(a,b){
+  const da = a.dateProchaineAction || '9999', db = b.dateProchaineAction || '9999';
+  return da.localeCompare(db) || (a.nom||'').localeCompare(b.nom||'');
+}
+function prospectsFiltres(){
+  const f = S.fp, q = f.q.trim().toLowerCase();
+  let l = S.data.prospects.filter(p=>
+    (!q || (p.nom||'').toLowerCase().includes(q) || (p.ville||'').toLowerCase().includes(q)) &&
+    (!f.statut || p.statut===f.statut) &&
+    (!f.origine || p.origine===f.origine));
+  const tris = {
+    action: triAction,
+    recent: (a,b)=>(b.premierContact||'').localeCompare(a.premierContact||''),
+    nom: (a,b)=>(a.nom||'').localeCompare(b.nom||'','fr')
+  };
+  return l.sort(tris[f.tri]);
+}
+function vueProspects(){
+  const l = prospectsFiltres(), f = S.fp;
+  return `
+    <h1>Prospects</h1>
+    <p class="sous">${S.data.prospects.length} propriétaire${S.data.prospects.length>1?'s':''} au total</p>
+    <div class="outils">
+      <div class="champ-recherche">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="rechP" placeholder="Rechercher un nom ou une ville" value="${esc(f.q)}">
+      </div>
+      <select id="filtreStatut">${opts(STATUTS, f.statut, 'Tous les statuts')}</select>
+      <select id="filtreOrigine">${opts(ORIGINES, f.origine, 'Toutes les origines')}</select>
+      <select id="tri">
+        <option value="action"${f.tri==='action'?' selected':''}>Trier par prochaine action</option>
+        <option value="recent"${f.tri==='recent'?' selected':''}>Plus récents d'abord</option>
+        <option value="nom"${f.tri==='nom'?' selected':''}>Par nom</option>
+      </select>
+      <div class="droite">
+        <button class="btn clair" data-act="exporterProspects">Exporter en CSV</button>
+        <button class="btn" data-act="nouveauProspect">Nouveau prospect</button>
+      </div>
+    </div>
+    ${l.length ? `<table class="tableau">
+      <thead><tr><th>Propriétaire</th><th>Ville et bien</th><th class="masquable">Origine</th><th>Statut</th><th class="masquable">Dernier contact</th><th>Prochaine action</th></tr></thead>
+      <tbody>${l.map(p=>{
+        const e = p.dateProchaineAction ? ecart(p.dateProchaineAction) : null;
+        const clos = STATUTS_CLOS.includes(p.statut);
+        return `<tr data-act="editerProspect" data-id="${p.id}">
+          <td><div class="nom">${esc(p.nom)}</div><div class="fin">${p.telephone?`<a href="tel:${esc(p.telephone.replace(/\s/g,''))}">${esc(p.telephone)}</a>`:esc(p.email||'')}</div></td>
+          <td class="fin" style="font-size:inherit">${esc([p.ville, bien(p)].filter(Boolean).join(', '))}</td>
+          
+          <td class="masquable">${esc(p.origine)}</td>
+          <td class="cell-statut">${pastille(p.statut)}</td>
+          <td class="masquable">${esc(dateCourte(p.dernierContact))}</td>
+          <td>${p.dateProchaineAction ? `<div style="${!clos&&e<0?'color:var(--retard);font-weight:500':''}">${quand(p.dateProchaineAction)}</div>`:''}<div class="fin">${esc(p.prochaineAction||'')}</div></td>
+        </tr>`;}).join('')}</tbody>
+    </table>
+    <p class="compte">${l.length} affiché${l.length>1?'s':''}</p>` : `<div class="carte vide">${S.data.prospects.length ? 'Aucun prospect ne correspond à ta recherche.' : 'Aucun prospect pour le moment. Ajoute le premier.'}</div>`}`;
+}
+function formProspect(p){
+  const n = !p;
+  p = p || { statut:'À contacter', premierContact:aujourdhui() };
+  $('#dlg').innerHTML = `
+    <form method="dialog" id="fP">
+      <div class="dlg-tete"><div class="surtitre">${n?'Nouveau prospect':'Fiche prospect'}</div><h2 style="margin:4px 0 0">${n?'Ajouter un propriétaire':esc(p.nom)}</h2></div>
+      <div class="dlg-corps"><div class="form">
+        <label class="large">Prénom et nom<input type="text" name="nom" required value="${esc(p.nom)}"></label>
+        <label>Téléphone<input type="tel" name="telephone" value="${esc(p.telephone)}"></label>
+        <label>Mail<input type="email" name="email" value="${esc(p.email)}"></label>
+        <label>Ville<input type="text" name="ville" value="${esc(p.ville)}" list="dlVilles"></label>
+        <label>Type de bien<select name="typeBien">${opts(TYPES_BIEN, p.typeBien, 'Choisir')}</select></label>
+        <label>Nombre de chambres<input type="number" min="0" name="chambres" value="${esc(p.chambres)}"></label>
+        <label>Origine<select name="origine">${opts(ORIGINES, p.origine, 'Choisir')}</select></label>
+        <label class="large">Statut<select name="statut">${opts(STATUTS, p.statut)}</select></label>
+        <div class="separateur"></div>
+        <label>Premier contact<input type="date" name="premierContact" value="${esc(p.premierContact)}"></label>
+        <label>Dernier contact<span class="avec-bouton"><input type="date" name="dernierContact" value="${esc(p.dernierContact)}"><button type="button" class="btn clair petit" data-act="auj" data-cible="dernierContact">Aujourd'hui</button></span></label>
+        <label>Prochaine action<input type="text" name="prochaineAction" value="${esc(p.prochaineAction)}" placeholder="Rappeler, envoyer le devis..."></label>
+        <label>Date de la prochaine action<input type="date" name="dateProchaineAction" value="${esc(p.dateProchaineAction)}"></label>
+        <label class="large">Notes<textarea name="notes">${esc(p.notes)}</textarea></label>
+      </div></div>
+      <div class="dlg-pied">
+        ${n?'':`<button type="button" class="btn danger" data-act="supprimerProspect" data-id="${p.id}">Supprimer</button>`}
+        <div class="droite"><button type="button" class="btn discret" data-act="fermer">Annuler</button><button class="btn" type="submit">Enregistrer</button></div>
+      </div>
+    </form>${datalist('dlVilles',['Antibes','Juan les Pins','Golfe Juan','Cannes','Vallauris','Mougins','Le Cannet','Mandelieu','Biot','Valbonne','Villeneuve Loubet','Cagnes sur Mer','Grasse','Nice'])}`;
+  $('#dlg').showModal();
+  $('#fP').addEventListener('submit', e=>{
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(e.target).entries());
+    Object.keys(v).forEach(k=>v[k] = v[k].trim());
+    v.chambres = v.chambres === '' ? '' : Number(v.chambres);
+    const id = p.id || nouvelId('p_');
+    enregistrer(d=>{
+      const i = d.prospects.findIndex(x=>x.id===id);
+      if(i>=0) d.prospects[i] = Object.assign({}, d.prospects[i], v);
+      else d.prospects.push(Object.assign({ id, creeLe:aujourdhui() }, v));
+    }, (n?'ajout de ':'modification de ')+v.nom).then(ok=>{ if(ok){ $('#dlg').close(); toast(n?'Prospect ajouté':'Modifications enregistrées'); } });
+  });
+}
+
+/* Export CSV */
+function exporterCSV(nom, colonnes, lignes){
+  const q = v => { const s = String(v ?? ''); return /[;"\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  const csv = '﻿' + [colonnes.map(c=>q(c[0])).join(';')].concat(lignes.map(l=>colonnes.map(c=>q(l[c[1]])).join(';'))).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = nom + '-' + aujourdhui() + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+function exporterProspects(){
+  if(!S.data.prospects.length){ toast('Aucun prospect à exporter'); return; }
+  exporterCSV('prospects-maison-solina', [
+    ['Prénom et nom','nom'],['Téléphone','telephone'],['Mail','email'],['Ville','ville'],['Type de bien','typeBien'],['Chambres','chambres'],
+    ['Origine','origine'],['Statut','statut'],['Premier contact','premierContact'],['Dernier contact','dernierContact'],
+    ['Prochaine action','prochaineAction'],['Date prochaine action','dateProchaineAction'],['Notes','notes']
+  ], [...S.data.prospects].sort(triAction));
+  toast('Export CSV téléchargé');
+}
+function exporterContacts(){
+  if(!S.data.contacts.length){ toast('Aucun contact à exporter'); return; }
+  exporterCSV('contacts-maison-solina', [['Nom','nom'],['Société','societe'],['Catégorie','categorie'],['Téléphone','telephone'],['Mail','email'],['Ville','ville'],['Notes','notes']], [...S.data.contacts].sort((a,b)=>(a.nom||'').localeCompare(b.nom||'','fr')));
+  toast('Export CSV téléchargé');
+}
+
+/* Contacts */
+function vueContacts(){
+  const f = S.fc, q = f.q.trim().toLowerCase();
+  const cats = [...new Set(CATEGORIES_CONTACT.concat(S.data.contacts.map(c=>c.categorie).filter(Boolean)))];
+  const utilisees = cats.filter(c=>S.data.contacts.some(x=>x.categorie===c));
+  let cartes = [];
+  if(f.cat !== 'Prospects'){
+    cartes = S.data.contacts
+      .filter(c=>(!f.cat || c.categorie===f.cat) && (!q || [c.nom,c.societe,c.ville,c.categorie].join(' ').toLowerCase().includes(q)))
+      .sort((a,b)=>(a.nom||'').localeCompare(b.nom||'','fr'))
+      .map(c=>({ act:'editerContact', id:c.id, nom:c.nom, soc:[c.categorie, c.societe].filter(Boolean).join(' · '), tel:c.telephone, email:c.email, ville:c.ville, notes:c.notes }));
+  }
+  if(f.cat === 'Prospects' || (!f.cat && q)){
+    cartes = cartes.concat(S.data.prospects
+      .filter(p=>!q || [p.nom,p.ville].join(' ').toLowerCase().includes(q))
+      .sort((a,b)=>(a.nom||'').localeCompare(b.nom||'','fr'))
+      .map(p=>({ act:'editerProspect', id:p.id, nom:p.nom, soc:'Prospect · '+(p.statut||''), tel:p.telephone, email:p.email, ville:[p.ville,bien(p)].filter(Boolean).join(', '), notes:p.notes })));
+  }
+  return `
+    <h1>Contacts</h1>
+    <p class="sous">Prestataires, artisans, partenaires et propriétaires</p>
+    <div class="outils">
+      <div class="champ-recherche">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="rechC" placeholder="Rechercher un nom, une société, une ville" value="${esc(f.q)}">
+      </div>
+      <div class="droite"><button class="btn clair" data-act="exporterContacts">Exporter en CSV</button><button class="btn" data-act="nouveauContact">Nouveau contact</button></div>
+    </div>
+    <div class="puces">
+      <button class="puce${!f.cat?' actif':''}" data-act="cat" data-cat="">Tous les prestataires</button>
+      ${utilisees.map(c=>`<button class="puce${f.cat===c?' actif':''}" data-act="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('')}
+      <button class="puce${f.cat==='Prospects'?' actif':''}" data-act="cat" data-cat="Prospects">Prospects</button>
+    </div>
+    ${cartes.length ? `<div class="grille-contacts">${cartes.map(c=>`
+      <div class="contact" data-act="${c.act}" data-id="${c.id}">
+        <div class="nom">${esc(c.nom)}</div>
+        <div class="soc">${esc(c.soc)}</div>
+        <div class="lignes">
+          ${c.tel?`<a href="tel:${esc(c.tel.replace(/\s/g,''))}">${esc(c.tel)}</a>`:''}
+          ${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}
+          ${c.ville?`<span>${esc(c.ville)}</span>`:''}
+        </div>
+        ${c.notes?`<div class="notes">${esc(c.notes)}</div>`:''}
+      </div>`).join('')}</div>` : `<div class="carte vide">${S.data.contacts.length||f.cat==='Prospects' ? 'Aucun contact ne correspond.' : 'Aucun contact pour le moment. Ajoute ta femme de ménage, ton plombier, ta blanchisserie...'}</div>`}`;
+}
+function formContact(c){
+  const n = !c;
+  c = c || {};
+  const cats = [...new Set(CATEGORIES_CONTACT.concat(S.data.contacts.map(x=>x.categorie).filter(Boolean)))];
+  $('#dlg').innerHTML = `
+    <form method="dialog" id="fC">
+      <div class="dlg-tete"><div class="surtitre">${n?'Nouveau contact':'Fiche contact'}</div><h2 style="margin:4px 0 0">${n?'Ajouter un contact':esc(c.nom)}</h2></div>
+      <div class="dlg-corps"><div class="form">
+        <label>Prénom et nom<input type="text" name="nom" required value="${esc(c.nom)}"></label>
+        <label>Société<input type="text" name="societe" value="${esc(c.societe)}"></label>
+        <label>Catégorie<input type="text" name="categorie" list="dlCats" value="${esc(c.categorie)}" placeholder="Choisir ou écrire"></label>
+        <label>Ville<input type="text" name="ville" value="${esc(c.ville)}"></label>
+        <label>Téléphone<input type="tel" name="telephone" value="${esc(c.telephone)}"></label>
+        <label>Mail<input type="email" name="email" value="${esc(c.email)}"></label>
+        <label class="large">Notes<textarea name="notes" placeholder="Tarifs, disponibilités, logements sur lesquels il intervient...">${esc(c.notes)}</textarea></label>
+      </div></div>
+      <div class="dlg-pied">
+        ${n?'':`<button type="button" class="btn danger" data-act="supprimerContact" data-id="${c.id}">Supprimer</button>`}
+        <div class="droite"><button type="button" class="btn discret" data-act="fermer">Annuler</button><button class="btn" type="submit">Enregistrer</button></div>
+      </div>
+    </form>${datalist('dlCats', cats)}`;
+  $('#dlg').showModal();
+  $('#fC').addEventListener('submit', e=>{
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(e.target).entries());
+    Object.keys(v).forEach(k=>v[k] = v[k].trim());
+    const id = c.id || nouvelId('c_');
+    enregistrer(d=>{
+      const i = d.contacts.findIndex(x=>x.id===id);
+      if(i>=0) d.contacts[i] = Object.assign({}, d.contacts[i], v);
+      else d.contacts.push(Object.assign({ id, creeLe:aujourdhui() }, v));
+    }, (n?'ajout du contact ':'modification du contact ')+v.nom).then(ok=>{ if(ok){ $('#dlg').close(); toast(n?'Contact ajouté':'Modifications enregistrées'); } });
+  });
+}
+
+/* Planning */
+function vuePlanning(){
+  const l = S.lundi, auj = aujourdhui();
+  const dim = ajouterJours(l,6);
+  const enRetard = S.data.taches.filter(t=>!t.fait && t.date && t.date < auj).sort((a,b)=>a.date.localeCompare(b.date));
+  const periode = l.getMonth()===dim.getMonth()
+    ? `${l.getDate()} au ${dim.getDate()} ${dim.toLocaleDateString('fr-FR',{month:'long'})}`
+    : `${l.getDate()} ${MOIS[l.getMonth()]} au ${dim.getDate()} ${MOIS[dim.getMonth()]}`;
+  return `
+    <div class="outils"><div><h1>Planning</h1><p class="sous" style="margin:0">Tes tâches et les actions prospects, semaine par semaine</p></div>
+      <div class="droite"><button class="btn" data-act="nouvelleTache">Nouvelle tâche</button></div></div>
+    <div class="semaine-nav">
+      <button class="btn clair petit" data-act="semaine" data-n="-7">Précédente</button>
+      <button class="btn discret petit" data-act="semaine" data-n="0">Cette semaine</button>
+      <button class="btn clair petit" data-act="semaine" data-n="7">Suivante</button>
+      <span class="periode">Semaine du ${esc(periode)}</span>
+    </div>
+    <div class="semaine">
+      ${JOURS.map((nom,i)=>{
+        const d = iso(ajouterJours(l,i));
+        const taches = S.data.taches.filter(t=>t.date===d).sort((a,b)=>(a.fait-b.fait)||(a.heure||'99').localeCompare(b.heure||'99'));
+        const actions = S.data.prospects.filter(p=>p.dateProchaineAction===d && !STATUTS_CLOS.includes(p.statut));
+        return `<div class="jour${d===auj?' aujourdhui':''}">
+          <div class="tete"><span>${nom}</span><b>${versDate(d).getDate()}</b></div>
+          ${taches.map(t=>`<div class="tache${t.fait?' faite':''}" data-act="editerTache" data-id="${t.id}">
+            <button class="case${t.fait?' cochee':''}" data-act="cocher" data-id="${t.id}" title="${t.fait?'Remettre à faire':'Marquer comme fait'}"></button>
+            <div class="txt">${t.heure?`<b style="font-weight:500">${esc(t.heure)}</b> `:''}${esc(t.titre)}<small>${esc([t.logement, nomLie(t.lien)].filter(Boolean).join(' · '))}</small></div>
+          </div>`).join('')}
+          ${actions.map(p=>`<div class="tache prospect" data-act="editerProspect" data-id="${p.id}"><div class="txt">${esc(p.prochaineAction||'Recontacter')}<small>${esc(p.nom)}</small></div></div>`).join('')}
+          <button class="ajout" data-act="nouvelleTache" data-date="${d}">+ Ajouter</button>
+        </div>`;
+      }).join('')}
+    </div>
+    ${enRetard.length ? `<section class="carte" style="margin-top:24px"><h2>Tâches en retard</h2><ul class="liste">${enRetard.map(t=>ligneAFaire({type:'tache',id:t.id,date:t.date,heure:t.heure,titre:t.titre,qui:nomLie(t.lien),meta:[t.categorie,t.logement].filter(Boolean).join(', ')})).join('')}</ul></section>`:''}`;
+}
+function formTache(t, dateParDefaut){
+  const n = !t;
+  t = t || { date: dateParDefaut || aujourdhui() };
+  const liens = S.data.contacts.slice().sort((a,b)=>(a.nom||'').localeCompare(b.nom||'','fr')).map(c=>[`c:${c.id}`, c.nom+(c.categorie?' ('+c.categorie+')':'')])
+    .concat(S.data.prospects.slice().sort((a,b)=>(a.nom||'').localeCompare(b.nom||'','fr')).map(p=>[`p:${p.id}`, p.nom+' (prospect)']));
+  $('#dlg').innerHTML = `
+    <form method="dialog" id="fT">
+      <div class="dlg-tete"><div class="surtitre">${n?'Nouvelle tâche':'Tâche'}</div><h2 style="margin:4px 0 0">${n?'Ajouter au planning':esc(t.titre)}</h2></div>
+      <div class="dlg-corps"><div class="form">
+        <label class="large">Intitulé<input type="text" name="titre" required value="${esc(t.titre)}" placeholder="Ménage Casa Isla, rappeler le plombier..."></label>
+        <label>Date<input type="date" name="date" required value="${esc(t.date)}"></label>
+        <label>Heure<input type="time" name="heure" value="${esc(t.heure)}"></label>
+        <label>Catégorie<input type="text" name="categorie" list="dlCatT" value="${esc(t.categorie)}" placeholder="Choisir ou écrire"></label>
+        <label>Logement<input type="text" name="logement" list="dlLog" value="${esc(t.logement)}" placeholder="Choisir ou écrire"></label>
+        <label class="large">Contact lié<select name="lien"><option value="">Aucun</option>${liens.map(([v,l])=>`<option value="${esc(v)}"${v===t.lien?' selected':''}>${esc(l)}</option>`).join('')}</select></label>
+        <label class="large">Notes<textarea name="notes">${esc(t.notes)}</textarea></label>
+      </div></div>
+      <div class="dlg-pied">
+        ${n?'':`<button type="button" class="btn danger" data-act="supprimerTache" data-id="${t.id}">Supprimer</button>`}
+        <div class="droite"><button type="button" class="btn discret" data-act="fermer">Annuler</button><button class="btn" type="submit">Enregistrer</button></div>
+      </div>
+    </form>${datalist('dlCatT', CATEGORIES_TACHE)}${datalist('dlLog', LOGEMENTS)}`;
+  $('#dlg').showModal();
+  $('#fT').addEventListener('submit', e=>{
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(e.target).entries());
+    Object.keys(v).forEach(k=>v[k] = v[k].trim());
+    const id = t.id || nouvelId('t_');
+    enregistrer(d=>{
+      const i = d.taches.findIndex(x=>x.id===id);
+      if(i>=0) d.taches[i] = Object.assign({}, d.taches[i], v);
+      else d.taches.push(Object.assign({ id, fait:false, creeLe:aujourdhui() }, v));
+    }, (n?'nouvelle tâche ':'modification de la tâche ')+v.titre).then(ok=>{ if(ok){ $('#dlg').close(); toast(n?'Tâche ajoutée':'Modifications enregistrées'); } });
+  });
+}
+
+/* Confirmation de suppression */
+function confirmer(texte, action, message){
+  const dc = $('#dlgConfirm');
+  dc.innerHTML = `<div class="dlg-tete"><div class="surtitre">Confirmation</div><h2 style="margin:4px 0 0">${esc(texte)}</h2></div>
+    <div class="dlg-corps"><p style="margin:0;color:var(--doux)">Cette suppression est définitive.</p></div>
+    <div class="dlg-pied"><div class="droite"><button class="btn discret" id="cNon">Annuler</button><button class="btn plein-danger" id="cOui">Supprimer</button></div></div>`;
+  dc.showModal();
+  $('#cNon').onclick = ()=>dc.close();
+  $('#cOui').onclick = async ()=>{ dc.close(); if(await enregistrer(action, message)){ $('#dlg').close(); toast('Supprimé'); } };
+}
+
+/* Clics */
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-act], #onglets button, #ongletsBas button');
+  if(!el) return;
+  if(el.closest('#onglets, #ongletsBas')){ if(S.vueConnexion) return; S.vue = el.dataset.vue; rendre(); window.scrollTo(0,0); return; }
+  const a = el.dataset.act, id = el.dataset.id;
+  if(e.target.closest('a')) return;
+  switch(a){
+    case 'actualiser': actualiser(true); break;
+    case 'reglages': formReglages(); break;
+    case 'deconnecter': deconnecter(); break;
+    case 'fermer': $('#dlg').close(); break;
+    case 'nouveauProspect': if(!S.connecte) return toast('Connecte toi d\u2019abord'); formProspect(); break;
+    case 'editerProspect': { const p = S.data.prospects.find(x=>x.id===id); if(p) formProspect(p); break; }
+    case 'supprimerProspect': { const p = S.data.prospects.find(x=>x.id===id); confirmer('Supprimer '+(p?p.nom:'ce prospect')+' ?', d=>{ d.prospects = d.prospects.filter(x=>x.id!==id); d.taches.forEach(t=>{ if(t.lien==='p:'+id) t.lien=''; }); }, 'suppression de '+(p?p.nom:'un prospect')); break; }
+    case 'nouveauContact': if(!S.connecte) return toast('Connecte toi d\u2019abord'); formContact(); break;
+    case 'editerContact': { const c = S.data.contacts.find(x=>x.id===id); if(c) formContact(c); break; }
+    case 'supprimerContact': { const c = S.data.contacts.find(x=>x.id===id); confirmer('Supprimer '+(c?c.nom:'ce contact')+' ?', d=>{ d.contacts = d.contacts.filter(x=>x.id!==id); d.taches.forEach(t=>{ if(t.lien==='c:'+id) t.lien=''; }); }, 'suppression du contact '+(c?c.nom:'')); break; }
+    case 'nouvelleTache': e.stopPropagation(); if(!S.connecte) return toast('Connecte toi d\u2019abord'); formTache(null, el.dataset.date); break;
+    case 'editerTache': { const t = S.data.taches.find(x=>x.id===id); if(t) formTache(t); break; }
+    case 'supprimerTache': { const t = S.data.taches.find(x=>x.id===id); confirmer('Supprimer la tâche « '+(t?t.titre:'')+' » ?', d=>{ d.taches = d.taches.filter(x=>x.id!==id); }, 'suppression de la tâche '+(t?t.titre:'')); break; }
+    case 'cocher': e.stopPropagation(); { const t0 = S.data.taches.find(x=>x.id===id); enregistrer(d=>{ const t = d.taches.find(x=>x.id===id); if(t) t.fait = !t.fait; }, (t0&&t0.fait?'tâche à refaire : ':'tâche faite : ')+(t0?t0.titre:'')); } break;
+    case 'auj': { const i = el.closest('form').querySelector(`[name="${el.dataset.cible}"]`); i.value = aujourdhui(); break; }
+    case 'filtrerStatut': S.fp = { q:'', statut:el.dataset.statut, origine:'', tri:'action' }; S.vue = 'prospects'; rendre(); break;
+    case 'exporterProspects': exporterProspects(); break;
+    case 'exporterContacts': exporterContacts(); break;
+    case 'cat': S.fc.cat = el.dataset.cat; rendre(); break;
+    case 'semaine': { const n = Number(el.dataset.n); S.lundi = n===0 ? lundiDe(new Date()) : ajouterJours(S.lundi, n); rendre(); break; }
+  }
+});
+$('#dlg').addEventListener('click', e=>{ if(e.target === $('#dlg')) $('#dlg').close(); });
+
+document.addEventListener('submit', e=>{
+  if(e.target.id === 'fConnexion'){ e.preventDefault(); const v = $('#cle').value; if(v.trim()) connecter(v); }
+});
+
+/* Recherche et filtres */
+document.addEventListener('input', e=>{
+  const id = e.target.id;
+  if(id === 'rechP' || id === 'rechC'){
+    if(id === 'rechP') S.fp.q = e.target.value; else S.fc.q = e.target.value;
+    const pos = e.target.selectionStart;
+    rendre();
+    const el = document.getElementById(id); el.focus(); try{ el.setSelectionRange(pos,pos); }catch(_){}
+  }
+});
+document.addEventListener('change', e=>{
+  const id = e.target.id;
+  if(id === 'filtreStatut'){ S.fp.statut = e.target.value; rendre(); }
+  if(id === 'filtreOrigine'){ S.fp.origine = e.target.value; rendre(); }
+  if(id === 'tri'){ S.fp.tri = e.target.value; rendre(); }
+});
+
+/* Changement de jour si la page reste ouverte */
+setInterval(()=>{ if(S.vue==='accueil' && !$('#dlg').open && !S.vueConnexion) rendre(); }, 5*60*1000);
+if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+demarrer();
+</script>
+</body>
+</html>
