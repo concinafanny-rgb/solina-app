@@ -273,7 +273,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .canal.active{border-color:var(--terre);box-shadow:0 0 0 1px var(--terre) inset}
 .canal b{display:block;font-weight:500;font-size:13.5px;color:var(--brun)}
 .canal span{font-size:12px;color:var(--muted)}
-#task-kanban .col,#home-kanban .col{flex:1 1 280px}
+#task-kanban .col,#home-kanban .col{flex:1 1 320px}
+#task-kanban .col[data-tetape="a_faire"],#home-kanban .col[data-tetape="a_faire"]{flex:2 1 420px}
+#t-liens a{text-decoration:none}
+.lienx{color:var(--terre);text-decoration:underline;text-underline-offset:2px;font-weight:500}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .row .av{color:#fff!important;font-weight:500}
 #type-chips .chip[data-type]:not([data-type=""]){color:#fff;border-color:transparent}
@@ -719,11 +722,12 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field"><label for="t-rep">Revient</label><select id="t-rep"><option value="">Une seule fois</option><option value="semaine">Chaque semaine</option><option value="mois">Chaque mois</option><option value="trimestre">Chaque trimestre</option><option value="an">Chaque année</option></select></div>
     </div>
     <div class="two">
-      <div class="field"><label for="t-statut">Où j'en suis</label><select id="t-statut"><option value="a_faire">À faire</option><option value="en_cours">En cours</option><option value="fait">Faite</option></select></div>
+      <div class="field"><label for="t-statut">Où j'en suis</label><select id="t-statut"><option value="a_faire">À faire</option><option value="fait">Faite</option></select></div>
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
     <div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div>
-    <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes"></textarea></div>
+    <div class="actions" id="t-liens"></div>
+    <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
     <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
   </form>
 </div>
@@ -948,10 +952,11 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('relance-groups').innerHTML=html||'<div class="empty"><b>Aucune relance planifiée</b>Ouvre une fiche contact et indique une date de relance.</div>';
   }
   function taskRow(t){return '<label class="task'+(t.fait?' done':'')+'"><input type="checkbox" data-task="'+esc(t.id)+'"'+(t.fait?' checked':'')+'><span class="t">'+esc(t.titre)+'</span>'+(t.date?'<span class="d">'+esc(fmtDate(t.date))+'</span>':'')+'<button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></label>';}
-  var T_ETAPES=[['a_faire','À faire'],['en_cours','En cours'],['fait','Faites']];
-  function statutTache(t){return t.statut||(t.fait?'fait':'a_faire');}
+  var T_ETAPES=[['a_faire','À faire'],['fait','Faites']];
+  function statutTache(t){var s=t.statut||(t.fait?'fait':'a_faire');return s==='en_cours'?'a_faire':s;}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
-  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+esc(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
+  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
+  function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
   function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
   function renderTaskBoard(id,maxFaites){
     var k=$(id);if(!k)return;
@@ -971,8 +976,13 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(st==='fait'&&t.repeter&&!t.suite){maj.suite=true;var n={id:uid('t'),titre:t.titre,date:prochaineDate(t.date||todayISO(),t.repeter),repeter:t.repeter,importante:!!t.importante,notes:t.notes||'',statut:'a_faire',fait:false,createdAt:new Date().toISOString()};save('taches',n).catch(function(){});toast('Bravo. Prochaine fois : '+fmtDate(n.date));}
     return save('taches',maj).catch(function(){});
   }
+  function messagePret(txt){var i=(txt||'').indexOf('Message prêt à copier :');return i<0?'':txt.slice(i+'Message prêt à copier :'.length).trim();}
+  function majLiensTache(){var n=$('t-notes').value,h='';var urls=n.match(/https?:\/\/[^\s]+/g)||[];urls.forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});if(messagePret(n))h+='<button type="button" class="btn sm" data-copier>Copier le message</button>';$('t-liens').innerHTML=h;$('t-liens').hidden=!h;}
+  function copierMessage(btn){var m=messagePret($('t-notes').value);if(!m)return;var fin=function(){btn.textContent='Message copié';setTimeout(function(){btn.textContent='Copier le message';},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(fin).catch(function(){copieSecours(m);fin();});}else{copieSecours(m);fin();}}
+  function copieSecours(m){var ta=document.createElement('textarea');ta.value=m;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(x){}ta.remove();}
   var tEdit=null;
-  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
+  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';majLiensTache();$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
   function fermerTache(){$('tsheet').classList.remove('open');document.body.style.overflow='';tEdit=null;}
 
   /* Fiche */
@@ -1399,6 +1409,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('input',function(e){if(tableEdit(e,'bien','biens','biens'))return;if(tableEdit(e,'rev','revenus','revenus'))return;if(tableEdit(e,'charge','charges','charges'))return;tableEdit(e,'conso','conso','conso');});
   document.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('table.tbl'))setTimeout(function(){if(!document.activeElement||!document.activeElement.closest('table.tbl'))renderAll();},80);});
   document.addEventListener('click',function(e){
+    if(e.target.closest('a.lienx,#t-liens a'))return;
+    var cp=e.target.closest('[data-copier]');if(cp){copierMessage(cp);return;}
     var o=e.target.closest('[data-open]');if(o){openSheet(o.dataset.open);return;}
     var d=e.target.closest('[data-done]');if(d){var c=byId(S.contacts,d.dataset.done);if(c){saveContact(Object.assign({},c,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),c.id).then(function(){toast('Relance faite');});}return;}
     var x=e.target.closest('[data-deltask]');if(x){e.preventDefault();remove('taches',x.dataset.deltask);return;}
