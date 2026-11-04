@@ -275,6 +275,16 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .canal span{font-size:12px;color:var(--muted)}
 #task-kanban .col,#home-kanban .col{flex:1 1 280px}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.row .av{color:#fff!important;font-weight:500}
+.pastille{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0;flex:none}
+.lien-contact{display:flex;align-items:center;font-size:12.5px;color:var(--brun);margin-top:4px}
+.mininote{font-size:12px;color:var(--muted);margin-top:4px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chip[data-type="prospect"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#C8553D;margin-right:7px;vertical-align:0}
+.chip[data-type="client"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#D9799F;margin-right:7px;vertical-align:0}
+.chip[data-type="prestataire"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#6E9B6A;margin-right:7px;vertical-align:0}
+.chip[data-type="partenaire"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#5B83B0;margin-right:7px;vertical-align:0}
+.chip[data-type="prescripteur"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#D4A72C;margin-right:7px;vertical-align:0}
+.chip[data-type="apporteur"]::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#8E6BB0;margin-right:7px;vertical-align:0}
 @media (max-width:699px){#task-kanban .col,#home-kanban .col{flex:0 0 82vw}.wknav{width:100%}.wknav #wk-titre{min-width:0;flex:1;white-space:nowrap;font-size:12.5px}.section-head{flex-wrap:wrap}}
 .moisnav{display:flex;align-items:center;gap:12px;margin-top:6px}
 .moisnav h2{min-width:190px;text-align:center}
@@ -372,7 +382,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- NOTES VOCALES -->
     <section class="panel" data-panel="vocaux">
-      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes vocales</h1><div class="pd">Appuie sur le micro et dis ce qu'il faut faire : un contact à ajouter, une tâche, une relance. Ton texte s'écrit tout seul, puis Claude range tout dans l'heure qui suit. Tu peux aussi réécouter tes notes ici.</div></div><button class="btn primary sm" data-micro>Enregistrer une note</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes vocales</h1><div class="pd">Appuie sur le micro et dis ce qu'il faut faire : un contact à ajouter, une tâche, une relance. Ton texte s'écrit tout seul, puis Claude range tout dans la minute qui suit. Tu peux aussi réécouter tes notes ici.</div></div><button class="btn primary sm" data-micro>Enregistrer une note</button></div>
       <div class="list" id="vocaux-list" style="margin-top:18px"></div>
     </section>
 
@@ -625,8 +635,11 @@ h2,h3{font-weight:500;letter-spacing:0}
   <h2 id="sheet-title">Nouveau contact</h2>
   <form class="form" id="contact-form" style="margin-top:14px">
     <div class="two">
+      <div class="field"><label for="f-civ">Civilité</label><select id="f-civ"><option value=""></option><option>Madame</option><option>Monsieur</option><option>Madame et Monsieur</option></select></div>
       <div class="field"><label for="f-prenom">Prénom</label><input id="f-prenom" autocomplete="off"></div>
-      <div class="field"><label for="f-nom">Nom</label><input id="f-nom" autocomplete="off" required></div>
+    </div>
+    <div class="field"><label for="f-nom">Nom</label><input id="f-nom" autocomplete="off" required></div>
+    <div style="display:none">
     </div>
     <div class="two">
       <div class="field"><label for="f-type">Type</label>
@@ -648,21 +661,24 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field"><label for="f-email">Email</label><input id="f-email" inputmode="email" autocomplete="off"></div>
     </div>
     <div class="two">
+      <div class="field" style="grid-column:1/-1"><label for="f-adresse">Adresse</label><input id="f-adresse" autocomplete="off" placeholder="Numéro et rue"></div>
       <div class="field"><label for="f-ville">Ville</label><input id="f-ville" autocomplete="off"></div>
       <div class="field"><label for="f-bien">Logement lié</label><input id="f-bien" placeholder="Casa Isla, La Roya…" autocomplete="off"></div>
     </div>
     <div class="field" id="field-etape"><label for="f-etape">Étape de prospection</label>
       <select id="f-etape">
         <option value="a_contacter">À contacter</option>
-        <option value="contacte">Contacté</option>
+        <option value="contacte">Déjà contacté</option>
+        <option value="a_relancer">À relancer</option>
         <option value="rdv">Rendez vous pris</option>
-        <option value="visite">Visite faite</option>
+        <option value="visite">Rendez vous fait</option>
         <option value="devis">Proposition envoyée</option>
+        <option value="signature">En cours de signature</option>
         <option value="signe">Signé</option>
         <option value="perdu">Perdu</option>
         <option value="pas_interesse">Pas intéressé</option>
       </select></div>
-    <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"><option value="">Non précisé</option><option>Leboncoin</option><option>AlloVoisins</option><option>Groupes Facebook</option><option>Instagram</option><option>LinkedIn</option><option>Site internet</option><option>Fiche Google</option><option>Bouche à oreille</option><option>Apporteurs d'affaires</option><option>Agences immobilières</option><option>Notaires et conseillers</option><option>Partenaires et artisans</option><option>Réseau CLF</option><option>Événements</option><option>PAP</option><option>Boîtage</option><option>Parrainage clients</option><option>Autre</option></select></div><div class="field"><label for="f-source">Précision</label><input id="f-source" placeholder="Qui, quelle annonce, quel groupe…" autocomplete="off"></div></div>
+    <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"><option value="">Non précisé</option><option>Leboncoin</option><option>AlloVoisins</option><option>Groupes Facebook</option><option>Instagram</option><option>LinkedIn</option><option>Site internet</option><option>Fiche Google</option><option>Bouche à oreille</option><option>Apporteurs d'affaires</option><option>Agences immobilières</option><option>Notaires et conseillers</option><option>Partenaires et artisans</option><option>Réseau CLF</option><option>Événements</option><option>PAP</option><option>Boîtage</option><option>Parrainage clients</option><option>Autre</option></select></div><input type="hidden" id="f-source"></div>
     <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Ce qu'il faut retenir : le bien, la situation, ce qui a été dit…"></textarea></div>
     <div class="hr"></div>
     <div class="two">
@@ -702,6 +718,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field"><label for="t-statut">Où j'en suis</label><select id="t-statut"><option value="a_faire">À faire</option><option value="en_cours">En cours</option><option value="fait">Faite</option></select></div>
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
+    <div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes"></textarea></div>
     <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
   </form>
@@ -749,9 +766,11 @@ h2,h3{font-weight:500;letter-spacing:0}
   ];
   var TABS=[['accueil','Accueil'],['contacts','Contacts'],['prospection','Prospection'],['relances','Relances'],['plus','Plus']];
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
+  var COULEURS_TYPE={'prospect': '#C8553D', 'client': '#D9799F', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
+  function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
   var CANAUX=['Leboncoin','AlloVoisins','Groupes Facebook','Instagram','LinkedIn','Site internet','Fiche Google','Bouche à oreille','Apporteurs d\'affaires','Agences immobilières','Notaires et conseillers','Partenaires et artisans','Réseau CLF','Événements','PAP','Boîtage','Parrainage clients','Autre'];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','Rendez vous'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
-  var ETAPES=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','Rendez vous pris'],['visite','Visite faite'],['devis','Proposition envoyée'],['signe','Signé'],['perdu','Perdu'],['pas_interesse','Pas intéressé']];
+  var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','Rendez vous pris'],['visite','Rendez vous fait'],['devis','Proposition envoyée'],['signature','En cours de signature'],['signe','Signé'],['perdu','Perdu'],['pas_interesse','Pas intéressé']];
   var DEFAULT_PARAMS={plateforme:3,urssaf:21.2,tvaSeuil:37500,tvaMajore:41250,plafondMicro:83600};
   var CHARGE_CATS=['Abonnements et logiciels','Assurance','Véhicule et déplacements','Banque','Marketing et site','Matériel','Comptabilité','Téléphone','Autre'];
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
@@ -768,7 +787,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function eur(n,dec){n=Number(n)||0;return n.toLocaleString('fr-FR',{minimumFractionDigits:dec||0,maximumFractionDigits:dec||0})+' €';}
   function num(v){var n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n;}
-  function fullName(c){return ((c.prenom||'')+' '+(c.nom||'')).trim()||'Sans nom';}
+  var CIV={'Monsieur':'M.','Madame':'Mme','Madame et Monsieur':'M. et Mme'};
+  function fullName(c){return [CIV[c.civilite]||'',c.prenom||'',c.nom||''].join(' ').replace(/\s+/g,' ').trim()||'Sans nom';}
   function initials(c){return ((c.prenom||'').charAt(0)+(c.nom||'').charAt(0)).toUpperCase()||'·';}
   function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},2200);}
   function uid(p){return (p||'x')+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
@@ -804,9 +824,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(d<=7)return {cls:'',txt:'Dans '+d+' j'};
     return {cls:'',txt:fmtDate(c.relance)};
   }
-  function contactRow(c,extra){
+  function contactRow(c,extra,avecNotes){
     var st=relanceStatus(c);var sub=[c.categorie,c.ville,c.bien].filter(Boolean).join(' · ');
-    return '<button class="row" data-open="'+esc(c.id)+'"><span class="av">'+esc(initials(c))+'</span><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(sub||TYPES[c.type]||'')+'</span></span><span class="r">'+(extra!==undefined?extra:('<span class="pill '+esc(c.type)+'">'+esc(TYPES[c.type]||c.type)+'</span>'+(st?'<br><span class="pill '+st.cls+'" style="margin-top:4px">'+esc(st.txt)+'</span>':'')))+'</span></button>';
+    return '<button class="row" data-open="'+esc(c.id)+'"><span class="av" style="background:'+couleurType(c.type)+'">'+esc(initials(c))+'</span><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(sub||TYPES[c.type]||'')+'</span>'+(avecNotes&&c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'</span><span class="r">'+(extra!==undefined?extra:('<span class="pill '+esc(c.type)+'">'+esc(TYPES[c.type]||c.type)+'</span>'+(st?'<br><span class="pill '+st.cls+'" style="margin-top:4px">'+esc(st.txt)+'</span>':'')))+'</span></button>';
   }
   function renderHome(){
     $('today-eyebrow').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
@@ -894,7 +914,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     etapes.forEach(function(e){
       var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&filtreCanal(c);}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];
-      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'').replace('<button class="row"','<button class="row" draggable="true"');}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<button class="row"','<button class="row" draggable="true"');}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       k.appendChild(col);
     });
   }
@@ -927,8 +947,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   var T_ETAPES=[['a_faire','À faire'],['en_cours','En cours'],['fait','Faites']];
   function statutTache(t){return t.statut||(t.fait?'fait':'a_faire');}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
-  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||''].filter(Boolean).join(' · ');return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
-  function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal">'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span><span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
+  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+esc(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
+  function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
   function renderTaskBoard(id,maxFaites){
     var k=$(id);if(!k)return;
     var dues=S.contacts.filter(function(c){return c.relance&&daysDiff(c.relance)<=0;}).sort(function(a,b){return a.relance<b.relance?-1:1;});
@@ -948,14 +968,14 @@ h2,h3{font-weight:500;letter-spacing:0}
     return save('taches',maj).catch(function(){});
   }
   var tEdit=null;
-  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
+  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
   function fermerTache(){$('tsheet').classList.remove('open');document.body.style.overflow='';tEdit=null;}
 
   /* Fiche */
   function openSheet(id){
     editingId=id||null;var c=id?byId(S.contacts,id):null;if(id&&!c)return;c=c||{type:'prospect',etape:'a_contacter'};
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
-    $('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
+    $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
     $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';
     $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;
     $('agenda-note').textContent='';$('agenda-note').className='note';
@@ -963,7 +983,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
   function toggleEtape(){var t=$('f-type').value;$('field-etape').hidden=(t!=='prospect'&&t!=='prescripteur');}
-  function readForm(){return {prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
+  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
   function saveContact(data,id){var ex=id?byId(S.contacts,id):null;var doc=Object.assign({},ex||{createdAt:new Date().toISOString()},data);doc.id=id||uid('c');return save('contacts',doc);}
 
   function planRelance(){
@@ -1286,7 +1306,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var v=byId(S.vocaux,id);if(!v)return;btn.disabled=true;btn.textContent='Transcription…';
     try{var r=await fetch(urlChemin(v.fichier)+'?ref='+DEPOT.branche,{headers:Object.assign({},entetes(),{'Accept':'application/vnd.github.raw'}),cache:'no-store'});if(!r.ok)throw 0;
       var t=await transcrireNatif(new Blob([await r.arrayBuffer()],{type:v.type||'audio/mp4'}),v.type);
-      if(!t)throw 0;await save('vocaux',Object.assign({},v,{texte:t,statut:'a_traiter'}));toast('Note transcrite, Claude la range dans l\u2019heure');
+      if(!t)throw 0;await save('vocaux',Object.assign({},v,{texte:t,statut:'a_traiter'}));toast('Note transcrite, Claude la range dans une minute');[60,120,200].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
     }catch(e){toast('Transcription impossible pour cette note');btn.disabled=false;btn.textContent='Transcrire';}
   }
   function blobVersB64(b){return new Promise(function(res,rej){var f=new FileReader();f.onload=function(){res(String(f.result).split(',')[1]||'');};f.onerror=rej;f.readAsDataURL(b);});}
@@ -1301,7 +1321,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       if(!r.ok)throw Err('autre','GitHub a refusé le fichier ('+r.status+')');
       var texte=$('rec-texte').value.trim();
       await save('vocaux',{id:id,titre:$('rec-titre').value.trim()||'Note vocale',date:new Date().toISOString(),duree:Math.round(REC.duree),fichier:chemin,type:REC.type,texte:texte,statut:texte?'a_traiter':'audio'});
-      $('rec').hidden=true;toast(texte?'Note envoyée, Claude la range dans l\u2019heure':'Note vocale enregistrée');
+      $('rec').hidden=true;toast(texte?'Note envoyée, Claude la range dans une minute':'Note vocale enregistrée');if(texte)[60,120,200,320].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
     }catch(e){toast(e.code==='echec'?'La note n\u2019a pas pu être enregistrée':(e.message&&e.message.indexOf('GitHub')===0?e.message:'Pas de connexion, la note n\u2019est pas enregistrée'));}
     btn.disabled=false;btn.textContent='Envoyer';
   }
@@ -1326,7 +1346,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('t-form').addEventListener('submit',function(e){
     e.preventDefault();var titre=$('t-titre').value.trim();if(!titre){$('t-titre').focus();return;}
     var ex=tEdit?byId(S.taches,tEdit):null;var st=$('t-statut').value;
-    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,notes:$('t-notes').value.trim()});
+    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,contact:$('t-contact').value,notes:$('t-notes').value.trim()});
     if(st!==statutTache(doc))changerStatut(doc,st);else save('taches',doc).catch(function(){});
     toast(ex?'Tâche modifiée':'Tâche ajoutée');fermerTache();
   });
