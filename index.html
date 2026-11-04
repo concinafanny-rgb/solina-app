@@ -261,6 +261,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .rec .field{text-align:left;margin-top:14px}
 .playbtn{width:38px;height:38px;border-radius:50%;background:var(--terre);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .playbtn.en-lecture{background:var(--brun)}
+.rec textarea{width:100%;min-height:96px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;outline:none;resize:vertical}
+.rec textarea:focus{border-color:var(--terre)}
+.vtexte{font-size:13px;color:var(--brun);margin-top:4px;white-space:normal;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.vtrait{font-size:12.5px;color:var(--vert);margin-top:4px;white-space:normal}
+.vtrait.att{color:#8A6A2A}
 .pill.apporteur{background:#E8E4EE;color:#6C5B82}
 .canaux{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .canal{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left}
@@ -367,7 +372,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- NOTES VOCALES -->
     <section class="panel" data-panel="vocaux">
-      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes vocales</h1><div class="pd">Appuie sur le micro, parle, c'est enregistré. Tu réécoutes tes notes ici, sur ton Mac comme sur ton téléphone.</div></div><button class="btn primary sm" data-micro>Enregistrer une note</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes vocales</h1><div class="pd">Appuie sur le micro et dis ce qu'il faut faire : un contact à ajouter, une tâche, une relance. Ton texte s'écrit tout seul, puis Claude range tout dans l'heure qui suit. Tu peux aussi réécouter tes notes ici.</div></div><button class="btn primary sm" data-micro>Enregistrer une note</button></div>
       <div class="list" id="vocaux-list" style="margin-top:18px"></div>
     </section>
 
@@ -706,11 +711,12 @@ h2,h3{font-weight:500;letter-spacing:0}
   <div class="rec-dot" id="rec-dot"></div>
   <div class="rec-temps" id="rec-temps">0:00</div>
   <p class="note" id="rec-etat" style="margin:4px 0 0">Je t'écoute…</p>
+  <div class="field"><label for="rec-texte">Ce que tu as dit</label><textarea id="rec-texte" placeholder="Ton texte s'écrit ici pendant que tu parles. Tu peux le corriger avant d'envoyer."></textarea></div>
   <div id="rec-fin" hidden>
     <div class="field"><label for="rec-titre">Titre de la note</label><input id="rec-titre" autocomplete="off"></div>
     <audio id="rec-audio" controls style="width:100%;margin-top:12px"></audio>
   </div>
-  <div class="actions" style="justify-content:center;margin-top:16px"><button class="btn primary" id="rec-stop">Terminer</button><button class="btn primary" id="rec-save" hidden>Enregistrer la note</button><button class="btn" id="rec-annuler">Annuler</button></div>
+  <div class="actions" style="justify-content:center;margin-top:16px"><button class="btn primary" id="rec-stop">Terminer</button><button class="btn primary" id="rec-save" hidden>Envoyer</button><button class="btn" id="rec-annuler">Annuler</button></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -1253,14 +1259,36 @@ h2,h3{font-weight:500;letter-spacing:0}
       if(REC.annule)return;
       REC.blob=new Blob(REC.chunks,{type:REC.type});
       $('rec-audio').src=URL.createObjectURL(REC.blob);
-      $('rec-fin').hidden=false;$('rec-save').hidden=false;$('rec-stop').hidden=true;$('rec-dot').classList.add('off');$('rec-etat').textContent='Réécoute si tu veux, puis enregistre.';
+      $('rec-fin').hidden=false;$('rec-save').hidden=false;$('rec-stop').hidden=true;$('rec-dot').classList.add('off');$('rec-etat').textContent='Vérifie ton texte, puis envoie.';
+      setTimeout(function(){if(!$('rec-texte').value.trim()&&natif()){$('rec-etat').textContent='Je transcris ta note…';transcrireNatif(REC.blob,REC.type).then(function(t){if(t&&!$('rec-texte').value.trim())$('rec-texte').value=t;$('rec-etat').textContent=t?'Vérifie ton texte, puis envoie.':'Je n\u2019ai pas pu transcrire : écris ou dicte ton texte, ou envoie la note telle quelle.';});}},900);
       var d=new Date();$('rec-titre').value='Note du '+d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+', '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0');
     };
+    REC.base='';REC.session='';$('rec-texte').value='';
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;REC.reco=null;
+    if(SR){try{var rc=new SR();rc.lang='fr-FR';rc.continuous=true;rc.interimResults=true;
+      rc.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript+(e.results[i].isFinal?' ':'');REC.session=t.trim();$('rec-texte').value=(REC.base+' '+REC.session).trim();};
+      rc.onerror=function(){};
+      rc.onend=function(){REC.base=(REC.base+' '+REC.session).trim();REC.session='';if(REC.media&&REC.media.state==='recording'){try{rc.start();}catch(x){}}};
+      rc.start();REC.reco=rc;}catch(x){REC.reco=null;}}
     REC.annule=false;REC.media.start(1000);REC.t0=Date.now();majTemps();REC.timer=setInterval(majTemps,500);
     $('rec').hidden=false;$('rec-fin').hidden=true;$('rec-save').hidden=true;$('rec-stop').hidden=false;$('rec-dot').classList.remove('off');$('rec-etat').textContent='Je t\u2019écoute…';
   }
-  function arreterMicro(){if(REC.media&&REC.media.state!=='inactive'){REC.duree=(Date.now()-REC.t0)/1000;clearInterval(REC.timer);REC.media.stop();}}
-  function annulerMicro(){REC.annule=true;clearInterval(REC.timer);if(REC.media&&REC.media.state!=='inactive')REC.media.stop();else if(REC.stream)REC.stream.getTracks().forEach(function(t){t.stop();});$('rec').hidden=true;}
+  function arreterMicro(){if(REC.media&&REC.media.state!=='inactive'){REC.duree=(Date.now()-REC.t0)/1000;clearInterval(REC.timer);REC.media.stop();}if(REC.reco){try{REC.reco.stop();}catch(x){}}}
+  function annulerMicro(){if(REC.reco){try{REC.reco.abort();}catch(x){}}REC.annule=true;clearInterval(REC.timer);if(REC.media&&REC.media.state!=='inactive')REC.media.stop();else if(REC.stream)REC.stream.getTracks().forEach(function(t){t.stop();});$('rec').hidden=true;}
+  function natif(){return !!(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.solina);}
+  var ATTENTES={};
+  window.solinaTranscription=function(id,texte){var f=ATTENTES[id];delete ATTENTES[id];if(f)f(texte||'');};
+  async function transcrireNatif(blob,type){
+    var b64=await blobVersB64(blob);var id=uid('tr');
+    return new Promise(function(res){ATTENTES[id]=res;window.webkit.messageHandlers.solina.postMessage({action:'transcrire',id:id,b64:b64,ext:/webm/.test(type||'')?'webm':'m4a'});setTimeout(function(){if(ATTENTES[id]){delete ATTENTES[id];res('');}},120000);});
+  }
+  async function transcrireNote(id,btn){
+    var v=byId(S.vocaux,id);if(!v)return;btn.disabled=true;btn.textContent='Transcription…';
+    try{var r=await fetch(urlChemin(v.fichier)+'?ref='+DEPOT.branche,{headers:Object.assign({},entetes(),{'Accept':'application/vnd.github.raw'}),cache:'no-store'});if(!r.ok)throw 0;
+      var t=await transcrireNatif(new Blob([await r.arrayBuffer()],{type:v.type||'audio/mp4'}),v.type);
+      if(!t)throw 0;await save('vocaux',Object.assign({},v,{texte:t,statut:'a_traiter'}));toast('Note transcrite, Claude la range dans l\u2019heure');
+    }catch(e){toast('Transcription impossible pour cette note');btn.disabled=false;btn.textContent='Transcrire';}
+  }
   function blobVersB64(b){return new Promise(function(res,rej){var f=new FileReader();f.onload=function(){res(String(f.result).split(',')[1]||'');};f.onerror=rej;f.readAsDataURL(b);});}
   function urlChemin(c){return 'https://api.github.com/repos/'+DEPOT.proprio+'/'+DEPOT.nom+'/contents/'+c;}
   async function enregistrerNote(){
@@ -1271,10 +1299,11 @@ h2,h3{font-weight:500;letter-spacing:0}
       var b64=await blobVersB64(REC.blob);
       var r=await fetch(urlChemin(chemin),{method:'PUT',cache:'no-store',headers:Object.assign({'Content-Type':'application/json'},entetes()),body:JSON.stringify({message:'Application : note vocale',content:b64,branch:DEPOT.branche})});
       if(!r.ok)throw Err('autre','GitHub a refusé le fichier ('+r.status+')');
-      await save('vocaux',{id:id,titre:$('rec-titre').value.trim()||'Note vocale',date:new Date().toISOString(),duree:Math.round(REC.duree),fichier:chemin,type:REC.type});
-      $('rec').hidden=true;toast('Note vocale enregistrée');
+      var texte=$('rec-texte').value.trim();
+      await save('vocaux',{id:id,titre:$('rec-titre').value.trim()||'Note vocale',date:new Date().toISOString(),duree:Math.round(REC.duree),fichier:chemin,type:REC.type,texte:texte,statut:texte?'a_traiter':'audio'});
+      $('rec').hidden=true;toast(texte?'Note envoyée, Claude la range dans l\u2019heure':'Note vocale enregistrée');
     }catch(e){toast(e.code==='echec'?'La note n\u2019a pas pu être enregistrée':(e.message&&e.message.indexOf('GitHub')===0?e.message:'Pas de connexion, la note n\u2019est pas enregistrée'));}
-    btn.disabled=false;btn.textContent='Enregistrer la note';
+    btn.disabled=false;btn.textContent='Envoyer';
   }
   async function ecouter(id,btn){
     if(LECTURE.audio&&LECTURE.id===id){LECTURE.audio.pause();LECTURE.audio=null;LECTURE.id=null;renderVocaux();return;}
@@ -1289,7 +1318,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function renderVocaux(){
     var el=$('vocaux-list');if(!el)return;
     var l=S.vocaux.slice().sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1;});
-    el.innerHTML=l.length?l.map(function(v){var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" style="cursor:default"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span></span><span class="r"><button class="btn ghost xs" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
+    el.innerHTML=l.length?l.map(function(v){var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" style="cursor:default"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte)+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r">'+'<span class="pill '+({a_traiter:'today',range:'ok',a_verifier:'warn',audio:''}[v.statut||'audio']||'')+'">'+esc({a_traiter:'À ranger',range:'Rangé',a_verifier:'À vérifier',audio:'Audio seul'}[v.statut||'audio']||'')+'</span><br>'+((v.statut||'audio')==='audio'&&natif()?'<button class="btn xs" style="margin-top:6px" data-transcrire="'+esc(v.id)+'">Transcrire</button><br>':'')+'<button class="btn ghost xs" style="margin-top:6px" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
   }
   $('rec-stop').addEventListener('click',arreterMicro);
   $('rec-save').addEventListener('click',enregistrerNote);
@@ -1356,6 +1385,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(e.target.closest('[data-newtask]')){ouvrirTache(null);return;}
     if(e.target.closest('[data-tclose]')){fermerTache();return;}
     if(e.target.closest('[data-micro]')){demarrerMicro();return;}
+    var trn=e.target.closest('[data-transcrire]');if(trn){transcrireNote(trn.dataset.transcrire,trn);return;}
     var ec=e.target.closest('[data-ecouter]');if(ec){ecouter(ec.dataset.ecouter,ec);return;}
     var dv=e.target.closest('[data-delvocal]');if(dv){if(dv.dataset.armed!=='1'){dv.dataset.armed='1';dv.textContent='Confirmer';setTimeout(function(){dv.dataset.armed='';dv.textContent='Supprimer';},4000);return;}var vv=byId(S.vocaux,dv.dataset.delvocal);remove('vocaux',dv.dataset.delvocal);if(vv&&vv.fichier)supprimerFichier(vv.fichier);toast('Note supprimée');return;}
     var sw=e.target.closest('[data-semaine]');if(sw){var n=Number(sw.dataset.semaine);if(n===0)wkDebut=lundiDe(new Date());else wkDebut.setDate(wkDebut.getDate()+7*n);renderAgenda();return;}
