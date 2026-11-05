@@ -236,6 +236,22 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
   .chip{padding:9px 14px}
   .tbl .del{min-width:40px;min-height:40px}
   input[type=checkbox]{width:24px;height:24px}
+  #ca-table{min-width:0}
+  #ca-table thead{display:none}
+  #ca-table tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;padding:12px;border-bottom:1px solid var(--line);position:relative}
+  #ca-table tbody td{border:0;padding:0}
+  #ca-table tbody td:nth-child(1){grid-column:1 / -1;padding-right:44px}
+  #ca-table tbody td:nth-child(2)::before{content:"Loyers encaissés €";display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  #ca-table tbody td:nth-child(3)::before{content:"Commission %";display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  #ca-table tbody td:nth-child(4)::before{content:"Facturé";display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  #ca-table tbody td:nth-child(4){font-weight:600;align-self:end}
+  #ca-table tbody td:nth-child(5)::before{content:"Facture";display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  #ca-table tbody td:nth-child(6){grid-column:1 / -1}
+  #ca-table tbody td:nth-child(7){position:absolute;top:8px;right:8px}
+  #ca-table tbody td.empty{grid-column:1 / -1;display:block}
+  #ca-table tfoot tr{display:flex;justify-content:space-between;padding:10px 12px}
+  #ca-table tfoot td{border:0;padding:0}
+  #ca-table tfoot td:empty{display:none}
   #ca-log{min-width:0;width:100%}
   #ca-log th,#ca-log td{padding-left:8px;padding-right:8px;font-size:13px}
   #ca-log th:nth-child(2),#ca-log td:nth-child(2),#ca-log th:nth-child(4),#ca-log td:nth-child(4){display:none}
@@ -345,6 +361,35 @@ h2,h3{font-weight:500;letter-spacing:0}
 .row.tache{gap:10px}
 .arme{color:#fff!important;background:#B5574B!important;border-color:#B5574B!important;white-space:nowrap;width:auto!important;padding:0 8px!important;border-radius:8px}
 .btn.xs.arme{color:#fff;background:#B5574B;border-color:#B5574B;white-space:nowrap}
+.joindre{margin:-4px 0 14px}
+.joindre-b{gap:6px}
+.reporter{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.reporter.col-r{margin-top:0;flex:none;align-items:center}
+.kcarte{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kcarte .row{border:0;border-radius:0}
+.etape-sel{display:block;width:100%;border:0;border-top:1px solid var(--line);border-radius:0;-webkit-appearance:none;appearance:none;background:var(--creme-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23935E36' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--terre);font-size:13px;padding:9px 34px 9px 12px;cursor:pointer}
+@media (max-width:699px){#kanban .col,#kanban-presc .col{flex:0 0 80vw}}
+.sheet .barre-fixe{position:sticky;bottom:0;z-index:3;background:var(--bg);margin:10px 0 0;padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.canal-plus{border:1px dashed var(--taupe);border-radius:14px;background:transparent;color:var(--muted);font-size:13px;padding:12px;text-align:left}
+@media (max-width:699px){#canaux{display:flex!important;overflow-x:auto;gap:8px;padding-bottom:6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}#canaux>*{flex:0 0 auto;min-width:140px;scroll-snap-align:start}}
+.ops-onglets{flex-wrap:wrap}
+.ops-calc{margin-top:14px}
+.ops-champs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.ops-champs .field{margin:0}
+.ops-total{font-family:var(--display);font-size:20px;color:var(--terre)}
+.ops-tbl{min-width:0!important}
+.ops-tbl td{vertical-align:middle}
+.ops-tbl .oa{display:block;color:var(--brun)}
+.ops-tbl .os{display:block;font-size:11.5px;color:var(--muted)}
+.ops-tbl .oprix{width:84px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}
+.ops-tbl .oq{font-weight:600;white-space:nowrap}
+.ops-budget{margin-top:16px}
+.ops-blocs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ops-bloc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.ops-bloc h3{font-size:15px;margin:0 0 8px}
+.ops-bloc ul{margin:0;padding-left:18px}
+.ops-bloc li{font-size:13.5px;line-height:1.5;margin-bottom:5px;color:var(--brun)}
+@media (max-width:699px){.ops-champs{grid-template-columns:repeat(3,1fr)}.ops-champs .field:first-child{grid-column:1 / -1}.ops-onglets{flex-wrap:nowrap;overflow-x:auto}.ops-onglets .chip{flex:none}.ops-tbl th:nth-child(4),.ops-tbl td:nth-child(4){display:none}.ops-tbl .oprix{width:72px}}
 .btn.voirplus{width:100%;margin-top:4px;justify-content:center}
 .coche{flex:none;width:26px;height:26px;margin:-1px 0 0;border-radius:50%;border:1.5px solid var(--taupe);background:var(--card);color:transparent;display:flex;align-items:center;justify-content:center;position:relative;transition:background .2s,color .2s,border-color .2s}
 .coche::after{content:"";position:absolute;inset:-9px}
@@ -448,7 +493,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- PROSPECTION -->
     <section class="panel" data-panel="prospection">
-      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Fais glisser une carte d'une colonne à l'autre, ou touche la pour ouvrir sa fiche. Le plan d'action est juste en dessous.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
       <div class="section-head" style="margin-top:22px"><h2>Mes canaux</h2><span class="note">Touche un canal pour voir sa pipeline</span></div>
       <div class="canaux" id="canaux"></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
@@ -606,28 +651,28 @@ h2,h3{font-weight:500;letter-spacing:0}
       </div>
     </section>
 
-    <!-- CONSOMMABLES -->
-    <section class="panel" data-panel="conso">
-      <div class="phrow"><div class="ph"><div class="pl">Opérationnel</div><h1>Consommables et linge</h1><div class="pd">Prix d'achat, quantités par logement, et ce que coûte le kit signature. Les consommables sont refacturés au propriétaire.</div></div><button class="btn primary sm" id="conso-add">+ Article</button></div>
-      <div class="card" style="margin-top:16px"><div class="ctit">Liens utiles</div><div class="two">
-        <div class="field"><label for="l-courses">Ma liste de courses Carrefour</label><span style="display:flex;gap:6px"><input id="l-courses" data-lien="lienCourses" placeholder="Colle ici le lien de ta liste" autocomplete="off"><a class="btn sm" data-ouvrir="lienCourses" target="_blank" rel="noopener">Ouvrir</a></span></div>
-        <div class="field"><label for="l-canva">Mes fiches linge et consommables (Canva)</label><span style="display:flex;gap:6px"><input id="l-canva" data-lien="lienCanva" placeholder="Colle ici le lien Canva" autocomplete="off"><a class="btn sm" data-ouvrir="lienCanva" target="_blank" rel="noopener">Ouvrir</a></span></div>
-      </div></div>
-      <div class="chips" id="conso-chips" style="margin-top:14px">
-        <button class="chip active" data-cat="">Tout</button>
-        <button class="chip" data-cat="consommable">Consommables</button>
-        <button class="chip" data-cat="linge">Linge</button>
-        <button class="chip" data-cat="kit">Kit signature</button>
+    <!-- OPÉRATIONNEL -->
+    <section class="panel" data-panel="ops">
+      <div class="phrow"><div class="ph"><div class="pl">Opérationnel</div><h1>Opérationnel</h1><div class="pd">Tout ce qu'il faut avoir sous la main : le ménage, le linge et l'équipement à faire acheter, le kit Signature, les consommables et la mise en place d'un nouveau bien.</div></div></div>
+      <div class="chips ops-onglets" id="ops-onglets" style="margin-top:14px">
+        <button class="chip" data-ops="menage">Ménage</button>
+        <button class="chip" data-ops="equiper">Équiper un bien</button>
+        <button class="chip" data-ops="kit">Kit Signature</button>
+        <button class="chip" data-ops="conso">Consommables</button>
+        <button class="chip" data-ops="nouveau">Nouveau bien</button>
       </div>
-      <div class="grid cards-4" style="margin-top:12px">
-        <div class="card"><div class="num" id="co-k-conso">0 €</div><div class="lbl">consommables par séjour</div></div>
-        <div class="card"><div class="num" id="co-k-linge">0 €</div><div class="lbl">linge par logement</div></div>
-        <div class="card"><div class="num" id="co-k-kit">0 €</div><div class="lbl">kit signature par logement</div></div>
+      <div class="card ops-calc" id="ops-calc" hidden>
+        <div class="ctit">Le logement</div>
+        <div class="chips" id="ops-modeles" style="margin:0 0 12px"></div>
+        <div class="ops-champs">
+          <div class="field"><label for="oc-voy">Voyageurs</label><select id="oc-voy" data-oc="voy"><option>2</option><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+          <div class="field"><label for="oc-lits">Lits</label><input id="oc-lits" data-oc="lits" type="number" min="1" inputmode="numeric"></div>
+          <div class="field"><label for="oc-ch">Chambres</label><input id="oc-ch" data-oc="ch" type="number" min="0" inputmode="numeric"></div>
+          <div class="field"><label for="oc-sdb">Salles de bain</label><input id="oc-sdb" data-oc="sdb" type="number" min="1" inputmode="numeric"></div>
+          <div class="field"><label for="oc-wc">WC</label><input id="oc-wc" data-oc="wc" type="number" min="1" inputmode="numeric"></div>
+        </div>
       </div>
-      <div class="section">
-        <div class="twrap"><table class="tbl" id="conso-table"><thead><tr><th>Article</th><th>Catégorie</th><th class="r">Prix unitaire €</th><th class="r">Quantité</th><th class="r">Total €</th><th>Fournisseur</th><th>Note</th><th></th></tr></thead><tbody></tbody></table></div>
-        <p class="note" style="margin-top:8px">Quantité = par séjour pour un consommable, par logement pour le linge et le kit.</p>
-      </div>
+      <div id="ops-contenu"></div>
     </section>
 
     <!-- IDÉES -->
@@ -681,6 +726,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     <span class="eyebrow" id="sheet-kind"></span>
   </div>
   <h2 id="sheet-title">Nouveau contact</h2>
+  <div class="actions joindre" id="f-joindre" hidden></div>
   <form class="form" id="contact-form" style="margin-top:14px">
     <div class="two">
       <div class="field"><label for="f-civ">Civilité</label><select id="f-civ"><option value=""></option><option>Madame</option><option>Monsieur</option><option>Madame et Monsieur</option></select></div>
@@ -740,7 +786,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     </div>
     <div class="note" id="agenda-note"></div>
     <div class="hr"></div>
-    <div class="actions">
+    <div class="actions barre-fixe">
       <button type="submit" class="btn primary">Enregistrer</button>
       <button type="button" class="btn" id="btn-cancel">Annuler</button>
       <span style="flex:1"></span>
@@ -770,7 +816,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     <div class="two"><div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div><div class="field"><label for="t-log">Logement</label><select id="t-log"></select></div></div>
     <div class="actions" id="t-liens"></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
-    <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
+    <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
   </form>
 </div>
 
@@ -812,7 +858,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
     <div class="list" id="l-taches"></div>
     <div class="hr"></div>
-    <div class="actions"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-lclose>Annuler</button></div>
+    <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-lclose>Annuler</button></div>
   </form>
 </div>
 
@@ -830,6 +876,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     simca:'<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3"/></svg>',
     simprop:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/></svg>',
     charges:'<svg viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5z"/><path d="M8 10v4M12 10v4M16 10v4"/></svg>',
+    ops:'<svg viewBox="0 0 24 24"><path d="M9 4h6v3H9z"/><path d="M7 6H5v15h14V6h-2"/><path d="M9 12l2 2 4-4"/></svg>',
     conso:'<svg viewBox="0 0 24 24"><path d="M3 4h2l3 12h11l2-8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>',
     idees:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
@@ -837,11 +884,11 @@ h2,h3{font-weight:500;letter-spacing:0}
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Consommables et linge',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes vocales']]],
     ['Développement',[['prospection','Prospection']]],
-    ['Mes logements',[['logements','Logements']]],
+    ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Chiffre d\'affaires'],['simprop','Simulateur propriétaire'],['charges','Charges']]],
     ['Idées et marketing',[['idees','Boîte à idées'],['reseaux','Studio réseaux sociaux']]]
   ];
@@ -857,7 +904,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
 
   var $=function(id){return document.getElementById(id);};
-  var S={vocaux:[],contacts:[],taches:[],biens:[],revenus:[],charges:[],conso:[],idees:[],posts:[],plan:[],params:Object.assign({},DEFAULT_PARAMS)};
+  var S={ops:[],vocaux:[],contacts:[],taches:[],biens:[],revenus:[],charges:[],conso:[],idees:[],posts:[],plan:[],params:Object.assign({},DEFAULT_PARAMS)};
   var db=null, mcp=null, filterType='', consoCat='', query='', editingId=null, caMois='';
 
   function todayISO(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -979,12 +1026,14 @@ h2,h3{font-weight:500;letter-spacing:0}
   function canalDe(c){return c.canal||'';}
   function filtreCanal(c){return !canalFiltre||(canalFiltre==='__sans'?!canalDe(c):canalDe(c)===canalFiltre);}
   function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
+  var voirCanaux=false;
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
     var pros=S.contacts.filter(function(c){return c.type==='prospect'||c.type==='prescripteur';});
     var html=carteCanal('','Tous les canaux',pros);
-    CANAUX.forEach(function(k){html+=carteCanal(k,k,pros.filter(function(c){return canalDe(c)===k;}));});
+    var vides=0;CANAUX.forEach(function(k){var l=pros.filter(function(c){return canalDe(c)===k;});if(!l.length&&!voirCanaux&&canalFiltre!==k){vides++;return;}html+=carteCanal(k,k,l);});
     var sans=pros.filter(function(c){return !canalDe(c);});if(sans.length)html+=carteCanal('__sans','Canal non précisé',sans);
+    html+='<button type="button" class="canal-plus" data-voircanaux>'+(voirCanaux?'Masquer les canaux vides':'+ '+vides+' canaux sans prospect')+'</button>';
     el.innerHTML=html;
   }
   function renderKanban(){
@@ -998,7 +1047,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     etapes.forEach(function(e){
       var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&filtreCanal(c);}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];
-      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<div class="row"','<div class="row" draggable="true"');}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return '<div class="kcarte">'+contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<div class="row"','<div class="row" draggable="true"')+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+etapes.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===(c.etape||'a_contacter')?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       k.appendChild(col);
     });
   }
@@ -1024,7 +1073,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var groups=[['En retard',[]],["Aujourd'hui",[]],['Cette semaine',[]],['Plus tard',[]]];
     S.contacts.filter(function(c){return c.relance;}).sort(function(a,b){return a.relance<b.relance?-1:1;}).forEach(function(c){var d=daysDiff(c.relance);groups[d<0?0:d===0?1:d<=7?2:3][1].push(c);});
     var html='';
-    groups.forEach(function(g){if(!g[1].length)return;html+='<div class="eyebrow" style="margin:12px 0 8px">'+esc(g[0])+' · '+g[1].length+'</div><div class="list">'+g[1].map(function(c){return '<div style="display:flex;gap:8px;align-items:center">'+contactRow(c,'<span class="pill '+relanceStatus(c).cls+'">'+esc(fmtDate(c.relance))+'</span>')+'<button class="btn sm" data-done="'+esc(c.id)+'">Fait</button></div>';}).join('')+'</div>';});
+    groups.forEach(function(g){if(!g[1].length)return;html+='<div class="eyebrow" style="margin:12px 0 8px">'+esc(g[0])+' · '+g[1].length+'</div><div class="list">'+g[1].map(function(c){return '<div style="display:flex;gap:8px;align-items:center">'+contactRow(c,'<span class="pill '+relanceStatus(c).cls+'">'+esc(fmtDate(c.relance))+'</span>')+'<span class="reporter col-r">'+boutonsJoindre(c,true)+'<button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="7">+7 j</button><button class="btn sm" data-done="'+esc(c.id)+'">Fait</button></span></div>';}).join('')+'</div>';});
     $('relance-groups').innerHTML=html||'<div class="empty"><b>Aucune relance planifiée</b>Ouvre une fiche contact et indique une date de relance.</div>';
   }
   function taskRow(t){return '<label class="task'+(t.fait?' done':'')+'"><input type="checkbox" data-task="'+esc(t.id)+'"'+(t.fait?' checked':'')+'><span class="t">'+esc(t.titre)+'</span>'+(t.date?'<span class="d">'+esc(fmtDate(t.date))+'</span>':'')+'<button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></label>';}
@@ -1033,7 +1082,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
   function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var lg=t.logement?byId(S.biens,t.logement):null;var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||'',lg?lg.nom:''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row tache'+(st==='fait'?' faite':'')+'" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><button type="button" class="coche" data-cocher="'+esc(t.id)+'" aria-label="'+(st==='fait'?'Remettre à faire':'Marquer comme faite')+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
   function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
-  function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
+  function carteRelance(c){var st=relanceStatus(c);return '<div class="row tache" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><button type="button" class="coche" data-relfait="'+esc(c.id)+'" aria-label="Relance faite"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span><span class="reporter">'+boutonsJoindre(c,true)+'<button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="3">+3 j</button><button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="7">+7 j</button></span></span></div>';}
   function renderTaskBoard(id,maxFaites,maxAFaire){
     var k=$(id);if(!k)return;
     var dues=S.contacts.filter(function(c){return c.relance&&daysDiff(c.relance)<=0;}).sort(function(a,b){return a.relance<b.relance?-1:1;});
@@ -1068,10 +1117,13 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
     $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
     $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';
-    $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();
+    $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();majJoindre();
     $('agenda-note').textContent='';$('agenda-note').className='note';
-    toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
+    toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';if(!id||window.innerWidth>=700)setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
   }
+  function telNet(t){return String(t||'').replace(/[^0-9+]/g,'');}
+  function boutonsJoindre(c,petit){var h='',t=telNet(c.tel),k=petit?' xs':' sm';if(t){h+='<a class="btn'+k+' joindre-b" href="tel:'+esc(t)+'">'+'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>'+(petit?'':' Appeler')+'</a>';h+='<a class="btn'+k+' joindre-b" href="sms:'+esc(t)+'">'+'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'+(petit?'':' SMS')+'</a>';}if(!petit&&/@/.test(c.email||''))h+='<a class="btn sm joindre-b" href="mailto:'+esc(c.email.trim())+'">'+'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>'+' Mail</a>';var ad=[c.adresse,c.ville].filter(Boolean).join(' ');if(!petit&&ad)h+='<a class="btn sm joindre-b" target="_blank" rel="noopener" href="https://maps.apple.com/?q='+encodeURIComponent(ad)+'">'+'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>'+' Itinéraire</a>';return h;}
+  function majJoindre(){var h=boutonsJoindre({tel:$('f-tel').value,email:$('f-email').value,adresse:$('f-adresse').value,ville:$('f-ville').value});$('f-joindre').innerHTML=h;$('f-joindre').hidden=!h;}
   function majLiensContact(){var n=$('f-notes').value,h='';(n.match(/https?:\/\/[^\s]+/g)||[]).forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});$('f-liens').innerHTML=h;$('f-liens').hidden=!h;}
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
   function toggleEtape(){var t=$('f-type').value;$('field-etape').hidden=(t!=='prospect'&&t!=='prescripteur');}
@@ -1142,13 +1194,42 @@ h2,h3{font-weight:500;letter-spacing:0}
     tb.innerHTML=S.charges.map(function(c){return '<tr data-charge="'+esc(c.id)+'"><td><input data-f="libelle" value="'+esc(c.libelle)+'" placeholder="Libellé"></td><td><select data-f="categorie">'+catOpts(c.categorie)+'</select></td><td><input class="r" type="number" data-f="montant" value="'+esc(c.montant)+'"></td><td class="r calc tnum">'+eur(num(c.montant)*12)+'</td><td><input data-f="note" value="'+esc(c.note||'')+'"></td><td><button class="del" data-delcharge="'+esc(c.id)+'" aria-label="Supprimer">×</button></td></tr>';}).join('')||'<tr><td colspan="6" class="empty">Aucune charge. « + Charge » pour commencer.</td></tr>';
     var t=chargesMois();tf.innerHTML='<tr><td colspan="2">Total</td><td class="r tnum">'+eur(t)+'</td><td class="r tnum">'+eur(t*12)+'</td><td colspan="2"></td></tr>';
   }
-  function renderConso(){
-    var list=S.conso.filter(function(c){return !consoCat||c.categorie===consoCat;}).sort(function(a,b){return (a.categorie+a.article).localeCompare(b.categorie+b.article,'fr');});
-    var tb=$('conso-table').querySelector('tbody');
-    tb.innerHTML=list.map(function(c){return '<tr data-conso="'+esc(c.id)+'"><td><input data-f="article" value="'+esc(c.article)+'"></td><td><select data-f="categorie"><option value="consommable"'+(c.categorie==='consommable'?' selected':'')+'>Consommable</option><option value="linge"'+(c.categorie==='linge'?' selected':'')+'>Linge</option><option value="kit"'+(c.categorie==='kit'?' selected':'')+'>Kit signature</option></select></td><td><input class="r" type="number" step="0.01" data-f="prix" value="'+esc(c.prix)+'"></td><td><input class="r" type="number" step="0.5" data-f="qte" value="'+esc(c.qte)+'"></td><td class="r calc tnum">'+eur(num(c.prix)*num(c.qte),2)+'</td><td><input data-f="fournisseur" value="'+esc(c.fournisseur||'')+'"></td><td><input data-f="note" value="'+esc(c.note||'')+'"></td><td><button class="del" data-delconso="'+esc(c.id)+'" aria-label="Supprimer">×</button></td></tr>';}).join('')||'<tr><td colspan="8" class="empty">Aucun article.</td></tr>';
-    var sum=function(cat){return S.conso.filter(function(c){return c.categorie===cat;}).reduce(function(a,c){return a+num(c.prix)*num(c.qte);},0);};
-    $('co-k-conso').textContent=eur(sum('consommable'),2);$('co-k-linge').textContent=eur(sum('linge'));$('co-k-kit').textContent=eur(sum('kit'));
+  /* ===== Opérationnel ===== */
+  var OPS_ONGLET='menage',OC={voy:4,lits:2,ch:2,sdb:1,wc:1};
+  try{var oc0=JSON.parse(localStorage.getItem('ms_oc')||'null');if(oc0)OC=Object.assign(OC,oc0);OPS_ONGLET=localStorage.getItem('ms_ops')||OPS_ONGLET;}catch(e){}
+  var OPS_MODELES=[['Studio, 2 voyageurs',{voy:2,lits:1,ch:0,sdb:1,wc:1}],['2 pièces, 4 voyageurs',{voy:4,lits:2,ch:1,sdb:1,wc:1}],['3 pièces, 6 voyageurs',{voy:6,lits:3,ch:2,sdb:1,wc:1}],['4 pièces, 8 voyageurs',{voy:8,lits:4,ch:3,sdb:2,wc:2}],['Villa, 10 voyageurs',{voy:10,lits:5,ch:5,sdb:3,wc:3}]];
+  var OPS_CAT={linge:'Linge',table:'Vaisselle et cuisine',kit:'Kit Signature',consommable:'Consommables par séjour'};
+  function qteArticle(a){var b=num(a.base)||0,v=num(OC.voy);switch(a.regle){case 'lit':return b*num(OC.lits);case 'voyageur':return b*v;case 'sdb':return b*num(OC.sdb);case 'wc':return b*num(OC.wc);case 'chambre':return b*Math.max(1,num(OC.ch));case 'voyplus':return v+b;case 'palier':var pa=a.paliers||[];return num(pa[Math.min(pa.length-1,Math.max(0,Math.ceil(v/2)-1))]);default:return b;}}
+  var OPS_REGLE={lit:'par lit',voyageur:'par voyageur',sdb:'par salle de bain',wc:'par WC',chambre:'par chambre',voyplus:'',palier:'',logement:'par logement'};
+  function blocCalc(catg,titre,sousTitre){
+    var l=S.conso.filter(function(a){return a.categorie===catg;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!l.length)return '';
+    var tot=0,manque=0;var rows=l.map(function(a){var q=qteArticle(a),pr=num(a.prix),t=q*pr;tot+=t;if(!pr)manque++;return '<tr><td><span class="oa">'+esc(a.article)+'</span><span class="os">'+esc([a.regle==='palier'||a.regle==='voyplus'?'':(num(a.base)+' '+(OPS_REGLE[a.regle]||'')),a.fournisseur,a.note].filter(Boolean).join(' · '))+'</span></td><td class="r tnum oq">'+q+'</td><td class="r"><input class="r oprix" type="number" step="0.01" min="0" inputmode="decimal" data-prixart="'+esc(a.id)+'" value="'+(pr?esc(a.prix):'')+'" placeholder="Prix"></td><td class="r tnum ot">'+(pr?eur(t,2):'')+'</td></tr>';}).join('');
+    return '<div class="section"><div class="section-head"><h2>'+esc(titre)+'</h2><span class="ops-total">'+(tot?eur(tot):'')+'</span></div>'+(sousTitre?'<p class="note" style="margin:-6px 0 10px">'+esc(sousTitre)+'</p>':'')+'<div class="twrap"><table class="tbl ops-tbl"><thead><tr><th>Article</th><th class="r">Qté</th><th class="r">Prix u. €</th><th class="r">Total</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Budget</td><td></td><td></td><td class="r tnum">'+eur(tot)+'</td></tr></tfoot></table></div>'+(manque?'<p class="note" style="margin-top:6px">'+manque+' prix à renseigner pour un budget complet. Tape le prix une fois, il sert pour tous les logements.</p>':'')+'</div>';
   }
+  function blocTexte(o){var lien=lienSur(o.lien);return '<div class="section ops-doc"><div class="section-head"><h2>'+esc(o.titre)+'</h2>'+(lien?'<a class="btn sm" href="'+esc(lien)+'" target="_blank" rel="noopener">Ouvrir dans Canva</a>':'')+'</div>'+(o.intro?'<p class="note" style="margin:-6px 0 12px">'+esc(o.intro)+'</p>':'')+'<div class="ops-blocs">'+(o.blocs||[]).map(function(b){return '<div class="ops-bloc"><h3>'+esc(b.titre||'')+'</h3><ul>'+(b.items||[]).map(function(it){return '<li>'+esc(it)+'</li>';}).join('')+'</ul></div>';}).join('')+'</div></div>';}
+  function textes(rub){return (S.ops||[]).filter(function(o){return o.rubrique===rub;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);}).map(blocTexte).join('');}
+  function renderOps(){
+    var el=$('ops-contenu');if(!el)return;
+    document.querySelectorAll('[data-ops]').forEach(function(b){b.classList.toggle('active',b.dataset.ops===OPS_ONGLET);});
+    var calc=OPS_ONGLET==='equiper'||OPS_ONGLET==='kit'||OPS_ONGLET==='conso';$('ops-calc').hidden=!calc;
+    if(calc){['voy','lits','ch','sdb','wc'].forEach(function(k){var f=$('oc-'+k);if(f&&document.activeElement!==f)f.value=OC[k];});
+      $('ops-modeles').innerHTML=OPS_MODELES.map(function(m,i){var on=Object.keys(m[1]).every(function(k){return num(OC[k])===m[1][k];});return '<button type="button" class="chip'+(on?' active':'')+'" data-opsmod="'+i+'">'+esc(m[0])+'</button>';}).join('');}
+    var h='';
+    if(OPS_ONGLET==='menage')h=textes('menage');
+    else if(OPS_ONGLET==='equiper'){var tl=0;h=blocCalc('linge','Linge à acheter','Tout en trois : un en place, un au lavage, un de secours.')+blocCalc('table','Vaisselle et cuisine','Vaisselle non dépareillée.')+textes('equiper');}
+    else if(OPS_ONGLET==='kit')h=blocCalc('kit','Kit Signature : liste d’achats','Ce que Maison Solina fournit, selon le nombre de salles de bain, de WC et de chambres.')+textes('kit');
+    else if(OPS_ONGLET==='conso')h=blocCalc('consommable','Consommables pour un séjour','Coût d’un séjour, refacturé au propriétaire.')+textes('conso');
+    else h=textes('nouveau');
+    if(OPS_ONGLET==='equiper'){var t=['linge','table'].reduce(function(a,c){return a+S.conso.filter(function(x){return x.categorie===c;}).reduce(function(b,x){return b+qteArticle(x)*num(x.prix);},0);},0);if(t)h='<div class="card ops-budget"><div class="num">'+eur(t)+'</div><div class="lbl">budget linge et vaisselle pour ce logement</div></div>'+h;}
+    el.innerHTML=h||'<div class="empty"><b>Rien ici pour l’instant</b>Demande à Claude d’ajouter le contenu.</div>';
+  }
+  $('ops-onglets').addEventListener('click',function(e){var b=e.target.closest('[data-ops]');if(!b)return;OPS_ONGLET=b.dataset.ops;try{localStorage.setItem('ms_ops',OPS_ONGLET);}catch(x){}renderOps();});
+  $('ops-calc').addEventListener('click',function(e){var b=e.target.closest('[data-opsmod]');if(!b)return;OC=Object.assign({},OPS_MODELES[Number(b.dataset.opsmod)][1]);try{localStorage.setItem('ms_oc',JSON.stringify(OC));}catch(x){}renderOps();});
+  $('ops-calc').addEventListener('input',function(e){var f=e.target.closest('[data-oc]');if(!f)return;OC[f.dataset.oc]=Math.max(0,num(f.value));try{localStorage.setItem('ms_oc',JSON.stringify(OC));}catch(x){}renderOps();});
+  $('ops-contenu').addEventListener('input',function(e){var f=e.target.closest('[data-prixart]');if(!f)return;var a=byId(S.conso,f.dataset.prixart);if(!a)return;a.prix=f.value===''?0:num(f.value);var tr=f.closest('tr');var q=qteArticle(a);tr.querySelector('.ot').textContent=a.prix?eur(q*a.prix,2):'';saveLater('conso',Object.assign({},a),'prix'+a.id);});
+  $('ops-contenu').addEventListener('change',function(e){if(e.target.closest('[data-prixart]'))renderOps();});
+  function renderConso(){renderOps();}
+
   function confirmer(b){if(b.dataset.armed==='1')return true;var t=b.innerHTML;b.dataset.armed='1';b.innerHTML='Supprimer ?';b.classList.add('arme');setTimeout(function(){b.dataset.armed='';b.innerHTML=t;b.classList.remove('arme');},3500);return false;}
   function lienSur(v){return /^https?:\/\//i.test(v||'')?v:'';}
   function renderLiens(){document.querySelectorAll('[data-lien]').forEach(function(el){if(document.activeElement!==el)el.value=S.params[el.dataset.lien]||'';});document.querySelectorAll('[data-ouvrir]').forEach(function(a){var u=lienSur(S.params[a.dataset.ouvrir]);if(u){a.href=u;a.style.opacity='';a.style.pointerEvents='';}else{a.removeAttribute('href');a.style.opacity='.45';a.style.pointerEvents='none';}});}
@@ -1162,14 +1243,15 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
+  var lNouveau=null;
   function ouvrirLogement(id){
-    lEdit=id;var b=byId(S.biens,id);if(!b)return;
+    lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
     $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
     majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
-  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;}
+  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;}
   function renderIdees(){
     var list=S.idees.slice().sort(function(a,b){return (b.createdAt||'')<(a.createdAt||'')?-1:1;});
     $('idea-list').innerHTML=list.map(function(i){return '<div class="idea"><span class="pill">'+esc(i.categorie||'Autre')+'</span><h3>'+esc(i.titre)+'</h3>'+(i.note?'<p>'+esc(i.note)+'</p>':'')+'<div class="foot"><select data-ideastatut="'+esc(i.id)+'"><option'+(i.statut==='Idée'?' selected':'')+'>Idée</option><option'+(i.statut==='À creuser'?' selected':'')+'>À creuser</option><option'+(i.statut==='Lancée'?' selected':'')+'>Lancée</option><option'+(i.statut==='Abandonnée'?' selected':'')+'>Abandonnée</option></select><button class="btn ghost xs" data-delidea="'+esc(i.id)+'">×</button></div></div>';}).join('')||'<div class="empty" style="grid-column:1/-1"><b>La boîte est vide</b>Note ta première idée ci-dessus.</div>';
@@ -1278,7 +1360,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
-  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux'];
+  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops'];
   var CLE_JETON='solina-jeton',CLE_COPIE='solina-copie-crm';
   var G={sha:null,connecte:false,D:null,derniere:0};
   var LIEN_CLE='https://github.com/settings/personal-access-tokens/new?name=Application%20Solina&description=Application%20Maison%20Solina%20(Mac%20et%20iPhone)&target_name=concinafanny-rgb&expires_in=365&contents=write';
@@ -1349,7 +1431,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     echec('Enregistrement impossible, réessaie dans un instant');
   }
 
-  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(){return 'consommables';},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
+  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(d){return 'prix '+(d.article||'');},ops:function(d){return 'opérationnel '+(d.titre||'');},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
   function upsert(d,coll,doc){var a=d[coll],i=a.findIndex(function(x){return x.id===doc.id;});if(i>=0)a[i]=doc;else a.push(doc);}
 
   /* Persistence (générique) */
@@ -1514,12 +1596,12 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('rec-save').addEventListener('click',enregistrerNote);
   $('rec-annuler').addEventListener('click',annulerMicro);
   $('l-form').addEventListener('submit',function(e){
-    e.preventDefault();var b=byId(S.biens,lEdit);if(!b)return;var nom=$('l-nom').value.trim();if(!nom){$('l-nom').focus();return;}
+    e.preventDefault();var b=byId(S.biens,lEdit)||lNouveau;if(!b)return;var nom=$('l-nom').value.trim();if(!nom){$('l-nom').focus();return;}
     save('biens',Object.assign({},b,{nom:nom,adresse:$('l-adresse').value.trim(),ville:$('l-ville').value.trim(),proprietaire:$('l-prop').value,typeBien:$('l-type').value.trim(),chambres:$('l-ch').value?num($('l-ch').value):'',voyageurs:$('l-voy').value?num($('l-voy').value):'',lienAnnonce:$('l-annonce').value.trim(),lienCanva:$('lg-canva').value.trim(),notes:$('l-notes').value.trim()})).catch(function(){});
     toast('Logement enregistré');fermerLogement();
   });
   ['l-annonce','lg-canva'].forEach(function(id){$(id).addEventListener('input',majLiensLog);});
-  $('log-add').addEventListener('click',function(){var id=uid('b');save('biens',{id:id,nom:'Nouveau logement',commission:25,prixNuit:150,occupation:50,moisActifs:12,actif:true}).catch(function(){});ouvrirLogement(id);$('l-nom').select();});
+  $('log-add').addEventListener('click',function(){var id=uid('b');lNouveau={id:id,nom:'',commission:25,prixNuit:150,occupation:50,moisActifs:12,actif:true};ouvrirLogement(id);$('l-titre-h').textContent='Nouveau logement';if(window.innerWidth>=700)$('l-nom').focus();});
   $('t-form').addEventListener('submit',function(e){
     e.preventDefault();var titre=$('t-titre').value.trim();if(!titre){$('t-titre').focus();return;}
     var ex=tEdit?byId(S.taches,tEdit):null;var st=$('t-statut').value;
@@ -1536,6 +1618,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
   $('f-type').addEventListener('change',toggleEtape);
   $('btn-today').addEventListener('click',function(){$('f-dernier').value=todayISO();});
+  ['f-tel','f-email','f-adresse','f-ville'].forEach(function(i){$(i).addEventListener('input',majJoindre);});
   $('btn-agenda').addEventListener('click',planRelance);
   $('btn-delete').addEventListener('click',function(){$('confirm-delete').hidden=false;});
   $('btn-delete-no').addEventListener('click',function(){$('confirm-delete').hidden=true;});
@@ -1543,7 +1626,6 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}saveContact(data,editingId).then(function(){toast('Enregistré');closeSheet();});});
   $('search').addEventListener('input',function(){query=this.value;renderContacts();});
   $('type-chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;filterType=c.dataset.type;this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===c);});renderContacts();});
-  $('conso-chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;consoCat=c.dataset.cat;this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===c);});renderConso();});
   $('task-form').addEventListener('submit',function(e){e.preventDefault();var v=$('task-input').value.trim();if(!v)return;save('taches',{id:uid('t'),titre:v,date:$('task-date').value||'',fait:false,statut:'a_faire',createdAt:new Date().toISOString()});$('task-input').value='';$('task-date').value='';});
   $('idea-form').addEventListener('submit',function(e){e.preventDefault();var v=$('idea-input').value.trim();if(!v)return;save('idees',{id:uid('i'),titre:v,categorie:$('idea-cat').value,note:'',statut:'Idée',createdAt:new Date().toISOString()});$('idea-input').value='';toast('Idée notée');});
   $('post-form').addEventListener('submit',function(e){e.preventDefault();var t=$('po-titre').value.trim();if(!t){$('po-titre').focus();return;}var ex=postEdit?byId(S.posts,postEdit):null;var date=$('po-date').value||'';save('posts',Object.assign({},ex||{id:uid('p'),statut:'Idée',createdAt:new Date().toISOString()},{date:date,reseau:$('po-reseau').value,format:$('po-format').value,titre:t,legende:$('po-legende').value.trim()})).catch(function(){});if(date)poMois=date.slice(0,7);toast(ex?'Publication modifiée':'Ajoutée au planning');finEditionPost();renderPosts();});
@@ -1552,7 +1634,6 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('ca-add').addEventListener('click',function(){var b=S.biens[0];save('revenus',{id:uid('r'),mois:caMois,bienId:b?b.id:'',loyers:0,pct:b?num(b.commission):25,note:''});});
   $('bien-add').addEventListener('click',function(){save('biens',{id:uid('b'),nom:'Nouveau logement',commission:25,prixNuit:150,occupation:50,moisActifs:12,actif:true});});
   $('charge-add').addEventListener('click',function(){save('charges',{id:uid('ch'),libelle:'',categorie:CHARGE_CATS[0],montant:0,note:''});});
-  $('conso-add').addEventListener('click',function(){save('conso',{id:uid('co'),article:'',categorie:consoCat||'consommable',prix:0,qte:1,fournisseur:'',note:''});});
   $('sp-doc').addEventListener('click',spDoc);
   $('sp-copy').addEventListener('click',function(){var txt=spTitle()+'\n\n'+spText(spCalc());var note=$('sp-note');var ok=function(){note.className='note ok';note.textContent='Texte copié, prêt à coller dans un mail ou un document.';};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(function(){var r=document.createRange();r.selectNodeContents($('sp-prev'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);note.className='note';note.textContent='Texte sélectionné : copie le avec Cmd+C ou Ctrl+C.';});}});
   document.querySelectorAll('[data-panel="simprop"] input,[data-panel="simprop"] select').forEach(function(el){el.addEventListener('input',spCalc);});
@@ -1586,6 +1667,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     var ca=e.target.closest('[data-canal]');if(ca){canalFiltre=ca.dataset.canal;renderKanban();return;}
     var mo=e.target.closest('[data-mois]');if(mo){var dm=new Date(poMois+'-01T00:00:00');dm.setMonth(dm.getMonth()+Number(mo.dataset.mois));poMois=monthISO(dm);renderPosts();return;}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
+    if(e.target.closest('a.joindre-b'))return;
+    if(e.target.closest('[data-voircanaux]')){voirCanaux=!voirCanaux;renderCanaux();return;}
+    var rf=e.target.closest('[data-relfait]');if(rf){var cf=byId(S.contacts,rf.dataset.relfait);if(cf){rf.closest('.row').classList.add('cochee');saveContact(Object.assign({},cf,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),cf.id).then(function(){toast('Relance faite');});}return;}
+    var rp=e.target.closest('[data-reporter]');if(rp){var cr=byId(S.contacts,rp.dataset.reporter);if(cr){var dj=new Date();dj.setDate(dj.getDate()+Number(rp.dataset.j));saveContact(Object.assign({},cr,{relance:isoD(dj),agendaOk:false}),cr.id).then(function(){toast('Relance reportée au '+fmtDate(isoD(dj)));});}return;}
     var rl=e.target.closest('[data-relance]');if(rl){openSheet(rl.dataset.relance);return;}
     var co=e.target.closest('[data-cocher]');if(co){var tt=byId(S.taches,co.dataset.cocher);if(tt){co.closest('.row').classList.add('cochee');var nst=statutTache(tt)==='fait'?'a_faire':'fait';setTimeout(function(){changerStatut(tt,nst);},nst==='fait'?260:0);}return;}
     var tc=e.target.closest('[data-tache]');if(tc){ouvrirTache(tc.dataset.tache);return;}
@@ -1602,6 +1687,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var gd=e.target.closest('[data-gday]');if(gd){window.open(gd.dataset.gday,'_blank');return;}
   });
   document.addEventListener('change',function(e){
+    var es=e.target.closest('[data-etapesel]');if(es){var ce=byId(S.contacts,es.dataset.etapesel);if(ce&&ce.etape!==es.value)saveContact(Object.assign({},ce,{etape:es.value}),ce.id).then(function(){toast('Étape changée');});return;}
     var cb=e.target.closest('[data-task]');if(cb){var t=byId(S.taches,cb.dataset.task);if(t)changerStatut(t,cb.checked?'fait':'a_faire');return;}
     var is=e.target.closest('[data-ideastatut]');if(is){var i=byId(S.idees,is.dataset.ideastatut);if(i)save('idees',Object.assign({},i,{statut:is.value}));return;}
     var ps=e.target.closest('[data-poststatut]');if(ps){var p=byId(S.posts,ps.dataset.poststatut);if(p)save('posts',Object.assign({},p,{statut:ps.value}));return;}
@@ -1612,7 +1698,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   buildNav();
   var saved='accueil';try{saved=localStorage.getItem('ms_tab')||'accueil';}catch(e){}
   var h=(location.hash||'').slice(1);if(TITLES[h])saved=h;
-  if(saved==='simca')saved='ca';if(saved==='conso')saved='logements';go(saved);caMois=monthISO();renderAll();spCalc();
+  if(saved==='simca')saved='ca';if(saved==='conso')saved='ops';go(saved);caMois=monthISO();renderAll();spCalc();
 
   try{var copie=localStorage.getItem(CLE_COPIE);if(copie){G.D=normaliserD(JSON.parse(copie));appliquer(G.D);renderAll();}}catch(e){}
   etat(false);
