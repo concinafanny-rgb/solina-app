@@ -183,6 +183,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .result .rr.big{font-family:var(--display);font-size:22px;border-bottom:none;padding-top:10px}
 .result .rr.big span:last-child{font-weight:600}
 .result .rr:last-child{border-bottom:none}
+.lienpdf{font-size:12px;color:var(--terre);text-decoration:none;border-bottom:1px solid currentColor}
+.nowrap{white-space:nowrap}
 .bars{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:8px}
 .bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
 .bars .b i{display:block;width:100%;max-width:34px;background:var(--taupe-2);border-radius:5px 5px 2px 2px;min-height:2px}
@@ -458,19 +460,23 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Chiffre d'affaires</h1><div class="pd">Chaque mois, tu saisis les loyers encaissés par logement. La commission Maison Solina se calcule toute seule.</div></div>
         <div class="field" style="min-width:150px"><label for="ca-mois">Mois</label><input type="month" id="ca-mois"></div></div>
       <div class="grid cards-4" style="margin-top:18px">
-        <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">commissions ce mois</div></div>
-        <div class="card"><div class="num" id="ca-k-annee">0 €</div><div class="lbl">commissions cette année</div></div>
+        <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">facturé ce mois</div></div>
+        <div class="card"><div class="num" id="ca-k-annee">0 €</div><div class="lbl">facturé cette année</div></div>
         <div class="card"><div class="num" id="ca-k-loyers">0 €</div><div class="lbl">loyers encaissés ce mois</div></div>
         <div class="card"><div class="num" id="ca-k-tva" style="font-size:22px;padding-top:6px">—</div><div class="lbl" id="ca-k-tva-l">du plafond</div></div>
       </div>
       <div class="section">
         <div class="section-head"><h2 id="ca-mois-titre">Saisie du mois</h2><button class="btn sm" id="ca-add">+ Ligne</button></div>
-        <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Commission €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Facturé €</th><th>Facture</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
         <p class="note" style="margin-top:8px">Loyers encaissés = ce que le propriétaire a réellement reçu sur le mois. Les logements viennent du simulateur, plus bas.</p>
       </div>
       <div class="section">
-        <div class="section-head"><h2>Commissions sur 12 mois</h2></div>
+        <div class="section-head"><h2>Facturé sur 12 mois</h2></div>
         <div class="card"><div class="bars" id="ca-bars"></div></div>
+      </div>
+      <div class="section">
+        <div class="section-head"><h2 id="ca-log-titre">Par logement</h2></div>
+        <div class="twrap"><table class="tbl" id="ca-log"><thead><tr><th>Logement</th><th class="r">Loyers encaissés</th><th class="r">Facturé</th><th class="r">Mois facturés</th><th class="r">Part du CA</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
       </div>
       <div class="section" style="margin-top:46px">
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2><div class="pd">Ton prévisionnel : chaque logement, ce qu'il rapporte, puis toutes tes charges et les cotisations, jusqu'au net dans ta poche.</div></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
@@ -845,6 +851,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function initials(c){return ((c.prenom||'').charAt(0)+(c.nom||'').charAt(0)).toUpperCase()||'·';}
   function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},2200);}
   function uid(p){return (p||'x')+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+  function comRev(r){return (r.montant!==undefined&&r.montant!==null&&r.montant!=='')?num(r.montant):num(r.loyers)*num(r.pct)/100;}
   function byId(arr,id){for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null;}
 
   /* Navigation */
@@ -1089,15 +1096,21 @@ h2,h3{font-weight:500;letter-spacing:0}
     var rows=S.revenus.filter(function(r){return r.mois===caMois;});
     var tb=$('ca-table').querySelector('tbody'),tf=$('ca-table').querySelector('tfoot');
     var opts=function(sel){return '<option value="">Logement…</option>'+S.biens.map(function(b){return '<option value="'+esc(b.id)+'"'+(b.id===sel?' selected':'')+'>'+esc(b.nom)+'</option>';}).join('');};
-    tb.innerHTML=rows.map(function(r){var com=num(r.loyers)*num(r.pct)/100;return '<tr data-rev="'+esc(r.id)+'"><td><select data-f="bienId">'+opts(r.bienId)+'</select></td><td><input class="r" type="number" data-f="loyers" value="'+esc(r.loyers)+'"></td><td><input class="r" type="number" step="0.1" data-f="pct" value="'+esc(r.pct)+'"></td><td class="r calc tnum">'+eur(com)+'</td><td><input data-f="note" value="'+esc(r.note||'')+'" placeholder="Note"></td><td><button class="del" data-delrev="'+esc(r.id)+'" aria-label="Supprimer">×</button></td></tr>';}).join('')||'<tr><td colspan="6" class="empty">Aucune ligne ce mois. « + Ligne » pour commencer.</td></tr>';
-    var tl=rows.reduce(function(a,r){return a+num(r.loyers);},0),tc=rows.reduce(function(a,r){return a+num(r.loyers)*num(r.pct)/100;},0);
-    tf.innerHTML='<tr><td>Total</td><td class="r tnum">'+eur(tl)+'</td><td></td><td class="r tnum">'+eur(tc)+'</td><td colspan="2"></td></tr>';
+    tb.innerHTML=rows.map(function(r){var com=comRev(r);return '<tr data-rev="'+esc(r.id)+'"><td><select data-f="bienId">'+opts(r.bienId)+'</select></td><td><input class="r" type="number" data-f="loyers" value="'+esc(r.loyers)+'"></td><td><input class="r" type="number" step="0.1" data-f="pct" value="'+esc(r.pct)+'"></td><td class="r calc tnum">'+eur(com)+'</td><td class="nowrap"><input data-f="facture" value="'+esc(r.facture||'')+'" placeholder="N°" style="width:7.5em">'+(r.lienFacture?' <a class="lienpdf" href="'+esc(r.lienFacture)+'" target="_blank" rel="noopener">PDF</a>':'')+'</td><td><input data-f="note" value="'+esc(r.note||'')+'" placeholder="Note"></td><td><button class="del" data-delrev="'+esc(r.id)+'" aria-label="Supprimer">×</button></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Aucune ligne ce mois. « + Ligne » pour commencer.</td></tr>';
+    var tl=rows.reduce(function(a,r){return a+num(r.loyers);},0),tc=rows.reduce(function(a,r){return a+comRev(r);},0);
+    tf.innerHTML='<tr><td>Total</td><td class="r tnum">'+eur(tl)+'</td><td></td><td class="r tnum">'+eur(tc)+'</td><td colspan="3"></td></tr>';
     $('ca-k-mois').textContent=eur(tc);$('ca-k-loyers').textContent=eur(tl);
-    var year=caMois.slice(0,4);var ty=S.revenus.filter(function(r){return (r.mois||'').slice(0,4)===year;}).reduce(function(a,r){return a+num(r.loyers)*num(r.pct)/100;},0);
+    var year=caMois.slice(0,4);var ty=S.revenus.filter(function(r){return (r.mois||'').slice(0,4)===year;}).reduce(function(a,r){return a+comRev(r);},0);
     $('ca-k-annee').textContent=eur(ty);
+    // par logement sur l'année
+    var parB={};S.revenus.forEach(function(r){if((r.mois||'').slice(0,4)!==year)return;var k=r.bienId||'';var o=parB[k]||(parB[k]={l:0,c:0,m:{}});o.l+=num(r.loyers);o.c+=comRev(r);o.m[r.mois]=1;});
+    var lignesB=Object.keys(parB).map(function(k){var b=byId(S.biens,k);return {nom:b?b.nom:'Autres missions',o:parB[k]};}).sort(function(a,b){return b.o.c-a.o.c;});
+    $('ca-log-titre').textContent='Par logement en '+year;
+    $('ca-log').querySelector('tbody').innerHTML=lignesB.map(function(x){return '<tr><td>'+esc(x.nom)+'</td><td class="r tnum">'+eur(x.o.l)+'</td><td class="r tnum">'+eur(x.o.c)+'</td><td class="r tnum">'+Object.keys(x.o.m).length+'</td><td class="r tnum">'+(ty?Math.round(100*x.o.c/ty):0)+' %</td></tr>';}).join('')||'<tr><td colspan="5" class="empty">Rien de saisi pour '+esc(year)+'.</td></tr>';
+    $('ca-log').querySelector('tfoot').innerHTML=lignesB.length?'<tr><td>Total</td><td class="r tnum">'+eur(lignesB.reduce(function(a,x){return a+x.o.l;},0))+'</td><td class="r tnum">'+eur(ty)+'</td><td></td><td></td></tr>':'';
     var plafR=num(S.params.plafond)||40000;$('ca-k-tva').textContent=Math.round(100*ty/plafR)+' %';$('ca-k-tva-l').textContent='du plafond de '+eur(plafR)+' en '+year;
     // 12 derniers mois
-    var bars=[],max=1;for(var i=11;i>=0;i--){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);var m=monthISO(d);var v=S.revenus.filter(function(r){return r.mois===m;}).reduce(function(a,r){return a+num(r.loyers)*num(r.pct)/100;},0);bars.push([m,v]);if(v>max)max=v;}
+    var bars=[],max=1;for(var i=11;i>=0;i--){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);var m=monthISO(d);var v=S.revenus.filter(function(r){return r.mois===m;}).reduce(function(a,r){return a+comRev(r);},0);bars.push([m,v]);if(v>max)max=v;}
     $('ca-bars').innerHTML=bars.map(function(b){var lab=new Date(b[0]+'-01T00:00:00').toLocaleDateString('fr-FR',{month:'short'});return '<div class="b'+(b[0]===caMois?' cur':'')+'"><b>'+(b[1]?eur(b[1]):'')+'</b><i style="height:'+Math.max(2,Math.round(100*b[1]/max))+'px"></i><em>'+esc(lab)+'</em></div>';}).join('');
   }
   function renderCharges(){
@@ -1524,7 +1537,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     fn();
     if(cle&&f){var n=document.querySelector('tr['+cle[0]+'="'+cle[1].replace(/"/g,'\\"')+'"] [data-f="'+f+'"]');if(n){n.focus();try{if(pos!==null&&pos!==undefined)n.setSelectionRange(pos,pos);}catch(x){}}}
   }
-  function tableEdit(e,attr,coll,arrKey){var tr=e.target.closest('tr[data-'+attr+']');if(!tr)return false;var id=tr.getAttribute('data-'+attr);var doc=byId(S[arrKey],id);if(!doc)return true;var f=e.target.dataset.f;if(!f)return true;var val=e.target.type==='number'?num(e.target.value):e.target.value;if(doc[f]===val)return true;doc[f]=val;if(coll==='revenus'&&f==='bienId'){var b=byId(S.biens,val);if(b)doc.pct=num(b.commission);}saveLater(coll,Object.assign({},doc),coll+id);
+  function tableEdit(e,attr,coll,arrKey){var tr=e.target.closest('tr[data-'+attr+']');if(!tr)return false;var id=tr.getAttribute('data-'+attr);var doc=byId(S[arrKey],id);if(!doc)return true;var f=e.target.dataset.f;if(!f)return true;var val=e.target.type==='number'?num(e.target.value):e.target.value;if(doc[f]===val)return true;doc[f]=val;if(coll==='revenus'&&f==='bienId'){var b=byId(S.biens,val);if(b)doc.pct=num(b.commission);}if(coll==='revenus'&&(f==='loyers'||f==='pct'))delete doc.montant;saveLater(coll,Object.assign({},doc),coll+id);
     garderFocus(function(){if(coll==='biens'||coll==='revenus'||coll==='charges')renderFinance();else renderConso();});return true;}
   document.addEventListener('input',function(e){if(tableEdit(e,'bien','biens','biens'))return;if(tableEdit(e,'rev','revenus','revenus'))return;if(tableEdit(e,'charge','charges','charges'))return;tableEdit(e,'conso','conso','conso');});
   document.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('table.tbl'))setTimeout(function(){if(!document.activeElement||!document.activeElement.closest('table.tbl'))renderAll();},80);});
