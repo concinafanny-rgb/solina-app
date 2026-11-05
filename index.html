@@ -441,6 +441,8 @@ h2,h3{font-weight:500;letter-spacing:0}
       <p class="note err" id="cx-err" hidden style="margin:-4px 0 12px"></p>
       <button class="btn primary" type="submit" style="width:100%">Se connecter</button>
     </form>
+    <button class="btn" type="button" id="cx-reessayer" hidden style="width:100%;margin-top:10px">Réessayer avec ma clé enregistrée</button>
+    <p class="note" id="cx-safari" hidden style="font-size:13px;margin:12px 0 0">Tu es dans Safari. Ferme cette page et ouvre Solina depuis son icône sur ton écran d’accueil : ta clé y est déjà enregistrée.</p>
     <a class="btn" id="cx-lien" target="_blank" rel="noopener" style="width:100%;margin-top:10px;text-decoration:none">Créer ma clé sur GitHub</a>
     <details><summary>Ce qu’il faut faire sur la page GitHub</summary><ol>
       <li>Le nom et la durée sont déjà remplis.</li>
@@ -1481,7 +1483,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       }catch(e){
         if(e.code==='conflit')continue;
         console.error(e);
-        if(e.code==='cle'||e.code==='acces')montrerConnexion(e.message);
+        if(e.code==='cle'||(e.code==='acces'&&!cleDejaOk()))montrerConnexion(e.message);
         return echec(e.code==='reseau'?'Pas de connexion, rien n’a été enregistré':'Enregistrement impossible : '+e.message);
       }
     }
@@ -1514,18 +1516,21 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   /* Connexion de l'appareil */
   function etat(on){var st=$('dbstatus');st.classList.toggle('on',on);st.innerHTML='<i></i><span>'+(on?'Synchronisé':'Hors connexion')+'</span>';}
-  function montrerConnexion(msg){$('connexion').hidden=false;$('cx-err').textContent=msg||'';$('cx-err').hidden=!msg;document.body.style.overflow='hidden';}
+  function dansSafariIphone(){return /iPhone|iPad|iPod/.test(navigator.userAgent)&&!navigator.standalone&&!(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);}
+  function cleDejaOk(){try{return localStorage.getItem('solina-cle-ok')==='1';}catch(e){return false;}}
+  function montrerConnexion(msg){$('cx-reessayer').hidden=!jeton();$('cx-safari').hidden=!(dansSafariIphone()&&!jeton());$('connexion').hidden=false;$('cx-err').textContent=msg||'';$('cx-err').hidden=!msg;document.body.style.overflow='hidden';}
   function masquerConnexion(){$('connexion').hidden=true;document.body.style.overflow='';}
   async function actualiser(){
     if(!jeton()){montrerConnexion('');return false;}
     try{
       var depart=Date.now();var f=await lireDepot();if(G.ecrit&&G.ecrit>depart)return true;var change=f.sha!==G.sha;
-      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();
+      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
       if(change){appliquer(f.data);attente.forEach(function(l){l.modif(S);});garderCopie();rafraichir();}
       return true;
     }catch(e){
       G.connecte=false;etat(false);
-      if(e.code==='cle'||e.code==='acces')montrerConnexion(e.message);
+      if(e.code==='acces'&&cleDejaOk())toast('GitHub ne répond pas bien pour l’instant, je réessaierai tout seul');
+      else if(e.code==='cle'||e.code==='acces')montrerConnexion(e.message);
       else if(e.code==='json')toast(e.message);
       return false;
     }
@@ -1536,10 +1541,12 @@ h2,h3{font-weight:500;letter-spacing:0}
   window.addEventListener('online',function(){vider();if(!attente.length)actualiser();});
   $('cx-form').addEventListener('submit',function(e){e.preventDefault();var v=$('cx-cle').value.trim();if(!v)return;try{localStorage.setItem(CLE_JETON,v);}catch(x){}$('cx-cle').value='';actualiser().then(function(ok){if(ok)toast('Connectée à tes données');});});
   $('cx-lien').href=LIEN_CLE;
+  $('cx-reessayer').addEventListener('click',function(){var b=this;b.disabled=true;actualiser().then(function(ok){b.disabled=false;if(ok)toast('Connectée à tes données');});});
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(x){}
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-deconnecter]');if(!b)return;
     if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Confirmer la déconnexion';setTimeout(function(){b.dataset.armed='';b.textContent='Déconnecter cet appareil';},4000);return;}
-    try{localStorage.removeItem(CLE_JETON);localStorage.removeItem(CLE_COPIE);}catch(x){}
+    try{localStorage.removeItem(CLE_JETON);localStorage.removeItem(CLE_COPIE);localStorage.removeItem('solina-cle-ok');}catch(x){}
     G={sha:null,connecte:false,D:null,derniere:0};appliquer(normaliserD({}));renderAll();etat(false);montrerConnexion('');
   });
 
