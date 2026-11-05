@@ -1483,7 +1483,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       }catch(e){
         if(e.code==='conflit')continue;
         console.error(e);
-        if(e.code==='cle'||(e.code==='acces'&&!cleDejaOk()))montrerConnexion(e.message);
+        if((e.code==='cle'||e.code==='acces')&&!cleDejaOk())montrerConnexion(e.message);
         return echec(e.code==='reseau'?'Pas de connexion, rien n’a été enregistré':'Enregistrement impossible : '+e.message);
       }
     }
@@ -1524,12 +1524,15 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(!jeton()){montrerConnexion('');return false;}
     try{
       var depart=Date.now();var f=await lireDepot();if(G.ecrit&&G.ecrit>depart)return true;var change=f.sha!==G.sha;
-      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
+      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();G.refus=0;try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
       if(change){appliquer(f.data);attente.forEach(function(l){l.modif(S);});garderCopie();rafraichir();}
       return true;
     }catch(e){
       G.connecte=false;etat(false);
-      if(e.code==='acces'&&cleDejaOk())toast('GitHub ne répond pas bien pour l’instant, je réessaierai tout seul');
+      if((e.code==='acces'||e.code==='cle')&&cleDejaOk()&&(G.refus=(G.refus||0)+1)<4){
+        if(G.refus===1)toast('GitHub ne répond pas bien pour l’instant, je réessaie tout seul');
+        clearTimeout(G.relance);G.relance=setTimeout(actualiser,30000*G.refus);
+      }
       else if(e.code==='cle'||e.code==='acces')montrerConnexion(e.message);
       else if(e.code==='json')toast(e.message);
       return false;
