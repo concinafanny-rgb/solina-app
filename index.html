@@ -390,6 +390,18 @@ h2,h3{font-weight:500;letter-spacing:0}
 .ops-bloc ul{margin:0;padding-left:18px}
 .ops-bloc li{font-size:13.5px;line-height:1.5;margin-bottom:5px;color:var(--brun)}
 @media (max-width:699px){.ops-champs{grid-template-columns:repeat(3,1fr)}.ops-champs .field:first-child{grid-column:1 / -1}.ops-onglets{flex-wrap:nowrap;overflow-x:auto}.ops-onglets .chip{flex:none}.ops-tbl th:nth-child(4),.ops-tbl td:nth-child(4){display:none}.ops-tbl .oprix{width:72px}}
+.coffre{background:var(--creme-2);border:1px solid var(--line);border-radius:14px;padding:14px 14px 6px}
+.coffre,.coffre *{min-width:0;box-sizing:border-box}
+.acces .two{grid-template-columns:1fr;gap:0}
+.acces-c .btn.xs{flex:none}
+#lsheet form{min-width:0;max-width:100%}
+.coffre-t{display:flex;align-items:center;gap:8px}
+.coffre-ouvrir{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px}
+.acces{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.acces-l{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.acces-l input{flex:1;font-weight:600;border:0;background:transparent;padding:4px 0;color:var(--brun)}
+.acces-c{display:flex;gap:6px;align-items:center}
+.acces-c input{flex:1;min-width:0}
 .btn.voirplus{width:100%;margin-top:4px;justify-content:center}
 .coche{flex:none;width:26px;height:26px;margin:-1px 0 0;border-radius:50%;border:1.5px solid var(--taupe);background:var(--card);color:transparent;display:flex;align-items:center;justify-content:center;position:relative;transition:background .2s,color .2s,border-color .2s}
 .coche::after{content:"";position:absolute;inset:-9px}
@@ -853,7 +865,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     </div>
     <div class="actions" id="l-liens" hidden></div>
     <div class="field"><label for="l-notes">Notes</label><textarea id="l-notes" placeholder="Équipements, consignes de ménage, linge, consommables, particularités…"></textarea></div>
-    <p class="note" style="margin:0">Ne note jamais ici un code de boîte à clés, un mot de passe wifi ou un code d'alarme.</p>
+    <p class="note" style="margin:0">Les codes et mots de passe vont dans les accès privés, juste en dessous, jamais dans les notes.</p>
+    <div class="hr"></div>
+    <div class="coffre" id="coffre"><div class="section-head" style="margin:0 0 8px"><h3 class="coffre-t"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Accès privés</h3><span class="eyebrow">Chiffré</span></div><div id="coffre-corps"></div></div>
+    <datalist id="dl-acces"><option value="Boîte à clés"><option value="Porte d'entrée"><option value="Portail"><option value="Digicode"><option value="Serrure connectée"><option value="Alarme"><option value="Wifi"><option value="Mail du logement"><option value="Airbnb"><option value="Booking"><option value="Channel manager"><option value="Mairie, taxe de séjour"><option value="Parking"></datalist>
     <div class="hr"></div>
     <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
     <div class="list" id="l-taches"></div>
@@ -1244,14 +1259,56 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
   var lNouveau=null;
+
+  /* ===== Coffre des accès privés : chiffré sur l'appareil (AES-GCM 256, clé tirée du mot de passe par PBKDF2), seul le texte chiffré part sur GitHub ===== */
+  var COFFRE={cle:null,depuis:0,entrees:null,bien:null,montrer:{}};
+  function enB64(u){var t='';for(var i=0;i<u.length;i+=0x8000)t+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(t);}
+  function deB64(b){var t=atob(b),u=new Uint8Array(t.length);for(var i=0;i<t.length;i++)u[i]=t.charCodeAt(i);return u;}
+  async function coffreCle(mdp,sel){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(mdp),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:deB64(sel),iterations:310000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+  async function chiffrer(cle,obj){var iv=crypto.getRandomValues(new Uint8Array(12));var c=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},cle,new TextEncoder().encode(JSON.stringify(obj)));return {v:1,iv:enB64(iv),d:enB64(new Uint8Array(c))};}
+  async function dechiffrer(cle,x){var p=await crypto.subtle.decrypt({name:'AES-GCM',iv:deB64(x.iv)},cle,deB64(x.d));return JSON.parse(new TextDecoder().decode(p));}
+  function coffreDispo(){return !!(window.crypto&&crypto.subtle&&window.TextEncoder);}
+  function verrouiller(){COFFRE.cle=null;COFFRE.entrees=null;COFFRE.montrer={};if($('lsheet').classList.contains('open'))renderCoffre();}
+  function coffreActif(){if(COFFRE.cle&&Date.now()-COFFRE.depuis>10*60*1000)verrouiller();return !!COFFRE.cle;}
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')verrouiller();});
+  async function chargerEntrees(){var b=byId(S.biens,lEdit);COFFRE.bien=lEdit;COFFRE.montrer={};if(!b||!b.coffre){COFFRE.entrees=[];return;}try{COFFRE.entrees=(await dechiffrer(COFFRE.cle,b.coffre)).entrees||[];}catch(e){COFFRE.entrees=null;toast('Ce coffre ne s’ouvre pas avec ce mot de passe');}}
+  function renderCoffre(){
+    var el=$('coffre-corps');if(!el)return;
+    if(!coffreDispo()){el.innerHTML='<p class="note">Le coffre n’est pas disponible sur cet appareil.</p>';return;}
+    if(!byId(S.biens,lEdit)){el.innerHTML='<p class="note">Enregistre d’abord le logement, puis rouvre sa fiche pour ajouter ses accès.</p>';return;}
+    if(!S.params.coffreSel){el.innerHTML='<p class="note" style="margin:0 0 10px">Crée le mot de passe de ton coffre. Il protège les accès de tous tes logements. Choisis une phrase que tu n’oublieras pas : <b>sans elle, personne ne pourra rouvrir le coffre, pas même Claude</b>.</p><div class="two"><div class="field"><label for="cf-m1">Mot de passe du coffre</label><input id="cf-m1" type="password" autocomplete="new-password"></div><div class="field"><label for="cf-m2">Le même, encore une fois</label><input id="cf-m2" type="password" autocomplete="new-password"></div></div><div class="actions"><button type="button" class="btn primary sm" data-coffre="creer">Créer le coffre</button></div><p class="note err" id="cf-err" hidden></p>';return;}
+    if(!coffreActif()){el.innerHTML='<div class="coffre-ouvrir"><div class="field" style="flex:1;margin:0"><label for="cf-m">Mot de passe du coffre</label><input id="cf-m" type="password" autocomplete="current-password"></div><button type="button" class="btn primary sm" data-coffre="ouvrir">Ouvrir</button></div><p class="note err" id="cf-err" hidden></p>';return;}
+    if(COFFRE.bien!==lEdit||!COFFRE.entrees){el.innerHTML='<p class="note">Ouverture…</p>';chargerEntrees().then(renderCoffre);return;}
+    var EYE='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+    el.innerHTML=(COFFRE.entrees.length?COFFRE.entrees.map(function(x,i){var vu=COFFRE.montrer[i];return '<div class="acces" data-acces="'+i+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Boîte à clés, Airbnb, Wifi…" autocomplete="off"><button type="button" class="btn ghost xs" data-coffre="suppr" data-i="'+i+'" aria-label="Supprimer cet accès">×</button></div><div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-coffre="copier" data-i="'+i+'" data-k="identifiant">Copier</button></span></div><div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-coffre="voir" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-coffre="copier" data-i="'+i+'" data-k="secret">Copier</button></span></div></div><div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}).join(''):'<p class="note">Aucun accès pour ce logement.</p>')+
+      '<div class="actions"><button type="button" class="btn sm" data-coffre="ajouter">+ Accès</button><button type="button" class="btn primary sm" data-coffre="enregistrer">Enregistrer les accès</button><span style="flex:1"></span><button type="button" class="btn ghost sm" data-coffre="fermer">Verrouiller</button></div>';
+  }
+  function lireAcces(){document.querySelectorAll('#coffre-corps [data-acces]').forEach(function(r){var i=Number(r.dataset.acces),x=COFFRE.entrees[i];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
+  function erreurCoffre(t){var e=$('cf-err');if(e){e.textContent=t;e.hidden=false;}}
+  $('coffre').addEventListener('click',async function(e){
+    var b=e.target.closest('[data-coffre]');if(!b)return;e.preventDefault();var a=b.dataset.coffre;
+    try{
+      if(a==='creer'){var m1=$('cf-m1').value,m2=$('cf-m2').value;if(m1.length<8)return erreurCoffre('Au moins 8 caractères.');if(m1!==m2)return erreurCoffre('Les deux mots de passe ne sont pas identiques.');b.disabled=true;b.textContent='Création…';var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var cle=await coffreCle(m1,sel);S.params.coffreSel=sel;S.params.coffreTest=await chiffrer(cle,{ok:'solina'});saveParams();COFFRE.cle=cle;COFFRE.depuis=Date.now();COFFRE.entrees=null;renderCoffre();toast('Coffre créé');return;}
+      if(a==='ouvrir'){var m=$('cf-m').value;if(!m)return;b.disabled=true;b.textContent='Ouverture…';var k=await coffreCle(m,S.params.coffreSel);try{await dechiffrer(k,S.params.coffreTest);}catch(x){b.disabled=false;b.textContent='Ouvrir';return erreurCoffre('Mot de passe incorrect.');}COFFRE.cle=k;COFFRE.depuis=Date.now();COFFRE.entrees=null;renderCoffre();return;}
+      if(!coffreActif()){renderCoffre();return;}
+      COFFRE.depuis=Date.now();lireAcces();
+      if(a==='ajouter'){COFFRE.entrees.push({libelle:'',identifiant:'',secret:'',note:''});renderCoffre();var l=document.querySelectorAll('#coffre-corps [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
+      if(a==='suppr'){if(!confirmer(b))return;COFFRE.entrees.splice(Number(b.dataset.i),1);renderCoffre();return;}
+      if(a==='voir'){var i=Number(b.dataset.i);COFFRE.montrer[i]=!COFFRE.montrer[i];renderCoffre();return;}
+      if(a==='copier'){var v=(COFFRE.entrees[Number(b.dataset.i)]||{})[b.dataset.k]||'';if(!v)return;try{await navigator.clipboard.writeText(v);toast('Copié');}catch(x){toast('Copie impossible sur cet appareil');}return;}
+      if(a==='fermer'){verrouiller();return;}
+      if(a==='enregistrer'){var bien=byId(S.biens,lEdit);if(!bien)return;var garde=COFFRE.entrees.filter(function(x){return (x.libelle||x.identifiant||x.secret||x.note);});var c=garde.length?await chiffrer(COFFRE.cle,{entrees:garde}):null;var nv=Object.assign({},bien);if(c)nv.coffre=c;else delete nv.coffre;COFFRE.entrees=garde;save('biens',nv).then(function(){toast('Accès enregistrés et chiffrés');}).catch(function(){});renderCoffre();return;}
+    }catch(x){console.error(x);toast('Le coffre a rencontré un problème');renderCoffre();}
+  });
+  $('coffre').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target;if(t.id==='cf-m'){e.preventDefault();$('coffre').querySelector('[data-coffre="ouvrir"]').click();}else if(t.id==='cf-m1'||t.id==='cf-m2'){e.preventDefault();}else if(t.closest('#coffre-corps'))e.preventDefault();});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
     $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
-    majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
+    COFFRE.entrees=null;COFFRE.bien=null;renderCoffre();majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
-  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;}
+  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;COFFRE.entrees=null;COFFRE.bien=null;COFFRE.montrer={};}
   function renderIdees(){
     var list=S.idees.slice().sort(function(a,b){return (b.createdAt||'')<(a.createdAt||'')?-1:1;});
     $('idea-list').innerHTML=list.map(function(i){return '<div class="idea"><span class="pill">'+esc(i.categorie||'Autre')+'</span><h3>'+esc(i.titre)+'</h3>'+(i.note?'<p>'+esc(i.note)+'</p>':'')+'<div class="foot"><select data-ideastatut="'+esc(i.id)+'"><option'+(i.statut==='Idée'?' selected':'')+'>Idée</option><option'+(i.statut==='À creuser'?' selected':'')+'>À creuser</option><option'+(i.statut==='Lancée'?' selected':'')+'>Lancée</option><option'+(i.statut==='Abandonnée'?' selected':'')+'>Abandonnée</option></select><button class="btn ghost xs" data-delidea="'+esc(i.id)+'">×</button></div></div>';}).join('')||'<div class="empty" style="grid-column:1/-1"><b>La boîte est vide</b>Note ta première idée ci-dessus.</div>';
