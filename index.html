@@ -305,7 +305,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .pastille{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0;flex:none}
 .lien-contact{display:flex;align-items:center;font-size:12.5px;color:var(--brun);margin-top:4px}
 .mininote{font-size:12px;color:var(--muted);margin-top:4px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-@media (max-width:699px){#task-kanban .col,#home-kanban .col{flex:0 0 82vw}.wknav{width:100%}.wknav #wk-titre{min-width:0;flex:1;white-space:nowrap;font-size:12.5px}.section-head{flex-wrap:wrap}}
+@media (max-width:699px){#task-kanban,#home-kanban{flex-direction:column;overflow:visible;gap:14px}#task-kanban .col[data-tetape],#home-kanban .col[data-tetape]{flex:none;width:100%}.wknav{width:100%}.wknav #wk-titre{min-width:0;flex:1;white-space:nowrap;font-size:12.5px}.section-head{flex-wrap:wrap}}
 .moisnav{display:flex;align-items:center;gap:12px;margin-top:6px}
 .moisnav h2{min-width:190px;text-align:center}
 .moisnav h2::first-letter{text-transform:uppercase}
@@ -331,6 +331,16 @@ h1{font-weight:500;letter-spacing:0}
 h2,h3{font-weight:500;letter-spacing:0}
 .brand .mark{font-weight:500}
 .col.survol{background:#EBD9CC}
+.row.tache{gap:10px}
+.btn.xs.arme{color:#fff;background:#B5574B;border-color:#B5574B;white-space:nowrap}
+.btn.voirplus{width:100%;margin-top:4px;justify-content:center}
+.coche{flex:none;width:26px;height:26px;margin:-1px 0 0;border-radius:50%;border:1.5px solid var(--taupe);background:var(--card);color:transparent;display:flex;align-items:center;justify-content:center;position:relative;transition:background .2s,color .2s,border-color .2s}
+.coche::after{content:"";position:absolute;inset:-9px}
+.coche:hover{border-color:var(--terre);color:var(--taupe)}
+.row.cochee .coche,.row.faite .coche{background:var(--terre);border-color:var(--terre);color:#fff}
+.row.faite{padding:7px 11px;opacity:.72}
+.row.faite .t{text-decoration:line-through;text-decoration-color:rgba(0,0,0,.25);font-size:13.5px}
+.row.faite .mininote,.row.faite .pills,.row.faite .lien-contact{display:none}
 .kanban .row[draggable]{cursor:grab}
 .connexion{position:fixed;inset:0;z-index:60;background:var(--creme);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:8vh 16px 40px}
 .connexion[hidden]{display:none!important}
@@ -436,7 +446,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- RELANCES -->
     <section class="panel" data-panel="relances">
-      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Tes tâches d'abord, que tu fais glisser de « À faire » à « Faites », puis tes relances, qui viennent des fiches contacts.</div></div>
+      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Touche le rond pour cocher une tâche faite, touche la tâche pour l'ouvrir. Tes relances viennent des fiches contacts.</div></div>
       <div class="section" style="margin-top:0">
         <div class="section-head"><h2>Tâches</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
         <form class="addline" id="task-form" style="margin-bottom:10px">
@@ -1009,10 +1019,10 @@ h2,h3{font-weight:500;letter-spacing:0}
   var T_ETAPES=[['a_faire','À faire'],['fait','Faites']];
   function statutTache(t){var s=t.statut||(t.fait?'fait':'a_faire');return s==='en_cours'?'a_faire':s;}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
-  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var lg=t.logement?byId(S.biens,t.logement):null;var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||'',lg?lg.nom:''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
+  function carteTache(t){var st=statutTache(t),d=t.date?daysDiff(t.date):null;var badge=(t.importante&&st!=='fait'?'<span class="pill imp">Important</span><br>':'')+(st!=='fait'&&d!==null&&d<0?'<span class="pill late">En retard</span><br>':(st!=='fait'&&d===0?'<span class="pill today">Aujourd\'hui</span><br>':''));var lg=t.logement?byId(S.biens,t.logement):null;var sous=[t.date?fmtDate(t.date):'Sans date',REPET[t.repeter]||'',lg?lg.nom:''].filter(Boolean).join(' · ');var lc=t.contact?byId(S.contacts,t.contact):null;return '<div class="row tache'+(st==='fait'?' faite':'')+'" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab;align-items:flex-start'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><button type="button" class="coche" data-cocher="'+esc(t.id)+'" aria-label="'+(st==='fait'?'Remettre à faire':'Marquer comme faite')+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="body"><span class="t" style="white-space:normal">'+esc(t.titre)+'</span><span class="s" style="white-space:normal">'+esc(sous)+'</span>'+(lc?'<span class="lien-contact"><i class="pastille" style="background:'+couleurType(lc.type)+'"></i>'+esc(fullName(lc))+'</span>':'')+(t.notes?'<span class="mininote">'+liensCliquables(t.notes)+'</span>':'')+(badge?'<span class="pills">'+badge.replace(/<br>/g,'')+'</span>':'')+'</span><span class="r"><button type="button" class="btn ghost xs" data-deltask="'+esc(t.id)+'" aria-label="Supprimer">×</button></span></div>';}
   function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
   function carteRelance(c){var st=relanceStatus(c);return '<div class="row" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;align-items:flex-start;border-left:4px solid '+couleurType(c.type)+'"><span class="body"><span class="t" style="white-space:normal">Relancer '+esc(fullName(c))+'</span><span class="s" style="white-space:normal"><i class="pastille" style="background:'+couleurType(c.type)+'"></i>'+esc([TYPES[c.type],c.tel].filter(Boolean).join(' · '))+'</span>'+(c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+'<span class="pills"><span class="pill '+st.cls+'">'+esc(st.txt)+'</span></span></span></div>';}
-  function renderTaskBoard(id,maxFaites){
+  function renderTaskBoard(id,maxFaites,maxAFaire){
     var k=$(id);if(!k)return;
     var dues=S.contacts.filter(function(c){return c.relance&&daysDiff(c.relance)<=0;}).sort(function(a,b){return a.relance<b.relance?-1:1;});
     k.innerHTML=T_ETAPES.map(function(e){
@@ -1020,10 +1030,11 @@ h2,h3{font-weight:500;letter-spacing:0}
       var total=items.length,plus='';
       if(e[0]==='fait'&&items.length>maxFaites){plus='<div class="note" style="text-align:center;padding:4px">et '+(items.length-maxFaites)+' autres</div>';items=items.slice(0,maxFaites);}
       var rel=e[0]==='a_faire'?dues.map(carteRelance).join(''):'';var n=total+(e[0]==='a_faire'?dues.length:0);
+      if(e[0]==='a_faire'&&maxAFaire&&n>maxAFaire){var dr=dues.slice(0,maxAFaire);rel=dr.map(carteRelance).join('');items=items.slice(0,Math.max(0,maxAFaire-dr.length));plus='<button type="button" class="btn voirplus" data-go="relances">Voir les '+(n-maxAFaire)+' autres tâches</button>';}
       return '<div class="col" data-tetape="'+e[0]+'"><h3>'+e[1]+'<span>'+n+'</span></h3><div class="list">'+(n?rel+items.map(carteTache).join('')+plus:'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div></div>';
     }).join('');
   }
-  function renderTasks(){renderTaskBoard('task-kanban',20);renderTaskBoard('home-kanban',4);}
+  function renderTasks(){renderTaskBoard('task-kanban',20);renderTaskBoard('home-kanban',3,5);}
   function prochaineDate(d,rep){var x=new Date(d+'T00:00:00');if(rep==='semaine'){x.setDate(x.getDate()+7);return isoD(x);}var k=rep==='mois'?1:rep==='trimestre'?3:12;var j=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+k);var der=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();x.setDate(Math.min(j,der));return isoD(x);}
   function changerStatut(t,st){
     var maj=Object.assign({},t,{statut:st,fait:st==='fait',faitLe:st==='fait'?todayISO():''});
@@ -1546,7 +1557,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var cp=e.target.closest('[data-copier]');if(cp){copierMessage(cp);return;}
     var o=e.target.closest('[data-open]');if(o){openSheet(o.dataset.open);return;}
     var d=e.target.closest('[data-done]');if(d){var c=byId(S.contacts,d.dataset.done);if(c){saveContact(Object.assign({},c,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),c.id).then(function(){toast('Relance faite');});}return;}
-    var x=e.target.closest('[data-deltask]');if(x){e.preventDefault();remove('taches',x.dataset.deltask);return;}
+    var x=e.target.closest('[data-deltask]');if(x){e.preventDefault();if(x.dataset.armed!=='1'){x.dataset.armed='1';x.textContent='Supprimer ?';x.classList.add('arme');setTimeout(function(){x.dataset.armed='';x.textContent='×';x.classList.remove('arme');},3500);return;}remove('taches',x.dataset.deltask);return;}
     var di=e.target.closest('[data-delidea]');if(di){remove('idees',di.dataset.delidea);return;}
     var dp=e.target.closest('[data-delpost]');if(dp){remove('posts',dp.dataset.delpost);return;}
     var db1=e.target.closest('[data-delbien]');if(db1){remove('biens',db1.dataset.delbien);return;}
@@ -1557,6 +1568,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var mo=e.target.closest('[data-mois]');if(mo){var dm=new Date(poMois+'-01T00:00:00');dm.setMonth(dm.getMonth()+Number(mo.dataset.mois));poMois=monthISO(dm);renderPosts();return;}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     var rl=e.target.closest('[data-relance]');if(rl){openSheet(rl.dataset.relance);return;}
+    var co=e.target.closest('[data-cocher]');if(co){var tt=byId(S.taches,co.dataset.cocher);if(tt){co.closest('.row').classList.add('cochee');var nst=statutTache(tt)==='fait'?'a_faire':'fait';setTimeout(function(){changerStatut(tt,nst);},nst==='fait'?260:0);}return;}
     var tc=e.target.closest('[data-tache]');if(tc){ouvrirTache(tc.dataset.tache);return;}
     if(e.target.closest('[data-newtask]')){ouvrirTache(null);return;}
     var lg=e.target.closest('[data-log]');if(lg){ouvrirLogement(lg.dataset.log);return;}
