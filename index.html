@@ -337,6 +337,33 @@ details.plier[open] .fl{transform:rotate(90deg)}
 .cb-l:first-of-type{margin-top:10px}
 .cb-l b{font-weight:500}
 .cb-e{flex:none;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 8px;font-weight:600;min-width:92px;text-align:center}
+.n-titre{font:inherit;font-size:19px;font-weight:500;color:var(--brun);border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 0;width:100%;margin-top:6px}
+.n-texte{flex:1;min-height:52vh;margin-top:10px;font:inherit;font-size:15.5px;line-height:1.6;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card);color:var(--brun);resize:vertical}
+#n-dicter.enreg{background:var(--rouge);border-color:var(--rouge)}
+.kp{padding:8px 10px;gap:8px;align-items:flex-start}
+.kp .t{font-size:13.5px;font-weight:500;white-space:normal}
+.kp .s{font-size:12px}
+.ecarter{font-size:11px;padding:2px 8px;color:var(--muted);flex:none}
+.kp-bas{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.kp .s{white-space:normal}
+.kp .body{flex:1;min-width:0}
+.kp-bas .pill{font-size:9.5px;padding:2px 6px}
+.kp-lien{white-space:nowrap}
+.kp-g{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ecarter{white-space:nowrap}
+.kp-lien{font-size:12px;display:inline-block;margin-top:2px}
+.kcarte .etape-sel{font-size:12px;padding:4px 8px}
+.logc.avecphoto{display:flex;gap:14px;align-items:stretch;padding:0;overflow:hidden;text-align:left}
+.logc-img{width:110px;min-height:96px;object-fit:cover;flex:none;display:block}
+.logc.avecphoto .logc-c{padding:14px 14px 14px 0;min-width:0}
+.logc-c{display:block}
+details.anciens{margin-top:16px}
+[data-panel="simprop"] .result{background:#4F6B57}
+[data-panel="simprop"] .btn.primary{background:#4F6B57;border-color:#4F6B57}
+[data-panel="simprop"] .ctit{color:#4F6B57}
+.sp-apercu{background:#E9E4DF;border-radius:14px;padding:14px;height:560px;overflow:hidden;position:relative}
+.sp-apercu iframe{border:0;width:794px;height:2300px;transform:scale(.62);transform-origin:0 0;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12);pointer-events:none}
+@media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}.logc-img{width:92px}}
 .toast-annul{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;margin-left:12px;cursor:pointer;padding:0}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--terre);color:var(--terre);display:inline-flex;align-items:center;justify-content:center;background:var(--card);flex:none}
 .micbtn:hover{background:var(--terre);color:#fff}
@@ -538,7 +565,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="section"><div class="section-head"><h2>Formation et veille</h2></div>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
           <div class="card"><div class="ctit">Formation School</div><p class="note" style="margin:0 0 10px">Chaque mercredi à 8h, le jour des lives, comme un rendez vous avec toi même. Colle ici le lien de ta formation.</p><div style="display:flex;gap:8px"><input data-lien="lienSchool" placeholder="Lien de la formation School" style="flex:1;min-width:0"><a class="btn primary sm" data-ouvrir="lienSchool" target="_blank" rel="noopener">Ouvrir</a></div></div>
-          <div class="card"><div class="ctit">Veille location saisonnière</div><p class="note" style="margin:0 0 10px">Chaque lundi matin, Claude fait le point sur les nouveautés : lois (LMNP, loi Le Meur, meublés de tourisme), règles des mairies d'Antibes, Cannes et alentours, changements Airbnb et Booking. Tu reçois une notification et le résumé est rangé dans ton Drive.</p><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
+          <div class="card"><div class="ctit">Veille location saisonnière</div><p class="note" style="margin:0 0 10px">Un lundi sur deux, Claude fait le point : lois et fiscalité (LMNP, loi Le Meur, abattements), ce que les propriétaires doivent faire, Airbnb, Booking et les plateformes, règles des mairies, tourisme et hôtellerie. Un seul document qui garde tout, avec les dates de chaque mise à jour.</p><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
         </div>
       </div>
       <div class="section"><div class="section-head"><h2>Ma carte</h2><span class="note" id="ent-bilan"></span></div><div id="ent-carte"></div></div>
@@ -546,7 +573,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- NOTES VOCALES -->
     <section class="panel" data-panel="vocaux">
-      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes vocales</h1><div class="pd">Appuie sur le micro et dis ce qu'il faut faire : un contact à ajouter, une tâche, une relance. Ton texte s'écrit tout seul, puis Claude range tout dans la minute qui suit. Tu peux aussi réécouter tes notes ici.</div></div><button class="btn primary sm" data-micro>Enregistrer une note</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes</h1><div class="pd">En rendez vous, écris pendant que la personne parle : tout s'enregistre tout seul, même si tu quittes l'application, et tu peux compléter en dictant. Une note écrite reste à toi, elle ne part chez Claude que si tu touches « Faire ranger par Claude ». Une note vocale, elle, est rangée par Claude automatiquement.</div></div><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-nnew>Écrire une note</button><button class="btn sm" data-micro>Note vocale</button></span></div>
       <div class="list" id="vocaux-list" style="margin-top:18px"></div>
     </section>
 
@@ -570,7 +597,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- PROSPECTION -->
     <section class="panel" data-panel="prospection">
-      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche. « Pas pour moi » retire un bien qui ne t'intéresse pas.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
       <div class="section-head" style="margin-top:22px"><h2>Mes canaux</h2><span class="note">Choisis un canal pour voir sa pipeline</span></div>
       <div class="canaux" id="canaux"></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
@@ -600,7 +627,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- CHIFFRE D'AFFAIRES -->
     <section class="panel" data-panel="ca">
-      <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Chiffre d'affaires</h1><div class="pd">Chaque mois, tu saisis les loyers encaissés par logement. La commission Maison Solina se calcule toute seule.</div></div>
+      <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Finances Maison Solina</h1><div class="pd">Ton chiffre d'affaires, tes charges et ton prévisionnel au même endroit. Chaque mois, tu saisis les loyers encaissés par logement : la commission se calcule toute seule.</div></div>
         <div class="field" style="min-width:150px"><label for="ca-mois">Mois</label><input type="month" id="ca-mois"></div></div>
       <div class="grid cards-4" style="margin-top:18px">
         <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">facturé ce mois</div></div>
@@ -621,6 +648,11 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="section-head"><h2 id="ca-log-titre">Par logement</h2></div>
         <div class="twrap"><table class="tbl" id="ca-log"><thead><tr><th>Logement</th><th class="r">Loyers encaissés</th><th class="r">Facturé</th><th class="r">Mois facturés</th><th class="r">Part du CA</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
       </div>
+      <div class="section">
+        <div class="section-head"><h2>Mes charges</h2><button class="btn sm" id="charge-add">+ Charge</button></div>
+        <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        <p class="note" style="margin-top:8px">Pour une charge annuelle (assurance, abonnement annuel), saisis le montant divisé par 12.</p>
+      </div>
       <div class="section" style="margin-top:46px">
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2><div class="pd">Ton prévisionnel : chaque logement, ce qu'il rapporte, puis toutes tes charges et les cotisations, jusqu'au net dans ta poche.</div></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
       <div class="section" style="margin-top:18px">
@@ -635,14 +667,14 @@ h2,h3{font-weight:500;letter-spacing:0}
               <div class="field"><label for="p-urssaf">Cotisations URSSAF %</label><input type="number" step="0.1" id="p-urssaf" data-param="urssaf"></div>
               <div class="field"><label for="p-plafond">Plafond à surveiller €</label><input type="number" id="p-plafond" data-param="plafond"></div>
             </div>
-            <div class="hint">Le plafond sert de repère : l'application te montre où tu en es par rapport à lui sur l'année. Les charges viennent de l'onglet Charges.</div>
+            <div class="hint">Le plafond sert de repère : l'application te montre où tu en es par rapport à lui sur l'année. Les charges viennent du tableau Mes charges, plus haut.</div>
           </div>
         </div>
         <div class="result">
           <div class="rl">Résultat mensuel prévisionnel</div>
           <div class="rr"><span>Chiffre d'affaires du mois</span><span id="s-ca">—</span></div>
           <div class="rr"><span>Cotisations URSSAF</span><span id="s-urssaf">—</span></div>
-          <div class="rr"><span>Charges fixes (onglet Charges)</span><span id="s-charges">—</span></div>
+          <div class="rr"><span>Charges fixes (Mes charges)</span><span id="s-charges">—</span></div>
           <div class="rr big"><span>Net avant impôt</span><span id="s-net">—</span></div>
           <div class="rr"><span>Chiffre d'affaires de l'année</span><span id="s-caan">—</span></div>
           <div class="rr"><span>Net avant impôt sur l'année</span><span id="s-an">—</span></div>
@@ -654,7 +686,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- SIMULATEUR PROPRIÉTAIRE -->
     <section class="panel" data-panel="simprop">
-      <div class="ph"><div class="pl">Finances</div><h1>Simulateur propriétaire</h1><div class="pd">Pour montrer à un propriétaire ce que son bien peut lui rapporter, en toute transparence, et lui envoyer le document.</div></div>
+      <div class="ph"><div class="pl" style="color:#4F6B57">Pour un propriétaire</div><h1>Simulateur propriétaire</h1><div class="pd">Ce que le bien d'un propriétaire peut lui rapporter, et le document à son nom, avec ton logo, à lui envoyer.</div></div>
       <div class="grid cards-2">
         <div class="card">
           <div class="ctit">Le bien et la location</div>
@@ -713,19 +745,12 @@ h2,h3{font-weight:500;letter-spacing:0}
             <button class="btn" id="sp-copy">Copier le texte</button>
           </div>
           <div class="note" id="sp-note" style="margin-top:6px"></div>
-          <div class="section"><div class="section-head"><h2>Aperçu du document</h2></div><div class="docprev" id="sp-prev"></div></div>
+          <div class="section"><div class="section-head"><h2>Le document envoyé au propriétaire</h2></div><div class="sp-apercu"><iframe id="sp-frame" title="Aperçu du document" tabindex="-1"></iframe></div><div class="docprev" id="sp-prev" hidden></div></div>
         </div>
       </div>
     </section>
 
     <!-- CHARGES -->
-    <section class="panel" data-panel="charges">
-      <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Charges</h1><div class="pd">Tout ce que Maison Solina paie chaque mois. Alimente le simulateur de CA.</div></div><button class="btn primary sm" id="charge-add">+ Charge</button></div>
-      <div class="section" style="margin-top:18px">
-        <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Pour une charge annuelle (assurance, abonnement annuel), saisis le montant divisé par 12.</p>
-      </div>
-    </section>
 
     <!-- OPÉRATIONNEL -->
     <section class="panel" data-panel="ops">
@@ -840,14 +865,14 @@ h2,h3{font-weight:500;letter-spacing:0}
         <option value="a_contacter">À contacter</option>
         <option value="contacte">Déjà contacté</option>
         <option value="a_relancer">À relancer</option>
-        <option value="rdv">Rendez vous pris</option>
-        <option value="visite">Rendez vous fait</option>
-        <option value="devis">Proposition envoyée</option>
-        <option value="signature">En cours de signature</option>
+        <option value="rdv">RDV pris</option>
+        <option value="visite">RDV fait + propal</option>
+        <option value="signature">En cours</option>
         <option value="signe">Signé</option>
         <option value="perdu">Perdu</option>
-        <option value="pas_interesse">Pas intéressé</option>
       </select></div>
+    <div class="field" id="field-raison" hidden><label for="f-raison">Pourquoi perdu</label><select id="f-raison"><option value="">À préciser</option></select></div>
+    <div class="field" id="field-pseudo"><label for="f-pseudo">Pseudo sur l'annonce (Leboncoin, AlloVoisins, PAP)</label><input id="f-pseudo" autocomplete="off" placeholder="Le nom affiché sur l'annonce"></div>
     <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"></select></div><input type="hidden" id="f-source"></div>
     <div class="actions" id="f-liens" hidden></div>
     <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Ce qu'il faut retenir : le bien, la situation, ce qui a été dit…"></textarea></div>
@@ -876,6 +901,13 @@ h2,h3{font-weight:500;letter-spacing:0}
   </form>
 </div>
 
+<div class="sheet" id="nsheet" role="dialog" aria-modal="true" aria-label="Note">
+  <div class="sheet-head"><button class="btn ghost sm" data-nclose>← Retour</button><span class="eyebrow" id="n-etat"></span></div>
+  <input id="n-titre" class="n-titre" autocomplete="off" aria-label="Titre de la note">
+  <div class="field" style="margin-top:8px"><label for="n-contact">Avec</label><select id="n-contact"></select></div>
+  <textarea id="n-texte" class="n-texte" placeholder="Écris ici pendant le rendez vous. Tout s'enregistre tout seul, même si tu verrouilles ton téléphone ou quittes l'application."></textarea>
+  <div class="actions barre-fixe"><button type="button" class="btn primary" id="n-dicter">Dicter</button><button type="button" class="btn" data-nclose>Terminer</button><span style="flex:1"></span><button type="button" class="btn sm" id="n-ranger">Faire ranger par Claude</button><button type="button" class="btn danger sm" id="n-del">Supprimer</button></div>
+</div>
 <div class="sheet" id="tsheet" role="dialog" aria-modal="true" aria-labelledby="t-titre-h">
   <div class="sheet-head"><button class="btn ghost sm" data-tclose>← Retour</button><span class="eyebrow">Tâche</span></div>
   <h2 id="t-titre-h">Nouvelle tâche</h2>
@@ -965,12 +997,12 @@ h2,h3{font-weight:500;letter-spacing:0}
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
-    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['entreprise','Mon entreprise'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes vocales']]],
-    ['Développement',[['prospection','Prospection']]],
+    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['entreprise','Mon entreprise'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
+    ['Développement',[['prospection','Prospection'],['simprop','Simulateur propriétaire']]],
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
-    ['Finances',[['ca','Chiffre d\'affaires'],['simprop','Simulateur propriétaire'],['charges','Charges']]],
+    ['Finances',[['ca','Finances']]],
     ['Communication',[['reseaux','Studio réseaux sociaux'],['idees','Boîte à idées']]]
   ];
   var TABS=[['accueil','Accueil'],['relances','Tâches'],['contacts','Contacts'],['prospection','Prospection'],['plus','Plus']];
@@ -978,8 +1010,9 @@ h2,h3{font-weight:500;letter-spacing:0}
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
   var BRANCHES=[['Prospection : je vais les chercher',['Leboncoin','AlloVoisins','PAP','Groupes Facebook','Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Boîtage','Événements']],['Communication : ils viennent à moi',['Site internet','Fiche Google','Instagram','LinkedIn','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
-  var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','Rendez vous'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
-  var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','Rendez vous pris'],['visite','Rendez vous fait'],['devis','Proposition envoyée'],['signature','En cours de signature'],['signe','Signé'],['perdu','Perdu'],['pas_interesse','Pas intéressé']];
+  var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
+  var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
+  var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
   var DEFAULT_PARAMS={urssaf:21.2,plafond:40000};
   var CHARGE_CATS=['Abonnements et logiciels','Assurance','Véhicule et déplacements','Banque','Marketing et site','Matériel','Comptabilité','Téléphone','Autre'];
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
@@ -1049,7 +1082,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     CAT_ORDRE.forEach(function(c){var l=it.filter(function(x){return x.cat===c;}),r=l.filter(function(x){return x.date&&daysDiff(x.date)<0;}).length,C=CAT[c];if(c==='divers'&&!l.length)return;
       h+='<button type="button" class="tuile'+(l.length?'':' zero')+'" data-filtrecat="'+c+'" style="background:'+C.fond+';color:'+C.texte+';box-shadow:inset 0 4px 0 '+C.coul+'"><span class="n">'+l.length+'</span><span class="l">'+esc(C.nom)+'</span><span class="s'+(r?' retard':'')+'">'+(r?'dont '+r+' en retard':(l.length?'pour aujourd\'hui':'rien à faire'))+'</span></button>';});
     $('home-resume').innerHTML=h;
-    var fini=['perdu','signe','pas_interesse'];
+    var fini=['perdu','signe','pas_interesse','ecarte'];
     var pa=S.contacts.filter(function(c){return c.type==='prospect'&&(!c.etape||c.etape==='a_contacter');}).length;
     var pd=S.contacts.filter(function(c){return c.type==='prospect'&&c.etape&&c.etape!=='a_contacter'&&fini.indexOf(c.etape)<0;}).length;
     var pr=S.contacts.filter(function(c){return c.type==='prescripteur'&&(!c.etape||c.etape==='a_contacter');}).length;
@@ -1083,20 +1116,20 @@ h2,h3{font-weight:500;letter-spacing:0}
   function toastAnnuler(msg,fn){var t=$('toast');t.innerHTML=esc(msg)+'<button type="button" class="toast-annul">Annuler</button>';t.classList.add('show','actif');t.querySelector('button').onclick=function(){fn();t.classList.remove('show','actif');};clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show','actif');},5000);}
   var ROUTINE=[
     ['Chaque jour','Tout seul',[['Tri de tes mails, repérage des annonces Leboncoin, nouveaux prospects dans le CRM, événements du 06, notes vocales rangées','auto'],['Ta prospection : 20 minutes de socle puis le thème du jour (voir ta semaine type dans Prospection)','toi']]],
-    ['Chaque semaine','',[['Lundi : veille location saisonnière et point fiche Google','auto'],['Mercredi 8h : formation School, le jour des lives (dans ton agenda)','toi'],['Vendredi : relances, pipeline à jour, préparation de la semaine suivante','toi']]],
+    ['Chaque semaine','',[['Lundi : point fiche Google, et un lundi sur deux la veille location saisonnière','auto'],['Mercredi 8h : formation School, le jour des lives (dans ton agenda)','toi'],['Vendredi : relances, pipeline à jour, préparation de la semaine suivante','toi']]],
     ['Chaque mois','',[['Le 1er : déclaration URSSAF, planning réseaux sociaux avec Claude, point finances (factures de commission, encaissements, mise de côté, justificatifs rangés)','toi'],['Le 5 : relevé du mois aux propriétaires, bientôt depuis le channel manager','toi']]],
     ['Chaque trimestre','',[['Bilan : chiffres, objectifs, ce qui marche, ce que j\'ajuste, et une réussite à célébrer','toi']]],
     ['Chaque année','',[['Décembre : avis de CFE à vérifier et payer avant le 15','toi'],['Mai : chiffre d\'affaires de l\'année sur ta déclaration de revenus','toi'],['Renouvellement assurance RC pro (date à noter)','toi']]]
   ];
   var CARTE=[
-    ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','part','À ranger dans le tiroir Documents'],['Respect de la réglementation','ok','Veille chaque lundi'],['Archivage des documents','part','Classement Drive à définir']]],
-    ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Chiffre d\'affaires'],['Suivi du chiffre d\'affaires','ok','Page Chiffre d\'affaires'],['Suivi des charges','ok','Page Charges'],['Encaissements et paiements','part','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','non','Au point finances du 1er'],['Prévisionnel et rentabilité par bien','part','Simulateur propriétaire, à compléter par bien']]],
+    ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','part','À ranger dans le tiroir Documents'],['Respect de la réglementation','ok','Veille un lundi sur deux'],['Archivage des documents','part','Classement Drive à définir']]],
+    ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Chiffre d\'affaires'],['Suivi du chiffre d\'affaires','ok','Page Finances'],['Suivi des charges','ok','Page Finances'],['Encaissements et paiements','part','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','non','Au point finances du 1er'],['Prévisionnel et rentabilité par bien','part','Simulateur propriétaire, à compléter par bien']]],
     ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, semaine type'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
     ['Communication et marketing','reseaux',[['Image de marque','ok','Plaquette du graphiste'],['Site internet et SEO','ok','Demandes du site suivies toutes les heures'],['Fiche Google Business','ok','Point chaque lundi'],['Réseaux sociaux et contenus','ok','Planning le 1er du mois, Studio réseaux sociaux'],['E réputation, réponses aux avis','part','Réponses rédigées avec Claude, à faire régulièrement'],['Publicité','part','Outils gratuits pour l\'instant, budget plus tard']]],
     ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Accès privés chiffrés'],['Channel manager','part','Bientôt : réservations, opérationnel et relevés propriétaires, relié à Maison Solina']]],
     ['Stratégie et pilotage','divers',[['Objectifs','ok','1 signature par mois, 12 à 15 logements fin 2027'],['Plan d\'action','ok','Programme de prospection'],['Suivi des indicateurs','part','CA suivi, taux d\'occupation à ajouter'],['Prendre du recul','non','Bilan chaque trimestre']]],
     ['Prestataires','logements',[['Ménage, protocole et photos de fin','ok','Page Opérationnel'],['Réseau de prestataires','part','Une personne ménage suffit cet hiver, à étoffer avant la saison'],['Maintenance et dépannage','part','Artisans de confiance à ajouter dans Contacts']]],
-    ['Formation et veille','reseaux',[['Formation School','ok','Chaque mercredi à 8h, lien ci dessus'],['Veille réglementaire','ok','Chaque lundi'],['Veille marché et événements','ok','Événements du 06 chaque jour']]],
+    ['Formation et veille','reseaux',[['Formation School','ok','Chaque mercredi à 8h, lien ci dessus'],['Veille réglementaire','ok','Un lundi sur deux'],['Veille marché et événements','ok','Événements du 06 chaque jour']]],
     ['Temps et équilibre','divers',[['Organisation des journées','ok','Tableau de bord et planning'],['Charge de travail','part','Semaine type, une chose à la fois'],['Équilibre vie pro, vie perso','non','À poser : horaires de fin de journée, jours off']]],
     ['Offres et services','logements',[['Offres et tarifs','ok','Premium 25 %, opérationnel 15 %, mise en place 300 €'],['Kit Maison Solina Signature','ok','Page Opérationnel'],['Expériences voyageurs premium','part','Idées à nourrir dans la Boîte à idées']]],
     ['Relation client','logements',[['Voyageurs : messages, accueil, séjour','ok','Messages automatiques Airbnb'],['Propriétaires : suivi et transparence','part','Relevé mensuel, bientôt via le channel manager'],['Gestion des avis','part','Voir E réputation']]],
@@ -1171,12 +1204,12 @@ h2,h3{font-weight:500;letter-spacing:0}
   function canalDe(c){return c.canal||'';}
   function remplirCanalFiche(){var f=$('f-canal');if(!f||f.options.length)return;f.innerHTML='<option value="">Non précisé</option>'+BRANCHES.map(function(b){return '<optgroup label="'+esc(b[0])+'">'+b[1].map(function(k){return '<option>'+esc(k)+'</option>';}).join('')+'</optgroup>';}).join('');}
   function filtreCanal(c){return !canalFiltre||(canalFiltre==='__sans'?!canalDe(c):canalDe(c)===canalFiltre);}
-  function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
+  function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
   var voirCanaux=false;
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
-    var pros=S.contacts.filter(function(c){return c.type==='prospect'||c.type==='prescripteur';});
-    var enc=function(l){return l.filter(function(c){return ['signe','perdu','pas_interesse'].indexOf(c.etape)<0;}).length;};
+    var pros=S.contacts.filter(function(c){return (c.type==='prospect'||c.type==='prescripteur')&&c.etape!=='ecarte';});
+    var enc=function(l){return l.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length;};
     var opt=function(v,lib,l){return '<option value="'+esc(v)+'"'+(canalFiltre===v?' selected':'')+'>'+esc(lib)+(l.length?' ('+l.length+')':'')+'</option>';};
     var h='<select id="canal-choix" class="canal-choix" aria-label="Choisir un canal">'+opt('','Tous les canaux',pros);
     BRANCHES.forEach(function(b){h+='<optgroup label="'+esc(b[0])+'">'+b[1].map(function(k){return opt(k,k,pros.filter(function(c){return canalDe(c)===k;}));}).join('')+'</optgroup>';});
@@ -1194,12 +1227,22 @@ h2,h3{font-weight:500;letter-spacing:0}
     if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
     if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(canalFiltre&&canalFiltre!=='__sans'?' · '+canalFiltre:canalFiltre?' · canal non précisé':'');
   }
+  var CANAUX_ANNONCE=['Leboncoin','AlloVoisins','PAP','Groupes Facebook'];
+  function carteProspect(c){
+    var annonce=CANAUX_ANNONCE.indexOf(c.canal)>=0&&!c.prenom&&!c.civilite;
+    var titre=annonce?'Prospect '+c.canal:fullName(c);
+    var sous=annonce?[c.pseudo||'Pseudo à noter',c.ville]:(c.type==='prescripteur'?[c.categorie,c.ville]:[c.categorie&&c.categorie!=='Propriétaire'?c.categorie:'',c.ville,c.bien&&c.bien!==c.nom?c.bien:'']);
+    sous=sous.filter(Boolean).join(' · ');
+    var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
+    var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+couleurType(c.type)+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">Pas pour moi</button>':'')+'</span>':'')+'</span></div>';
+  }
   function kanbanFor(id,type,etapes){
     var k=$(id);if(!k)return;k.innerHTML='';
     etapes.forEach(function(e){
       var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&filtreCanal(c);}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];
-      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){var st=relanceStatus(c);return '<div class="kcarte">'+contactRow(c,st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'',true).replace('<div class="row"','<div class="row" draggable="true"')+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+etapes.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===(c.etape||'a_contacter')?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){return '<div class="kcarte">'+carteProspect(c)+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+etapes.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===(c.etape||'a_contacter')?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       k.appendChild(col);
     });
   }
@@ -1284,7 +1327,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     editingId=id||null;var c=id?byId(S.contacts,id):null;if(id&&!c)return;c=c||{type:'prospect',etape:'a_contacter'};
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
     $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
-    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';
+    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';$('f-pseudo').value=c.pseudo||'';if(!$('f-raison').options.length||$('f-raison').options.length<2)$('f-raison').innerHTML='<option value="">À préciser</option>'+RAISONS.map(function(r){return '<option>'+esc(r)+'</option>';}).join('');$('f-raison').value=c.raisonPerte||'';
     $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();majJoindre();
     $('agenda-note').textContent='';$('agenda-note').className='note';
     toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';if(!id||window.innerWidth>=700)setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
@@ -1294,8 +1337,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majJoindre(){var h=boutonsJoindre({tel:$('f-tel').value,email:$('f-email').value,adresse:$('f-adresse').value,ville:$('f-ville').value});$('f-joindre').innerHTML=h;$('f-joindre').hidden=!h;}
   function majLiensContact(){var n=$('f-notes').value,h='';(n.match(/https?:\/\/[^\s]+/g)||[]).forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});$('f-liens').innerHTML=h;$('f-liens').hidden=!h;}
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
-  function toggleEtape(){var t=$('f-type').value;$('field-etape').hidden=(t!=='prospect'&&t!=='prescripteur');}
-  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
+  function toggleEtape(){var t=$('f-type').value,pr=(t==='prospect'||t==='prescripteur');$('field-etape').hidden=!pr;$('field-raison').hidden=!(pr&&$('f-etape').value==='perdu');$('field-pseudo').hidden=(t!=='prospect');}
+  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,pseudo:$('f-pseudo').value.trim(),raisonPerte:$('f-etape').value==='perdu'?$('f-raison').value:'',notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
   function saveContact(data,id){var ex=id?byId(S.contacts,id):null;var doc=Object.assign({},ex||{createdAt:new Date().toISOString()},data);doc.id=id||uid('c');return save('contacts',doc);}
 
   function planRelance(){
@@ -1405,9 +1448,9 @@ h2,h3{font-weight:500;letter-spacing:0}
   function tachesDuLogement(id){return S.taches.filter(function(t){return t.logement===id&&statutTache(t)!=='fait';}).sort(function(a,b){return (a.date||'9')<(b.date||'9')?-1:1;});}
   function renderLogements(){
     var el=$('log-list');if(!el)return;
-    var l=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});
-    el.innerHTML=l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
-      return '<button class="logc" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>';
+    var tous=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}),l=tous.filter(function(b){return b.actif!==false;}),anciens=tous.filter(function(b){return b.actif===false;});
+    el.innerHTML=(l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
+      return '<button class="logc'+(b.photo?' avecphoto':'')+'" data-log="'+esc(b.id)+'">'+(b.photo?'<img class="logc-img" src="'+esc(b.photo)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'<span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(anciens.length?'<details class="plier anciens"><summary class="groupe">Anciens logements · '+anciens.length+' <span class="fl">›</span></summary><div class="list">'+anciens.map(function(b){return '<button class="row" data-log="'+esc(b.id)+'" style="text-align:left"><span class="body"><span class="t">'+esc(b.nom)+'</span><span class="s">Plus en contrat</span></span></button>';}).join('')+'</div></details>':'');
   }
   function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
@@ -1491,7 +1534,8 @@ h2,h3{font-weight:500;letter-spacing:0}
     var r={nuits:nuits,brut:brut,plat:plat,loyers:loyers,com:com,charges:charges,net:net,ld:ld,ecart:net-ld,abat:v('sp-fisc')};
     $('sp-r-nuits').textContent=nuits+' nuits';$('sp-r-brut').textContent=eur(brut);$('sp-r-plat').textContent='− '+eur(plat);$('sp-r-loyers').textContent=eur(loyers);$('sp-r-com').textContent='− '+eur(com);$('sp-r-charges').textContent='− '+eur(charges);$('sp-r-net').textContent=eur(net);$('sp-r-mois').textContent=eur(net/12);$('sp-r-ld').textContent=eur(ld);$('sp-r-ecart').textContent=(r.ecart>=0?'+ ':'− ')+eur(Math.abs(r.ecart));
     $('sp-prev').innerHTML='<div class="dh">'+esc(spTitle())+'</div>'+esc(spText(r));return r;
-  }
+  }  var spMin=null;function spApercu(){clearTimeout(spMin);spMin=setTimeout(function(){var f=$('sp-frame');if(!f)return;try{f.srcdoc=spDocHTML(spCalc());}catch(e){}},250);}
+
   function spTitle(){return 'Proposition Maison Solina · '+($('sp-nom').value.trim()||'votre bien');}
   function spText(r){
     var nom=$('sp-nom').value.trim()||'votre bien',prop=$('sp-prop').value.trim();
@@ -1689,7 +1733,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       return false;
     }
   }
-  function verifier(){if(!jeton()||attente.length||enEdition()||$('sheet').classList.contains('open')||$('tsheet').classList.contains('open')||$('lsheet').classList.contains('open')||Date.now()-G.derniere<15000)return;G.derniere=Date.now();actualiser();}
+  function verifier(){if(!jeton()||attente.length||enEdition()||$('sheet').classList.contains('open')||$('tsheet').classList.contains('open')||$('nsheet').classList.contains('open')||$('lsheet').classList.contains('open')||Date.now()-G.derniere<15000)return;G.derniere=Date.now();actualiser();}
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')verifier();});
   window.addEventListener('focus',verifier);
   window.addEventListener('online',function(){vider();if(!attente.length)actualiser();});
@@ -1808,8 +1852,44 @@ h2,h3{font-weight:500;letter-spacing:0}
   function renderVocaux(){
     var el=$('vocaux-list');if(!el)return;
     var l=S.vocaux.slice().sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1;});
-    el.innerHTML=l.length?l.map(function(v){var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" style="cursor:default"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte)+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r">'+'<span class="pill '+({a_traiter:'today',range:'ok',a_verifier:'warn',audio:''}[v.statut||'audio']||'')+'">'+esc({a_traiter:'À ranger',range:'Rangé',a_verifier:'À vérifier',audio:'Audio seul'}[v.statut||'audio']||'')+'</span><br>'+((v.statut||'audio')==='audio'&&natif()?'<button class="btn xs" style="margin-top:6px" data-transcrire="'+esc(v.id)+'">Transcrire</button><br>':'')+(v.statut==='a_verifier'?'<button class="btn xs" style="margin-top:6px" data-vuvocal="'+esc(v.id)+'">C\'est bon</button><br>':'')+'<button class="btn ghost xs" style="margin-top:6px" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
+    el.innerHTML=l.length?l.map(function(v){if(v.ecrite)return ligneNoteEcrite(v);var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" style="cursor:default"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte)+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r">'+'<span class="pill '+({a_traiter:'today',range:'ok',a_verifier:'warn',audio:''}[v.statut||'audio']||'')+'">'+esc({a_traiter:'À ranger',range:'Rangé',a_verifier:'À vérifier',audio:'Audio seul'}[v.statut||'audio']||'')+'</span><br>'+((v.statut||'audio')==='audio'&&natif()?'<button class="btn xs" style="margin-top:6px" data-transcrire="'+esc(v.id)+'">Transcrire</button><br>':'')+(v.statut==='a_verifier'?'<button class="btn xs" style="margin-top:6px" data-vuvocal="'+esc(v.id)+'">C\'est bon</button><br>':'')+'<button class="btn ghost xs" style="margin-top:6px" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
   }
+  var NE={id:null,doc:null,reco:null,base:'',min:null};
+  function lireBrouillon(){try{return JSON.parse(localStorage.getItem('solina-brouillon')||'null');}catch(e){return null;}}
+  function ouvrirNote(id){
+    var v=id?byId(S.vocaux,id):null,br=lireBrouillon();
+    if(!v&&id&&br&&br.id===id)v=br;
+    if(!v){var d=new Date();v={id:uid('n'),ecrite:true,titre:'Rendez vous du '+d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+', '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'),date:d.toISOString(),texte:'',statut:'ecrit',contact:''};}
+    else if(br&&br.id===v.id&&(br.updatedAt||'')>(v.updatedAt||''))v=Object.assign({},v,{titre:br.titre,texte:br.texte,contact:br.contact,updatedAt:br.updatedAt});
+    NE.id=v.id;NE.doc=v;$('n-titre').value=v.titre||'';$('n-texte').value=v.texte||'';
+    $('n-contact').innerHTML='<option value="">Personne en particulier</option>'+S.contacts.filter(function(c){return c.etape!=='ecarte';}).slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'">'+esc(fullName(c))+'</option>';}).join('');
+    $('n-contact').value=v.contact||'';$('n-etat').textContent=v.texte?'Enregistrée':'';
+    $('n-del').dataset.armed='';$('n-del').textContent='Supprimer';$('n-ranger').hidden=(v.statut==='a_traiter'||v.statut==='range'||v.statut==='a_verifier');
+    $('nsheet').classList.add('open');document.body.style.overflow='hidden';try{localStorage.setItem('solina-note-ouverte',v.id);}catch(e){}
+    setTimeout(function(){var t=$('n-texte');t.focus();try{t.setSelectionRange(t.value.length,t.value.length);}catch(x){}},60);
+  }
+  function docNote(){return Object.assign({},NE.doc,{titre:$('n-titre').value.trim()||NE.doc.titre,texte:$('n-texte').value,contact:$('n-contact').value,updatedAt:new Date().toISOString()});}
+  function envoyerNote(){clearTimeout(NE.min);if(!NE.doc||!NE.doc.texte.trim())return;var d=NE.doc;save('vocaux',d).then(function(){if(NE.doc===d)$('n-etat').textContent='Enregistrée';}).catch(function(){$('n-etat').textContent='Gardée sur ce téléphone';});}
+  function noteModifiee(){if(!NE.id)return;NE.doc=docNote();try{localStorage.setItem('solina-brouillon',JSON.stringify(NE.doc));}catch(e){}$('n-etat').textContent='Enregistrement…';clearTimeout(NE.min);NE.min=setTimeout(envoyerNote,1500);}
+  function arreterDictee(){var rc=NE.reco;NE.reco=null;if(rc){try{rc.stop();}catch(x){}}$('n-dicter').textContent='Dicter';$('n-dicter').classList.remove('enreg');}
+  function basculerDictee(){
+    if(NE.reco){arreterDictee();return;}
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('Touche le micro de ton clavier pour dicter');$('n-texte').focus();return;}
+    var t=$('n-texte'),rc=new SR();rc.lang='fr-FR';rc.continuous=true;rc.interimResults=true;
+    var depart=function(){NE.base=t.value.replace(/\s+$/,'');if(NE.base)NE.base+=(/\n$/.test(t.value)?'':' ');};depart();
+    rc.onresult=function(e){var x='';for(var i=0;i<e.results.length;i++)x+=e.results[i][0].transcript+(e.results[i].isFinal?' ':'');t.value=NE.base+x.trim();noteModifiee();};
+    rc.onerror=function(){};rc.onend=function(){if(NE.reco===rc){depart();try{rc.start();}catch(x){arreterDictee();}}};
+    try{rc.start();NE.reco=rc;$('n-dicter').textContent='Arrêter la dictée';$('n-dicter').classList.add('enreg');}catch(x){toast('Le micro n’est pas disponible');}
+  }
+  function fermerNote(){arreterDictee();if(NE.id){NE.doc=docNote();envoyerNote();}NE.id=null;try{localStorage.removeItem('solina-note-ouverte');}catch(e){}$('nsheet').classList.remove('open');document.body.style.overflow='';renderVocaux();}
+  function ligneNoteEcrite(v){var d=v.date?new Date(v.date):null,c=v.contact?byId(S.contacts,v.contact):null;var et={ecrit:['Écrite',''],a_traiter:['À ranger','today'],range:['Rangé','ok'],a_verifier:['À vérifier','warn']}[v.statut||'ecrit']||['Écrite',''];
+    return '<div class="row" role="button" tabindex="0" data-note="'+esc(v.id)+'"><span class="av" style="background:#BB9F89"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="body"><span class="t">'+esc(v.titre||'Note')+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})):'')+(c?' · '+esc(fullName(c)):'')+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte.slice(0,220))+(v.texte.length>220?'…':'')+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r"><span class="pill '+et[1]+'">'+et[0]+'</span></span></div>';}
+  $('n-texte').addEventListener('input',noteModifiee);$('n-titre').addEventListener('input',noteModifiee);$('n-contact').addEventListener('change',noteModifiee);
+  $('n-dicter').addEventListener('click',basculerDictee);
+  $('n-ranger').addEventListener('click',function(){if(!NE.id)return;if(!$('n-texte').value.trim()){toast('La note est vide');return;}NE.doc=Object.assign(docNote(),{statut:'a_traiter'});try{localStorage.setItem('solina-brouillon',JSON.stringify(NE.doc));}catch(e){}envoyerNote();toast('Claude range ta note dans l’heure');fermerNote();});
+  $('n-del').addEventListener('click',function(){var b=this;if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Confirmer';return;}var id=NE.id;arreterDictee();clearTimeout(NE.min);NE.id=null;if(byId(S.vocaux,id))remove('vocaux',id);try{localStorage.removeItem('solina-note-ouverte');localStorage.removeItem('solina-brouillon');}catch(e){}$('nsheet').classList.remove('open');document.body.style.overflow='';toast('Note supprimée');});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&NE.id){NE.doc=docNote();try{localStorage.setItem('solina-brouillon',JSON.stringify(NE.doc));}catch(e){}envoyerNote();}});
+  document.addEventListener('click',function(e){if(e.target.closest('[data-nnew]')){go('vocaux');ouvrirNote(null);return;}if(e.target.closest('[data-nclose]')){fermerNote();return;}var n=e.target.closest('[data-note]');if(n){ouvrirNote(n.dataset.note);}});
   $('rec-stop').addEventListener('click',arreterMicro);
   $('rec-save').addEventListener('click',enregistrerNote);
   $('rec-annuler').addEventListener('click',annulerMicro);
@@ -1835,7 +1915,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
   $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans')$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
-  $('f-type').addEventListener('change',toggleEtape);
+  $('f-type').addEventListener('change',toggleEtape);$('f-etape').addEventListener('change',toggleEtape);
   $('btn-today').addEventListener('click',function(){$('f-dernier').value=todayISO();});
   ['f-tel','f-email','f-adresse','f-ville'].forEach(function(i){$(i).addEventListener('input',majJoindre);});
   $('btn-agenda').addEventListener('click',planRelance);
@@ -1855,7 +1935,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('charge-add').addEventListener('click',function(){save('charges',{id:uid('ch'),libelle:'',categorie:CHARGE_CATS[0],montant:0,note:''});});
   $('sp-doc').addEventListener('click',spDoc);
   $('sp-copy').addEventListener('click',function(){var txt=spTitle()+'\n\n'+spText(spCalc());var note=$('sp-note');var ok=function(){note.className='note ok';note.textContent='Texte copié, prêt à coller dans un mail ou un document.';};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(function(){var r=document.createRange();r.selectNodeContents($('sp-prev'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);note.className='note';note.textContent='Texte sélectionné : copie le avec Cmd+C ou Ctrl+C.';});}});
-  document.querySelectorAll('[data-panel="simprop"] input,[data-panel="simprop"] select').forEach(function(el){el.addEventListener('input',spCalc);});
+  document.querySelectorAll('[data-panel="simprop"] input,[data-panel="simprop"] select').forEach(function(el){el.addEventListener('input',function(){spCalc();spApercu();});});spApercu();
   document.querySelectorAll('[data-lien]').forEach(function(el){el.addEventListener('change',function(){S.params[el.dataset.lien]=el.value.trim();saveParams();renderLiens();toast('Lien enregistré');});});
   document.querySelectorAll('[data-param]').forEach(function(el){el.addEventListener('change',function(){S.params[el.dataset.param]=num(el.value);saveParams();renderFinance();});});
 
@@ -1888,6 +1968,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     if(e.target.closest('a.joindre-b'))return;
     if(e.target.closest('[data-voircanaux]')){voirCanaux=!voirCanaux;renderCanaux();return;}
+    var ec=e.target.closest('[data-ecarter]');if(ec){var ce=byId(S.contacts,ec.dataset.ecarter);if(ce){var avant=ce.etape||'a_contacter',liees=S.taches.filter(function(t){return t.contact===ce.id&&statutTache(t)!=='fait';});ec.closest('.row').classList.add('cochee');saveContact(Object.assign({},ce,{etape:'ecarte',relance:''}),ce.id);liees.forEach(function(t){save('taches',Object.assign({},t,{statut:'fait',fait:true,faitLe:todayISO()})).catch(function(){});});toastAnnuler('Retiré de ta prospection',function(){var c2=byId(S.contacts,ce.id);if(c2)saveContact(Object.assign({},c2,{etape:avant,relance:ce.relance||''}),ce.id);liees.forEach(function(t){var t2=byId(S.taches,t.id);if(t2)save('taches',Object.assign({},t2,{statut:'a_faire',fait:false,faitLe:''})).catch(function(){});});});}return;}
     var fc=e.target.closest('[data-filtrecat]');if(fc){catFiltre=fc.dataset.filtrecat;renderTaskBoard('task-kanban');go('relances');return;}
     var cfb=e.target.closest('[data-catf]');if(cfb){catFiltre=cfb.dataset.catf;renderTaskBoard('task-kanban');return;}
     var rf=e.target.closest('[data-relfait]');if(rf){var cf=byId(S.contacts,rf.dataset.relfait);if(cf){var ancienne=cf.relance;rf.closest('.row').classList.add('cochee');saveContact(Object.assign({},cf,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),cf.id).then(function(){toastAnnuler('Relance faite',function(){var c2=byId(S.contacts,cf.id);if(c2)saveContact(Object.assign({},c2,{relance:ancienne}),cf.id);});});}return;}
@@ -1922,6 +2003,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var h=(location.hash||'').slice(1);if(TITLES[h])saved=h;
   if(saved==='simca')saved='ca';if(saved==='conso')saved='ops';go(saved);caMois=monthISO();renderAll();spCalc();
 
+  setTimeout(function(){try{var o=localStorage.getItem('solina-note-ouverte');if(o){go('vocaux');ouvrirNote(o);}}catch(e){}},400);
   try{var copie=localStorage.getItem(CLE_COPIE);if(copie){G.D=normaliserD(JSON.parse(copie));appliquer(G.D);renderAll();}}catch(e){}
   etat(false);
   actualiser();
