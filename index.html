@@ -353,9 +353,6 @@ details.plier[open] .fl{transform:rotate(90deg)}
 .ecarter{white-space:nowrap}
 .kp-lien{font-size:12px;display:inline-block;margin-top:2px}
 .kcarte .etape-sel{font-size:12px;padding:4px 8px}
-.logc.avecphoto{display:flex;gap:14px;align-items:stretch;padding:0;overflow:hidden;text-align:left}
-.logc-img{width:110px;min-height:96px;object-fit:cover;flex:none;display:block}
-.logc.avecphoto .logc-c{padding:14px 14px 14px 0;min-width:0}
 .logc-c{display:block}
 details.anciens{margin-top:16px}
 [data-panel="simprop"] .result{background:#4F6B57}
@@ -363,8 +360,7 @@ details.anciens{margin-top:16px}
 [data-panel="simprop"] .ctit{color:#4F6B57}
 .sp-apercu{background:#E9E4DF;border-radius:14px;padding:14px;height:560px;overflow:hidden;position:relative}
 .sp-apercu iframe{border:0;width:794px;height:2300px;transform:scale(.62);transform-origin:0 0;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12);pointer-events:none}
-@media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}.logc-img{width:92px}}
-.bud-in{width:100px;text-align:right;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun)}
+@media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}.bud-in{width:100px;text-align:right;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun)}
 .bud-in::placeholder{color:#C2B0A3}
 #bud-table tr.bud-auj td{background:#FCF4EE}
 #bud-table td{white-space:nowrap}
@@ -1600,7 +1596,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var el=$('log-list');if(!el)return;
     var tous=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}),l=tous.filter(function(b){return b.actif!==false;}),anciens=tous.filter(function(b){return b.actif===false;});
     el.innerHTML=(l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
-      return '<button class="logc'+(b.photo?' avecphoto':'')+'" data-log="'+esc(b.id)+'">'+(b.photo?'<img class="logc-img" src="'+esc(b.photo)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'<span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(anciens.length?'<div class="anciens-sep"><span>Anciens logements</span></div>'+anciens.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;return '<div class="logc ancien" role="button" tabindex="0" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom)+'</h3><div class="s">'+esc([b.ville,p?fullName(p):''].filter(Boolean).join(' · ')||'Plus en contrat')+'</div><div class="fait"><button type="button" class="btn xs" data-reactiver="'+esc(b.id)+'">Remettre en logement actif</button></div></div>';}).join(''):'');
+      return '<button class="logc" data-log="'+esc(b.id)+'"><span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(anciens.length?'<div class="anciens-sep"><span>Anciens logements</span></div>'+anciens.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;return '<div class="logc ancien" role="button" tabindex="0" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom)+'</h3><div class="s">'+esc([b.ville,p?fullName(p):''].filter(Boolean).join(' · ')||'Plus en contrat')+'</div><div class="fait"><button type="button" class="btn xs" data-reactiver="'+esc(b.id)+'">Remettre en logement actif</button></div></div>';}).join(''):'');
   }
   function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
