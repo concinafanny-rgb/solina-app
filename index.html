@@ -1287,30 +1287,32 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   /* Envoi courrier : propriétaires repérés dans l'annuaire des entreprises (collection courriers) */
   var crVille='',crStatut='a_envoyer',crMax=30;
-  var CR_VILLES=['Antibes','Juan les Pins','Vallauris Golfe Juan','Cannes'];
+  var CR_VILLES=['Antibes','Juan les Pins','Vallauris Golfe Juan','Cannes','Le Cannet','Biot'];var CR_DEBUT='2026-11-10';
+  function crNouveau(x){return (x.createdAt||'')>=CR_DEBUT&&daysDiff((x.createdAt||'').slice(0,10))>=-7;}
+  function crNom(x){return (x.societe||x.nom||'')+' '+(x.prenom||'');}
   function lundiISO(){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return isoD(d);}
   function courriersSemaine(){var l=lundiISO();return (S.courriers||[]).filter(function(x){return x.envoyeLe&&x.envoyeLe>=l&&x.statut!=='a_envoyer';}).length;}
-  function adresseCourrier(x){return [x.prenom+' '+x.nom,x.adresse,(x.cp+' '+x.villeEnvoi).trim()].join('\n');}
+  function adresseCourrier(x){return (x.societe?['SCI '+x.societe.replace(/^SCI\s+/,'')].concat(x.nom?['À l\'attention de '+(x.prenom+' '+x.nom).trim()]:[]):[(x.prenom+' '+x.nom).trim()]).concat([x.adresse,(x.cp+' '+x.villeEnvoi).trim()],x.pays?[x.pays.toUpperCase()]:[]).join('\n');}
   function renderCourriers(){
     var el=$('cr-liste');if(!el)return;
-    var all=(S.courriers||[]).slice().sort(function(a,b){return num(a.ordre)-num(b.ordre);});
+    var all=(S.courriers||[]).slice().sort(function(a,b){return crNom(a).localeCompare(crNom(b),'fr');});
     var fait=courriersSemaine(),reste=Math.max(0,5-fait);
     $('cr-semaine').textContent='Cette semaine : '+fait+' sur 5 envoyés';
-    var dv=all.filter(function(x){return x.statut===crStatut;});
+    var dv=all.filter(function(x){return crStatut==='nouveaux'?crNouveau(x):x.statut===crStatut;});
     $('cr-villes').innerHTML=[''].concat(CR_VILLES).map(function(v){var n=dv.filter(function(x){return !v||x.villeLogement===v;}).length;return '<button type="button" class="chip'+(crVille===v?' active':'')+'" data-crville="'+esc(v)+'">'+esc(v||'Toutes les villes')+' · '+n+'</button>';}).join('');
-    var ST=[['a_envoyer','À envoyer'],['envoye','Envoyés'],['repondu','Ont répondu'],['no_way','No way']];
-    $('cr-statuts').innerHTML=ST.map(function(t){var n=all.filter(function(x){return x.statut===t[0]&&(!crVille||x.villeLogement===crVille);}).length;return '<button type="button" class="chip'+(crStatut===t[0]?' active':'')+'" data-crstat="'+t[0]+'">'+t[1]+' · '+n+'</button>';}).join('');
+    var ST=[['nouveaux','Nouveaux de la semaine'],['a_envoyer','À envoyer'],['envoye','Envoyés'],['repondu','Ont répondu'],['no_way','No way']];
+    $('cr-statuts').innerHTML=ST.map(function(t){var n=all.filter(function(x){return (t[0]==='nouveaux'?crNouveau(x):x.statut===t[0])&&(!crVille||x.villeLogement===crVille);}).length;return '<button type="button" class="chip'+(crStatut===t[0]?' active':'')+'" data-crstat="'+t[0]+'">'+t[1]+' · '+n+'</button>';}).join('');
     var l=dv.filter(function(x){return !crVille||x.villeLogement===crVille;});
-    if(crStatut!=='a_envoyer')l.sort(function(a,b){return (b.envoyeLe||'')<(a.envoyeLe||'')?-1:1;});
+    if(crStatut!=='a_envoyer'&&crStatut!=='nouveaux')l.sort(function(a,b){return (b.envoyeLe||'')<(a.envoyeLe||'')?-1:1;});
     if(!l.length){el.innerHTML='<div class="empty" style="padding:14px">Rien ici pour l\'instant.</div>';return;}
-    var r='<div class="crt-wrap"><table class="crt"><thead><tr><th>N°</th><th>Propriétaire et adresse d\'envoi</th><th>Son logement</th><th>Depuis</th><th></th></tr></thead><tbody>';
+    var r='<div class="crt-wrap"><table class="crt"><thead><tr><th>Propriétaire et adresse d\'envoi</th><th>Son logement</th><th>Depuis</th><th></th></tr></thead><tbody>';
     l.slice(0,crMax).forEach(function(x,i){
-      var sem=crStatut==='a_envoyer'&&i<reste;
+      var sem=false;
       var act=x.statut==='a_envoyer'?'<button type="button" class="btn xs rose" data-crenv="'+esc(x.id)+'">Envoyé</button><button type="button" class="btn ghost xs" data-crnoway="'+esc(x.id)+'">No way</button>'
         :x.statut==='envoye'?'<span class="note">Envoyé le '+esc(fmtDate(x.envoyeLe))+'</span><button type="button" class="btn xs rose" data-crrep="'+esc(x.id)+'">A répondu</button><button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Annuler</button>'
         :x.statut==='repondu'?'<span class="note">Dans ta prospection</span>'+(x.contact?'<button type="button" class="btn ghost xs" data-open="'+esc(x.contact)+'">Fiche</button>':'')
         :'<button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Remettre</button>';
-      r+='<tr'+(sem?' class="semaine"':'')+'><td class="num">'+esc(x.ordre)+'</td><td><div class="adr"><b style="font-weight:500">'+esc(x.prenom+' '+x.nom)+'</b><br>'+esc(x.adresse)+'<br>'+esc(x.cp+' '+x.villeEnvoi)+'</div><button type="button" class="btn ghost xs" style="margin-top:4px" data-crcopie="'+esc(x.id)+'">Copier l\'adresse</button></td><td>'+esc(x.villeLogement)+(x.logement?'<div class="note">'+esc(x.logement)+'</div>':'')+(x.nbLogements>1?'<div class="note">'+x.nbLogements+' logements</div>':'')+'</td><td class="num">'+esc(x.depuis?x.depuis.slice(0,4):'')+'</td><td><div class="act">'+act+'</div></td></tr>';
+      r+='<tr'+(sem?' class="semaine"':'')+'><td><div class="adr">'+(x.societe?'<b style="font-weight:500">SCI '+esc(x.societe.replace(/^SCI\s+/,''))+'</b>'+(x.nom?'<br>Gérant : '+esc(x.prenom+' '+x.nom):''):'<b style="font-weight:500">'+esc(x.nom+' '+x.prenom)+'</b>')+(crNouveau(x)?' <span class="pill today" style="font-size:9.5px;padding:1px 6px">Nouveau</span>':'')+'<br>'+esc(x.adresse)+'<br>'+esc(x.cp+' '+x.villeEnvoi)+(x.pays?'<br>'+esc(x.pays):'')+'</div><span class="act" style="margin-top:4px"><button type="button" class="btn ghost xs" data-crcopie="'+esc(x.id)+'">Copier l\'adresse</button><a class="btn ghost xs" href="https://data.inpi.fr/entreprises/'+esc(x.siren)+'" target="_blank" rel="noopener">Fiche INPI</a></span></td><td>'+esc(x.villeLogement)+(x.logement?'<div class="note">'+esc(x.logement)+'</div>':'')+(x.nbLogements>1?'<div class="note">'+x.nbLogements+' logements</div>':'')+'<div class="note">'+(x.naf==='55.20Z'?'Hébergement touristique':'Location de logements')+'</div></td><td class="num">'+esc(x.depuis?x.depuis.slice(0,4):'')+'</td><td><div class="act">'+act+'</div></td></tr>';
     });
     r+='</tbody></table></div>';
     if(l.length>crMax)r+='<button type="button" class="btn ghost sm" style="margin-top:8px" data-crplus>Voir les suivants ('+(l.length-crMax)+')</button>';
@@ -2089,7 +2091,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var cen=e.target.closest('[data-crenv]');if(cen){var av=majCourrier(cen.dataset.crenv,{statut:'envoye',envoyeLe:todayISO()});if(av)toastAnnuler('Courrier envoyé',function(){save('courriers',av).catch(function(){});});return;}
     var cnw=e.target.closest('[data-crnoway]');if(cnw){var av2=majCourrier(cnw.dataset.crnoway,{statut:'no_way'});if(av2)toastAnnuler('Retiré de la liste',function(){save('courriers',av2).catch(function(){});});return;}
     var can=e.target.closest('[data-crannul]');if(can){majCourrier(can.dataset.crannul,{statut:'a_envoyer',envoyeLe:''});return;}
-    var crp=e.target.closest('[data-crrep]');if(crp){var xr=byId(S.courriers,crp.dataset.crrep);if(xr){saveContact({type:'prospect',categorie:'Propriétaire',prenom:xr.prenom,nom:xr.nom,adresse:xr.adresse+', '+xr.cp+' '+xr.villeEnvoi,ville:xr.villeLogement,bien:xr.logement||'',canal:'Envoi courrier',etape:'contacte',dernierContact:todayISO(),notes:'A répondu au courrier envoyé le '+fmtDate(xr.envoyeLe)+'. Logement : '+(xr.logement?xr.logement+', ':'')+xr.villeLogement+'. SIREN '+xr.siren+'.'},null).then(function(cid){majCourrier(xr.id,{statut:'repondu',contact:cid});openSheet(cid);}).catch(function(){});}return;}
+    var crp=e.target.closest('[data-crrep]');if(crp){var xr=byId(S.courriers,crp.dataset.crrep);if(xr){saveContact({type:'prospect',categorie:'Propriétaire',prenom:xr.prenom,nom:xr.nom||xr.societe,source:xr.societe?'SCI '+xr.societe:'',adresse:xr.adresse+', '+xr.cp+' '+xr.villeEnvoi,ville:xr.villeLogement,bien:xr.logement||'',canal:'Envoi courrier',etape:'contacte',dernierContact:todayISO(),notes:'A répondu au courrier envoyé le '+fmtDate(xr.envoyeLe)+'. Logement : '+(xr.logement?xr.logement+', ':'')+xr.villeLogement+'. SIREN '+xr.siren+'.'},null).then(function(cid){majCourrier(xr.id,{statut:'repondu',contact:cid});openSheet(cid);}).catch(function(){});}return;}
     var mo=e.target.closest('[data-mois]');if(mo){var dm=new Date(poMois+'-01T00:00:00');dm.setMonth(dm.getMonth()+Number(mo.dataset.mois));poMois=monthISO(dm);renderPosts();return;}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     if(e.target.closest('a.joindre-b'))return;
