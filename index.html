@@ -298,6 +298,29 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 .wk-now{position:absolute;left:0;right:0;height:2px;background:var(--rouge);z-index:2}
 .wk-now::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--rouge)}
 .pill.imp{background:#F4E8C9;color:#8A6A2A}
+.resume{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tuile{font:inherit;text-align:left;border:1px solid transparent;border-radius:16px;padding:16px 16px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-height:104px;transition:transform .15s,opacity .15s}
+.tuile:hover{transform:translateY(-1px)}
+.tuile .n{font-family:var(--display);font-size:36px;line-height:1;font-weight:500}
+.tuile .l{font-size:13.5px;font-weight:500;margin-top:4px}
+.tuile .s{font-size:12px;opacity:.85}
+.tuile .s.retard{color:var(--rouge);opacity:1;font-weight:500}
+.tuile.zero{opacity:.5}
+.tuile.petite{min-height:0;padding:12px 14px 12px 18px}
+.tuile.petite .n{font-size:26px}
+.tuile.petite .l{font-size:12.5px;font-weight:400;margin-top:2px}
+.r.rfait{display:flex;align-items:center;gap:8px;flex:none}
+.fait-b{background:#fff;font-weight:500}
+.row.cochee{opacity:.3;transition:opacity .25s}
+#task-kanban .list{gap:6px}
+details.plier{margin-top:6px}
+details.plier summary{cursor:pointer;list-style:none}
+details.plier summary::-webkit-details-marker{display:none}
+details.plier .fl{display:inline-block;transition:transform .2s}
+details.plier[open] .fl{transform:rotate(90deg)}
+.toast.actif{pointer-events:auto}
+@media (max-width:699px){.resume{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.tuile{min-height:0;padding:12px 14px}.tuile .n{font-size:28px}.tuile.zero{display:none}.tuile.petite .n{font-size:22px}}
+.toast-annul{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;margin-left:12px;cursor:pointer;padding:0}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--terre);color:var(--terre);display:inline-flex;align-items:center;justify-content:center;background:var(--card);flex:none}
 .micbtn:hover{background:var(--terre);color:#fff}
 .topbar .droite{display:flex;align-items:center;gap:12px}
@@ -474,20 +497,16 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- ACCUEIL -->
     <section class="panel" data-panel="accueil">
-      <div class="ph"><div class="pl" id="today-eyebrow"></div><h1>Bonjour Fanny</h1></div>
-      <div class="grid cards-4">
-        <div class="card cliquable" data-go="relances"><div class="num" id="k-taches">0</div><div class="lbl">tâches pour aujourd'hui</div></div>
-        <div class="card cliquable" data-go="relances"><div class="num" id="k-relances">0</div><div class="lbl">relances à faire</div></div>
-        <div class="card cliquable" data-go="prospection"><div class="num" id="k-prospects">0</div><div class="lbl">prospects en cours</div></div>
-        <div class="card cliquable" data-go="logements"><div class="num" id="k-biens">0</div><div class="lbl">logements actifs</div></div>
-      </div>
+      <div class="ph"><div class="pl" id="today-eyebrow"></div><h1>Bonjour Fanny</h1><div class="pd" id="home-phrase"></div></div>
+      <div class="section-head" style="margin-top:18px"><h2>À faire aujourd'hui</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
+      <div class="resume" id="home-resume"></div>
       <div class="section">
-        <div class="section-head"><h2>Mes tâches du jour</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
-        <div id="home-taches"></div>
-      </div>
-      <div class="section">
-        <div class="section-head"><h2>Ma semaine</h2><span class="wknav"><button class="btn sm" data-semaine="-1" aria-label="Semaine précédente">‹</button><span id="wk-titre"></span><button class="btn sm" data-semaine="1" aria-label="Semaine suivante">›</button><button class="btn ghost sm" data-semaine="0">Aujourd'hui</button><a class="btn ghost sm" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE">+ Rendez vous</a></span></div>
+        <div class="section-head"><h2>Mon planning</h2><span class="wknav"><button class="btn sm" data-semaine="-1" aria-label="Semaine précédente">‹</button><span id="wk-titre"></span><button class="btn sm" data-semaine="1" aria-label="Semaine suivante">›</button><button class="btn ghost sm" data-semaine="0">Aujourd'hui</button><a class="btn ghost sm" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE">+ Rendez vous</a></span></div>
         <div id="home-agenda"></div>
+      </div>
+      <div class="section">
+        <div class="section-head"><h2>Mon développement</h2></div>
+        <div class="resume" id="home-dev"></div>
       </div>
     </section>
 
@@ -527,7 +546,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- RELANCES -->
     <section class="panel" data-panel="relances">
-      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Touche le rond pour cocher une tâche faite, touche la tâche pour l'ouvrir. Tes relances viennent des fiches contacts.</div></div>
+      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Touche « Fait » et la tâche disparaît. Touche une tâche pour l'ouvrir. Les rappels qui reviennent chaque mois sont dans ton planning et apparaissent ici 3 jours avant.</div></div>
       <div class="section" style="margin-top:0">
         <div class="section-head"><h2>Tâches</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
         <form class="addline" id="task-form" style="margin-bottom:10px">
@@ -535,9 +554,8 @@ h2,h3{font-weight:500;letter-spacing:0}
           <input id="task-date" type="date" class="short">
           <button class="btn primary" type="submit">Ajouter</button>
         </form>
-        <div class="kanban" id="task-kanban"></div>
+        <div class="chips" id="task-filtres" style="margin:4px 0 8px;flex-wrap:wrap"></div><div id="task-kanban"></div>
       </div>
-      <div class="section"><div class="section-head"><h2>Relances</h2></div><div id="relance-groups"></div></div>
     </section>
 
     <!-- LOGEMENTS -->
@@ -838,6 +856,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
     <div class="two"><div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div><div class="field"><label for="t-log">Logement</label><select id="t-log"></select></div></div>
+    <div class="field"><label for="t-cat">Catégorie (couleur)</label><select id="t-cat"><option value="">Automatique</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements</option><option value="admin">Administratif</option><option value="reseaux">Réseaux sociaux</option><option value="divers">Divers</option></select></div>
     <div class="actions" id="t-liens"></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
     <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
@@ -945,7 +964,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var CIV={'Monsieur':'M.','Madame':'Mme','Madame et Monsieur':'M. et Mme'};
   function fullName(c){return [CIV[c.civilite]||'',c.prenom||'',c.nom||''].join(' ').replace(/\s+/g,' ').trim()||'Sans nom';}
   function initials(c){return ((c.prenom||'').charAt(0)+(c.nom||'').charAt(0)).toUpperCase()||'·';}
-  function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},2200);}
+  function toast(msg){var t=$('toast');t.textContent=msg;t.classList.remove('actif');t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},2200);}
   function uid(p){return (p||'x')+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
   function comRev(r){return (r.montant!==undefined&&r.montant!==null&&r.montant!=='')?num(r.montant):num(r.loyers)*num(r.pct)/100;}
   function byId(arr,id){for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null;}
@@ -988,13 +1007,45 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function renderHome(){
     $('today-eyebrow').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
-    var due=S.contacts.filter(function(c){return c.relance && daysDiff(c.relance)<=0;}).sort(function(a,b){return a.relance<b.relance?-1:1;});
-    $('k-relances').textContent=due.length;
-    $('k-prospects').textContent=S.contacts.filter(function(c){return c.type==='prospect'&&['perdu','signe','pas_interesse'].indexOf(c.etape)<0;}).length;
-    $('k-biens').textContent=S.biens.filter(function(b){return b.actif!==false;}).length;
-    $('k-taches').textContent=tachesOuvertes().filter(function(x){return !x.date||daysDiff(x.date)<=0;}).length;
+    var it=elementsAFaire().filter(function(x){return x.date?daysDiff(x.date)<=0:x.k==='t';});
+    var tot=it.length,ret=it.filter(function(x){return x.date&&daysDiff(x.date)<0;}).length;
+    $('home-phrase').textContent=tot?('Aujourd\'hui, '+tot+' chose'+(tot>1?'s':'')+' à faire'+(ret?', dont '+ret+' en retard.':'.')):'Tout est à jour. Belle journée.';
+    var h='';
+    CAT_ORDRE.forEach(function(c){var l=it.filter(function(x){return x.cat===c;}),r=l.filter(function(x){return x.date&&daysDiff(x.date)<0;}).length,C=CAT[c];if(c==='divers'&&!l.length)return;
+      h+='<button type="button" class="tuile'+(l.length?'':' zero')+'" data-filtrecat="'+c+'" style="background:'+C.fond+';color:'+C.texte+';box-shadow:inset 0 4px 0 '+C.coul+'"><span class="n">'+l.length+'</span><span class="l">'+esc(C.nom)+'</span><span class="s'+(r?' retard':'')+'">'+(r?'dont '+r+' en retard':(l.length?'pour aujourd\'hui':'rien à faire'))+'</span></button>';});
+    $('home-resume').innerHTML=h;
+    var fini=['perdu','signe','pas_interesse'];
+    var pa=S.contacts.filter(function(c){return c.type==='prospect'&&(!c.etape||c.etape==='a_contacter');}).length;
+    var pd=S.contacts.filter(function(c){return c.type==='prospect'&&c.etape&&c.etape!=='a_contacter'&&fini.indexOf(c.etape)<0;}).length;
+    var pr=S.contacts.filter(function(c){return c.type==='prescripteur'&&(!c.etape||c.etape==='a_contacter');}).length;
+    var bi=S.biens.filter(function(b){return b.actif!==false;}).length;
+    $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'prescripteurs à démarcher','partenaires','prospection'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
     renderAgenda();
   }
+  var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Réseaux sociaux',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
+  var CAT_ORDRE=['prospection','partenaires','logements','admin','reseaux','divers'];
+  function catContact(c){if(!c)return '';if(c.type==='prospect')return 'prospection';if(['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0)return 'partenaires';if(['client','prestataire'].indexOf(c.type)>=0)return 'logements';return '';}
+  function catTache(t){if(t.categorie&&CAT[t.categorie])return t.categorie;var ti=(t.titre||'').toLowerCase();
+    if(/^envoyer le message|^répondre sur/.test(ti))return 'prospection';
+    if(/urssaf|factur|compta|impôt|impot|déclar|declar|banque|assurance|tva|cfe/.test(ti))return 'admin';
+    if(/réseaux|reseaux|instagram|linkedin|tiktok|publication|studio|story|stories/.test(ti))return 'reseaux';
+    var c=catContact(t.contact?byId(S.contacts,t.contact):null);if(c)return c;
+    if(t.logement)return 'logements';
+    if(/nestenn|agence|notaire|prescri|partenaire|apporteur/.test(ti))return 'partenaires';
+    if(/prospect|propriétaire|leboncoin|boîtage|boitage|flyer/.test(ti))return 'prospection';
+    if(/ménage|menage|linge|logement|voyageur|airbnb|booking/.test(ti))return 'logements';
+    return 'divers';}
+  function rappelLoin(t){return !!(t.repeter&&t.date&&daysDiff(t.date)>3);}
+  function elementsAFaire(){var a=[];tachesOuvertes().forEach(function(t){if(rappelLoin(t))return;a.push({k:'t',t:t,date:t.date||'',cat:catTache(t),imp:!!t.importante});});S.contacts.forEach(function(c){if(c.relance)a.push({k:'r',c:c,date:c.relance,cat:catContact(c)||'divers',imp:false});});return a;}
+  function titreTache(t){var tit=t.titre||'',m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook) : (.*)$/);return m?{tit:m[2],canal:m[1]}:{tit:tit,canal:''};}
+  function chipsTaches(j){var t=todayISO();if(j<t)return '';var par={};
+    tachesOuvertes().forEach(function(x){if(x.date&&(j===t?x.date<=t:x.date===j))(par[catTache(x)]=par[catTache(x)]||[]).push({k:'t',t:x});});
+    S.contacts.forEach(function(c){if(c.relance&&(j===t?c.relance<=t:c.relance===j)){var k=catContact(c)||'divers';(par[k]=par[k]||[]).push({k:'r',c:c});}});
+    var h='';CAT_ORDRE.forEach(function(c){var l=par[c];if(!l)return;var C=CAT[c],st=' style="background:'+C.fond+';color:'+C.texte+';border-left:3px solid '+C.coul+'"';
+      if(l.length>2){h+='<div class="wk-chip" data-filtrecat="'+c+'"'+st+' title="'+esc(C.nom)+'">'+l.length+' · '+esc(C.nom)+'</div>';return;}
+      l.forEach(function(x){var tit=x.k==='t'?titreTache(x.t).tit:'Relancer '+fullName(x.c);h+='<div class="wk-chip" '+(x.k==='t'?'data-tache="'+esc(x.t.id)+'"':'data-relance="'+esc(x.c.id)+'"')+st+' title="'+esc(tit)+'">'+esc(tit)+'</div>';});});
+    return h;}
+  function toastAnnuler(msg,fn){var t=$('toast');t.innerHTML=esc(msg)+'<button type="button" class="toast-annul">Annuler</button>';t.classList.add('show','actif');t.querySelector('button').onclick=function(){fn();t.classList.remove('show','actif');};clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show','actif');},5000);}
   var AG=null;
   try{var agc=localStorage.getItem('solina-agenda');if(agc)AG=JSON.parse(agc);}catch(e){}
   function heureDe(v){return v&&v.length>10?v.slice(11,16).replace(':','h'):'';}
@@ -1018,7 +1069,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var html='<div class="wk"><div class="wk-grid"><div class="wk-coin"></div>';
     pj.forEach(function(p){var d=new Date(p.j+'T00:00:00');html+='<div class="wk-tete'+(p.j===t?' auj':'')+'"><span>'+esc(d.toLocaleDateString('fr-FR',{weekday:'short'}).replace('.',''))+'</span><b>'+d.getDate()+'</b></div>';});
     html+='<div class="wk-coin wk-lbl">Journée</div>';
-    pj.forEach(function(p){html+='<div class="wk-jr">'+p.jr.map(function(e){return '<div class="wk-chip" data-gday="'+esc(jour(p.j))+'" title="'+esc(e.titre)+'">'+esc(e.titre)+'</div>';}).join('')+'</div>';});
+    pj.forEach(function(p){html+='<div class="wk-jr">'+p.jr.map(function(e){return '<div class="wk-chip" data-gday="'+esc(jour(p.j))+'" title="'+esc(e.titre)+'">'+esc(e.titre)+'</div>';}).join('')+chipsTaches(p.j)+'</div>';});
     html+='<div class="wk-heures" style="height:'+haut+'px">';
     for(var h=hMin+1;h<hMax;h++)html+='<div style="top:'+((h-hMin)*H)+'px">'+h+'h</div>';
     html+='</div>';
@@ -1097,6 +1148,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     }).join('<div style="height:22px"></div>');
   }
   function renderRelances(){
+    if(!$('relance-groups'))return;
     var groups=[['En retard',[]],["Aujourd'hui",[]],['Cette semaine',[]],['Plus tard',[]]];
     S.contacts.filter(function(c){return c.relance;}).sort(function(a,b){return a.relance<b.relance?-1:1;}).forEach(function(c){var d=daysDiff(c.relance);groups[d<0?0:d===0?1:d<=7?2:3][1].push(c);});
     var html='';
@@ -1109,41 +1161,34 @@ h2,h3{font-weight:500;letter-spacing:0}
   var REPET={semaine:'chaque semaine',mois:'chaque mois',trimestre:'chaque trimestre',an:'chaque année'};
   function lienAnnonce(t){var u=((t.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];return u?'<a class="lienx" style="font-size:12px" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'';}
   function badgeDate(date,fait){if(fait)return '';if(!date)return '';var d=daysDiff(date);if(d<0)return '<span class="pill late">'+(d===-1?'Hier':'Retard '+(-d)+' j')+'</span>';if(d===0)return '<span class="pill today">Aujourd\'hui</span>';if(d===1)return '<span class="dtxt">Demain</span>';return '<span class="dtxt">'+esc(fmtDate(date))+'</span>';}
-  function carteTache(t){var st=statutTache(t),fait=st==='fait';var lc=t.contact?byId(S.contacts,t.contact):null;var lg=t.logement?byId(S.biens,t.logement):null;
-    var tit=t.titre||'',canal='';var m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook) : (.*)$/);if(m){canal=m[1];tit=m[2];}
-    var l2=(canal?'<span class="pill prospect">'+esc(canal)+'</span>':'')+(t.repeter?'<span class="pill">Rappel</span>':'')+(t.importante&&!fait?'<span class="pill imp">Important</span>':'')+(lg?'<span class="dtxt">'+esc(lg.nom)+'</span>':'')+(fait?'':lienAnnonce(t));
-    return '<div class="row tache compacte'+(fait?' faite':'')+'" draggable="true" data-tache="'+esc(t.id)+'" style="cursor:grab'+(lc?';border-left:4px solid '+couleurType(lc.type):'')+'"><button type="button" class="coche" data-cocher="'+esc(t.id)+'" aria-label="'+(fait?'Remettre à faire':'Marquer comme faite')+'"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="body"><span class="t">'+esc(tit)+'</span>'+(l2?'<span class="ligne2">'+l2+'</span>':'')+'</span><span class="r">'+badgeDate(t.date,fait)+'</span></div>';}
+  function carteTache(t){var cat=catTache(t),C=CAT[cat];var lg=t.logement?byId(S.biens,t.logement):null;var tt=titreTache(t);
+    var l2='<span class="pill" style="background:#fff;color:'+C.texte+'">'+esc(C.nom)+'</span>'+(tt.canal?'<span class="dtxt">'+esc(tt.canal)+'</span>':'')+(t.repeter?'<span class="dtxt">'+esc(REPET[t.repeter]||'')+'</span>':'')+(t.importante?'<span class="pill imp">Important</span>':'')+(lg?'<span class="dtxt">'+esc(lg.nom)+'</span>':'')+lienAnnonce(t);
+    return '<div class="row tache compacte" data-tache="'+esc(t.id)+'" style="border-left:4px solid '+C.coul+';background:'+C.fond+';border-color:'+C.coul+'44;border-left-color:'+C.coul+'"><span class="body"><span class="t">'+esc(tt.tit)+'</span><span class="ligne2">'+l2+'</span></span><span class="r rfait">'+badgeDate(t.date,false)+'<button type="button" class="btn xs fait-b" data-cocher="'+esc(t.id)+'">Fait</button></span></div>';}
   function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
-  function carteRelance(c,complet){return '<div class="row tache compacte" draggable="true" data-relance="'+esc(c.id)+'" style="cursor:grab;border-left:4px solid '+couleurType(c.type)+'"><button type="button" class="coche" data-relfait="'+esc(c.id)+'" aria-label="Relance faite"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span class="body"><span class="t">Relancer '+esc(fullName(c))+'</span>'+(complet?'<span class="ligne2 reporter">'+boutonsJoindre(c,true)+'<button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="3">+3 j</button><button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="7">+7 j</button></span>':'')+'</span><span class="r">'+badgeDate(c.relance,false)+'</span></div>';}
+  function carteRelance(c,complet){var C=CAT[catContact(c)||'divers'];return '<div class="row tache compacte" data-relance="'+esc(c.id)+'" style="border-left:4px solid '+C.coul+';background:'+C.fond+';border-color:'+C.coul+'44;border-left-color:'+C.coul+'"><span class="body"><span class="t">Relancer '+esc(fullName(c))+'</span><span class="ligne2 reporter"><span class="pill" style="background:#fff;color:'+C.texte+'">'+esc(C.nom)+'</span>'+(complet?boutonsJoindre(c,true)+'<button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="3">+3 j</button><button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="7">+7 j</button>':'')+'</span></span><span class="r rfait">'+badgeDate(c.relance,false)+'<button type="button" class="btn xs fait-b" data-relfait="'+esc(c.id)+'">Fait</button></span></div>';}
   function tachesOuvertes(){return S.taches.filter(function(t){return statutTache(t)!=='fait';});}
   function relancesDues(){return S.contacts.filter(function(c){return c.relance&&daysDiff(c.relance)<=0;}).sort(function(a,b){return a.relance<b.relance?-1:1;});}
   function triTaches(a,b){if(!!a.importante!==!!b.importante)return a.importante?-1:1;return (a.date||'9')<(b.date||'9')?-1:1;}
   function blocGroupe(titre,html,rouge){return html?'<div class="groupe'+(rouge?' rouge':'')+'">'+titre+'</div><div class="list">'+html+'</div>':'';}
-  function renderHomeTaches(){
-    var el=$('home-taches');if(!el)return;
-    var t=tachesOuvertes(),rel=relancesDues();
-    var retard=t.filter(function(x){return x.date&&daysDiff(x.date)<0;}).sort(triTaches),auj=t.filter(function(x){return x.date&&daysDiff(x.date)===0;}).sort(triTaches),sans=t.filter(function(x){return !x.date;}).sort(triTaches);
-    var rr=rel.filter(function(c){return daysDiff(c.relance)<0;}),ra=rel.filter(function(c){return daysDiff(c.relance)===0;});
-    var html=blocGroupe('En retard',rr.map(function(c){return carteRelance(c);}).join('')+retard.map(carteTache).join(''),true)+blocGroupe('Aujourd\'hui',ra.map(function(c){return carteRelance(c);}).join('')+auj.map(carteTache).join(''))+blocGroupe('Sans date',sans.map(carteTache).join(''));
-    el.innerHTML=(html||'<div class="vide-jour">Rien à faire aujourd\'hui. Belle journée.</div>')+'<div style="margin-top:12px"><button type="button" class="btn ghost sm" data-go="relances">Voir tout mon planning de tâches</button></div>';
-  }
+  var catFiltre='';
+  function renderHomeTaches(){}
+  function plier(titre,html,n){return html?'<details class="plier"><summary class="groupe">'+titre+' · '+n+' <span class="fl">›</span></summary><div class="list">'+html+'</div></details>':'';}
   function renderTaskBoard(id){
     var k=$(id);if(!k)return;
-    var t=tachesOuvertes(),rel=relancesDues();
-    var g=function(f){return t.filter(f).sort(triTaches).map(carteTache).join('');};
-    var rr=rel.filter(function(c){return daysDiff(c.relance)<0;}).map(function(c){return carteRelance(c,true);}).join(''),ra=rel.filter(function(c){return daysDiff(c.relance)===0;}).map(function(c){return carteRelance(c,true);}).join('');
-    var aFaire=blocGroupe('En retard',rr+g(function(x){return x.date&&daysDiff(x.date)<0;}),true)+
-      blocGroupe('Aujourd\'hui',ra+g(function(x){return x.date&&daysDiff(x.date)===0;}))+
-      blocGroupe('Cette semaine',g(function(x){var d=x.date?daysDiff(x.date):null;return d!==null&&d>0&&d<=7;}))+
-      blocGroupe('Plus tard',g(function(x){var d=x.date?daysDiff(x.date):null;return d!==null&&d>7&&!x.repeter;}))+
-      blocGroupe('Sans date',g(function(x){return !x.date;}))+
-      blocGroupe('Rappels à venir',g(function(x){var d=x.date?daysDiff(x.date):null;return d!==null&&d>7&&x.repeter;}));
-    var faites=S.taches.filter(function(x){return statutTache(x)==='fait';}).sort(function(a,b){return (b.faitLe||b.date||'')<(a.faitLe||a.date||'')?-1:1;}).slice(0,10);
-    var nb=t.length+rel.length;
-    k.innerHTML='<div class="col" data-tetape="a_faire"><h3>À faire<span>'+nb+'</span></h3>'+(aFaire||'<div class="empty" style="padding:10px;font-size:13px">Tout est fait.</div>')+'</div>'+
-      '<div class="col" data-tetape="fait"><h3>Faites récemment<span></span></h3><div class="list">'+(faites.length?faites.map(carteTache).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div></div>';
+    var items=elementsAFaire(),cnt={};items.forEach(function(x){cnt[x.cat]=(cnt[x.cat]||0)+1;});
+    var f=$('task-filtres');if(f)f.innerHTML='<button type="button" class="chip'+(catFiltre?'':' active')+'" data-catf="">Tout · '+items.length+'</button>'+CAT_ORDRE.filter(function(c){return cnt[c]||catFiltre===c;}).map(function(c){var C=CAT[c],on=catFiltre===c;return '<button type="button" class="chip" data-catf="'+c+'" style="'+(on?'background:'+C.coul+';border-color:'+C.coul+';color:#fff':'background:'+C.fond+';border-color:'+C.coul+'66;color:'+C.texte)+'">'+esc(C.nom)+' · '+(cnt[c]||0)+'</button>';}).join('');
+    if(catFiltre)items=items.filter(function(x){return x.cat===catFiltre;});
+    var tri=function(a,b){if(a.imp!==b.imp)return a.imp?-1:1;var ca=CAT_ORDRE.indexOf(a.cat)-CAT_ORDRE.indexOf(b.cat);if(ca)return ca;return (a.date||'9')<(b.date||'9')?-1:(a.date||'9')>(b.date||'9')?1:0;};
+    var carte=function(x){return x.k==='t'?carteTache(x.t):carteRelance(x.c,true);};
+    var g=function(fn){return items.filter(fn).sort(tri);};
+    var ret=g(function(x){return x.date&&daysDiff(x.date)<0;}),auj=g(function(x){return x.date&&daysDiff(x.date)===0;}),sans=g(function(x){return !x.date;}),sem=g(function(x){var d=x.date?daysDiff(x.date):null;return d!==null&&d>0&&d<=7;}),tard=g(function(x){return x.date&&daysDiff(x.date)>7;});
+    var rap=tachesOuvertes().filter(rappelLoin).filter(function(t){return !catFiltre||catTache(t)===catFiltre;}).sort(function(a,b){return a.date<b.date?-1:1;});
+    var html=blocGroupe('En retard · '+ret.length,ret.map(carte).join(''),true)+blocGroupe('Aujourd\'hui · '+auj.length,auj.map(carte).join(''))+blocGroupe('Sans date · '+sans.length,sans.map(carte).join(''))+blocGroupe('Cette semaine · '+sem.length,sem.map(carte).join(''));
+    if(!html)html='<div class="vide-jour">Tout est fait pour le moment. Bravo.</div>';
+    html+=plier('Plus tard',tard.map(carte).join(''),tard.length)+plier('Rappels programmés',rap.map(carteTache).join(''),rap.length);
+    k.innerHTML=html;
   }
-  function renderTasks(){renderTaskBoard('task-kanban');renderHomeTaches();}
+  function renderTasks(){renderTaskBoard('task-kanban');renderHome();}
   function prochaineDate(d,rep){var x=new Date(d+'T00:00:00');if(rep==='semaine'){x.setDate(x.getDate()+7);return isoD(x);}var k=rep==='mois'?1:rep==='trimestre'?3:12;var j=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+k);var der=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();x.setDate(Math.min(j,der));return isoD(x);}
   function changerStatut(t,st){
     var maj=Object.assign({},t,{statut:st,fait:st==='fait',faitLe:st==='fait'?todayISO():''});
@@ -1157,7 +1202,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(fin).catch(function(){copieSecours(m);fin();});}else{copieSecours(m);fin();}}
   function copieSecours(m){var ta=document.createElement('textarea');ta.value=m;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(x){}ta.remove();}
   var tEdit=null;
-  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';majLiensTache();$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-log').innerHTML='<option value="">Aucun</option>'+S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}).map(function(b){return '<option value="'+esc(b.id)+'"'+(b.id===(t.logement||tLogDefaut)?' selected':'')+'>'+esc(b.nom)+'</option>';}).join('');tLogDefaut='';$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
+  function ouvrirTache(id){tEdit=id||null;var t=id?byId(S.taches,id):null;if(id&&!t)return;t=t||{statut:'a_faire',date:''};$('t-titre-h').textContent=id?t.titre:'Nouvelle tâche';$('t-titre').value=t.titre||'';$('t-date').value=t.date||'';$('t-rep').value=t.repeter||'';$('t-statut').value=statutTache(t);$('t-imp').checked=!!t.importante;$('t-notes').value=t.notes||'';$('t-cat').value=t.categorie||'';majLiensTache();$('t-contact').innerHTML='<option value="">Aucun</option>'+S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===t.contact?' selected':'')+'>'+esc(fullName(c)+' ('+(TYPES[c.type]||c.type||'')+')')+'</option>';}).join('');$('t-log').innerHTML='<option value="">Aucun</option>'+S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}).map(function(b){return '<option value="'+esc(b.id)+'"'+(b.id===(t.logement||tLogDefaut)?' selected':'')+'>'+esc(b.nom)+'</option>';}).join('');tLogDefaut='';$('t-del').hidden=!id;$('t-del').textContent='Supprimer';$('t-del').dataset.armed='';$('tsheet').classList.add('open');document.body.style.overflow='hidden';setTimeout(function(){$('t-titre').focus();},50);}
   function fermerTache(){$('tsheet').classList.remove('open');document.body.style.overflow='';tEdit=null;}
 
   /* Fiche */
@@ -1704,7 +1749,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('t-form').addEventListener('submit',function(e){
     e.preventDefault();var titre=$('t-titre').value.trim();if(!titre){$('t-titre').focus();return;}
     var ex=tEdit?byId(S.taches,tEdit):null;var st=$('t-statut').value;
-    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,contact:$('t-contact').value,logement:$('t-log').value,notes:$('t-notes').value.trim()});
+    var doc=Object.assign({},ex||{id:uid('t'),createdAt:new Date().toISOString(),statut:'a_faire',fait:false},{titre:titre,date:$('t-date').value||'',repeter:$('t-rep').value,importante:$('t-imp').checked,contact:$('t-contact').value,logement:$('t-log').value,categorie:$('t-cat').value,notes:$('t-notes').value.trim()});
     if(st!==statutTache(doc))changerStatut(doc,st);else save('taches',doc).catch(function(){});
     toast(ex?'Tâche modifiée':'Tâche ajoutée');fermerTache();
   });
@@ -1768,10 +1813,12 @@ h2,h3{font-weight:500;letter-spacing:0}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     if(e.target.closest('a.joindre-b'))return;
     if(e.target.closest('[data-voircanaux]')){voirCanaux=!voirCanaux;renderCanaux();return;}
-    var rf=e.target.closest('[data-relfait]');if(rf){var cf=byId(S.contacts,rf.dataset.relfait);if(cf){rf.closest('.row').classList.add('cochee');saveContact(Object.assign({},cf,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),cf.id).then(function(){toast('Relance faite');});}return;}
+    var fc=e.target.closest('[data-filtrecat]');if(fc){catFiltre=fc.dataset.filtrecat;renderTaskBoard('task-kanban');go('relances');return;}
+    var cfb=e.target.closest('[data-catf]');if(cfb){catFiltre=cfb.dataset.catf;renderTaskBoard('task-kanban');return;}
+    var rf=e.target.closest('[data-relfait]');if(rf){var cf=byId(S.contacts,rf.dataset.relfait);if(cf){var ancienne=cf.relance;rf.closest('.row').classList.add('cochee');saveContact(Object.assign({},cf,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),cf.id).then(function(){toastAnnuler('Relance faite',function(){var c2=byId(S.contacts,cf.id);if(c2)saveContact(Object.assign({},c2,{relance:ancienne}),cf.id);});});}return;}
     var rp=e.target.closest('[data-reporter]');if(rp){var cr=byId(S.contacts,rp.dataset.reporter);if(cr){var dj=new Date();dj.setDate(dj.getDate()+Number(rp.dataset.j));saveContact(Object.assign({},cr,{relance:isoD(dj),agendaOk:false}),cr.id).then(function(){toast('Relance reportée au '+fmtDate(isoD(dj)));});}return;}
     var rl=e.target.closest('[data-relance]');if(rl){openSheet(rl.dataset.relance);return;}
-    var co=e.target.closest('[data-cocher]');if(co){var tt=byId(S.taches,co.dataset.cocher);if(tt){co.closest('.row').classList.add('cochee');var nst=statutTache(tt)==='fait'?'a_faire':'fait';setTimeout(function(){changerStatut(tt,nst);},nst==='fait'?260:0);}return;}
+    var co=e.target.closest('[data-cocher]');if(co){var tt=byId(S.taches,co.dataset.cocher);if(tt){co.closest('.row').classList.add('cochee');setTimeout(function(){changerStatut(tt,'fait');toastAnnuler(tt.repeter?'Fait, elle reviendra '+(REPET[tt.repeter]||''):'Tâche faite',function(){var t2=byId(S.taches,tt.id);if(t2)save('taches',Object.assign({},t2,{statut:'a_faire',fait:false,faitLe:''})).catch(function(){});});},250);}return;}
     var tc=e.target.closest('[data-tache]');if(tc){ouvrirTache(tc.dataset.tache);return;}
     if(e.target.closest('[data-newtask]')){ouvrirTache(null);return;}
     var lg=e.target.closest('[data-log]');if(lg){ouvrirLogement(lg.dataset.log);return;}
