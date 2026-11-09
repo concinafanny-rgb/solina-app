@@ -406,6 +406,25 @@ details.anciens{margin-top:16px}
 .canal.active{border-color:var(--terre);box-shadow:0 0 0 1px var(--terre) inset}
 .canal b{display:block;font-weight:500;font-size:13.5px;color:var(--brun)}
 .canal span{font-size:12px;color:var(--muted)}
+.rosebtn{background:#D9799F;border-color:#D9799F;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
+.rosebtn:hover{background:#C7648B;border-color:#C7648B}
+.canal.pros{background:#FBE6EE;border-color:#F3CADB}
+#canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+.canal.pros b{color:#A2416C}
+.canal.pros.active{border-color:#D9799F;box-shadow:0 0 0 1.5px #D9799F inset;background:#F8D7E4}
+.canaux-autres{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.canaux-autres .note{margin-right:4px}
+.crt-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.crt{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+.crt th{text-align:left;font-weight:500;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line)}
+.crt td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.crt tr:last-child td{border-bottom:0}
+.crt tr.semaine td{background:#FDF3F7}
+.crt tr.semaine td:first-child{box-shadow:3px 0 0 #D9799F inset}
+.crt .adr{font-size:12px;line-height:1.45;color:var(--brun)}
+.crt .act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.crt .btn.rose{background:#D9799F;border-color:#D9799F;color:#fff}
+.crt .num{color:var(--muted);font-size:12px}
 #task-kanban .col,#home-kanban .col{flex:1 1 320px}
 #task-kanban .col[data-tetape="a_faire"],#home-kanban .col[data-tetape="a_faire"]{flex:2 1 420px}
 #t-liens a,#f-liens a{text-decoration:none}
@@ -613,9 +632,9 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- PROSPECTION -->
     <section class="panel" data-panel="prospection">
-      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche. « No way » retire un bien qui ne t'intéresse pas.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
-      <div class="section-head" style="margin-top:22px"><h2>Mes canaux</h2><span class="note">Choisis un canal pour voir sa pipeline</span></div>
-      <div class="canaux" id="canaux"></div>
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1></div><button class="btn rosebtn" id="btn-new-prospect">+ Nouveau prospect</button></div>
+      <div id="canaux" style="margin-top:20px"></div>
+      <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
       <div class="section" id="sec-presc"><div class="section-head"><h2>Pipeline prescripteurs</h2><span class="note">Agences, notaires et conseillers à démarcher</span></div><div class="kanban" id="kanban-presc"></div></div>
       <div class="section" style="margin-top:34px"><div class="section-head"><div class="ph" style="margin:0"><div class="pl">Plan d'action</div><h2>Programme de prospection</h2></div></div><div id="plan" style="margin-top:14px"></div></div>
@@ -1046,7 +1065,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : je vais les chercher',['Leboncoin','AlloVoisins','PAP','Groupes Facebook','Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Boîtage','Événements']],['Communication : ils viennent à moi',['Site internet','Fiche Google','Instagram','LinkedIn','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Dépôt de flyers','Cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
   var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
@@ -1161,7 +1180,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var CARTE=[
     ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','ok','Rangés dans le Drive'],['Respect de la réglementation','ok','Veille un lundi sur deux'],['Archivage des documents','ok','Sur le Drive']]],
     ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Finances, rétrocessions et versements des plateformes à ajouter'],['Suivi du chiffre d\'affaires','ok','Page Finances'],['Suivi des charges','ok','Page Finances'],['Encaissements et paiements','ok','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','ok','Montant calculé chaque mois dans le budget prévisionnel (Finances)'],['Budget prévisionnel et rentabilité par bien','ok','Budget prévisionnel dans Finances, simulateur propriétaire']]],
-    ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, semaine type, « Pas pour moi »'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
+    ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, envoi courrier, « No way »'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
     ['Communication et marketing','reseaux',[['Image de marque','ok','Plaquette du graphiste'],['Site internet et SEO','ok','Demandes du site suivies toutes les heures'],['Fiche Google Business','ok','Point chaque lundi'],['Réseaux sociaux et contenus','ok','Planning le 1er du mois, Studio réseaux sociaux'],['E réputation, réponses aux avis','part','Réponses rédigées avec Claude, à faire régulièrement'],['Publicité','part','Outils gratuits pour l\'instant, budget plus tard']]],
     ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Accès privés chiffrés'],['Channel manager','part','Bientôt : réservations, opérationnel et relevés propriétaires, relié à Maison Solina']]],
     ['Stratégie et pilotage','divers',[['Objectifs','ok','1 signature par mois, 12 à 15 logements fin 2027'],['Plan d\'action','ok','Programme de prospection'],['Suivi des indicateurs','part','CA suivi, taux d\'occupation à ajouter'],['Prendre du recul','non','Bilan chaque trimestre']]],
@@ -1245,32 +1264,65 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   var canalFiltre='';
   var CANAUX=[];BRANCHES.forEach(function(b){CANAUX=CANAUX.concat(b[1]);});
-  function brancheDe(k){for(var i=0;i<BRANCHES.length;i++)if(BRANCHES[i][1].indexOf(k)>=0)return i;return 2;}
+  function brancheDe(k){for(var i=0;i<BRANCHES.length;i++)if(BRANCHES[i][1].indexOf(k)>=0)return i;return 3;}
   function canalDe(c){return c.canal||'';}
   function remplirCanalFiche(){var f=$('f-canal');if(!f||f.options.length)return;f.innerHTML='<option value="">Non précisé</option>'+BRANCHES.map(function(b){return '<optgroup label="'+esc(b[0])+'">'+b[1].map(function(k){return '<option>'+esc(k)+'</option>';}).join('')+'</optgroup>';}).join('');}
-  function filtreCanal(c){return !canalFiltre||(canalFiltre==='__sans'?!canalDe(c):canalDe(c)===canalFiltre);}
+  function filtreCanal(c){if(!canalFiltre)return true;if(canalFiltre==='__sans')return !canalDe(c);if(canalFiltre.indexOf('b:')===0)return !!canalDe(c)&&brancheDe(canalDe(c))===Number(canalFiltre.slice(2));return canalDe(c)===canalFiltre;}
   function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
   var voirCanaux=false;
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
     var pros=S.contacts.filter(function(c){return (c.type==='prospect'||c.type==='prescripteur')&&c.etape!=='ecarte';});
     var enc=function(l){return l.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length;};
-    var opt=function(v,lib,l){return '<option value="'+esc(v)+'"'+(canalFiltre===v?' selected':'')+'>'+esc(lib)+(l.length?' ('+l.length+')':'')+'</option>';};
-    var h='<select id="canal-choix" class="canal-choix" aria-label="Choisir un canal">'+opt('','Tous les canaux',pros);
-    BRANCHES.forEach(function(b){h+='<optgroup label="'+esc(b[0])+'">'+b[1].map(function(k){return opt(k,k,pros.filter(function(c){return canalDe(c)===k;}));}).join('')+'</optgroup>';});
-    var sans=pros.filter(function(c){return !canalDe(c);});if(sans.length)h+=opt('__sans','Canal non précisé',sans);
-    h+='</select>';
-    var pb=[0,0];pros.forEach(function(c){var k=canalDe(c);if(!k)return;var b=brancheDe(k);if(b<2)pb[b]++;});
-    var actifs=CANAUX.map(function(k){return [k,pros.filter(function(c){return canalDe(c)===k;})];}).filter(function(x){return x[1].length;});
-    h+='<div class="canal-resume"><span><b style="color:#A2416C">'+pb[0]+'</b> par la prospection</span><span><b style="color:#634388">'+pb[1]+'</b> par la communication</span></div>';
-    h+='<div class="chips" style="flex-wrap:wrap;margin-top:8px">'+actifs.map(function(x){var on=canalFiltre===x[0];return '<button type="button" class="chip'+(on?' active':'')+'" data-canal="'+(on?'':esc(x[0]))+'">'+esc(x[0])+' · '+enc(x[1])+'</button>';}).join('')+'</div>';
+    var h='<div class="canaux">'+BRANCHES[0][1].map(function(k){
+      var l=pros.filter(function(c){return canalDe(c)===k;}),on=canalFiltre===k,n=enc(l),sous;
+      if(k==='Envoi courrier'){var ae=(S.courriers||[]).filter(function(x){return x.statut==='a_envoyer';}).length;sous=courriersSemaine()+'/5 cette semaine'+(n?' · '+n+' en cours':'');if(!ae&&!n)sous='Aucun';}
+      else sous=l.length?n+' en cours':'Aucun';
+      return '<button type="button" class="canal pros'+(on?' active':'')+'" data-canal="'+(on?'':esc(k))+'"><b>'+esc(k)+'</b><span>'+esc(sous)+'</span></button>';}).join('')+'</div>';
+    var ch=function(v,lib,l){var on=canalFiltre===v;return '<button type="button" class="chip'+(on?' active':'')+'" data-canal="'+(on?'':esc(v))+'">'+esc(lib)+' · '+enc(l)+'</button>';};
+    var br=function(i){return pros.filter(function(c){return canalDe(c)&&brancheDe(canalDe(c))===i;});};
+    var sans=pros.filter(function(c){return !canalDe(c);});
+    h+='<div class="canaux-autres"><span class="note">Ailleurs :</span>'+ch('b:1','Réseau et partenaires',br(1))+ch('b:2','Ils viennent à moi',br(2))+(sans.length?ch('__sans','Canal non précisé',sans):'')+(canalFiltre?'<button type="button" class="chip" data-canal="">Tout voir</button>':'')+'</div>';
     el.innerHTML=h;
   }
+  /* Envoi courrier : propriétaires repérés dans l'annuaire des entreprises (collection courriers) */
+  var crVille='',crStatut='a_envoyer',crMax=30;
+  var CR_VILLES=['Antibes','Juan les Pins','Vallauris Golfe Juan','Cannes'];
+  function lundiISO(){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return isoD(d);}
+  function courriersSemaine(){var l=lundiISO();return (S.courriers||[]).filter(function(x){return x.envoyeLe&&x.envoyeLe>=l&&x.statut!=='a_envoyer';}).length;}
+  function adresseCourrier(x){return [x.prenom+' '+x.nom,x.adresse,(x.cp+' '+x.villeEnvoi).trim()].join('\n');}
+  function renderCourriers(){
+    var el=$('cr-liste');if(!el)return;
+    var all=(S.courriers||[]).slice().sort(function(a,b){return num(a.ordre)-num(b.ordre);});
+    var fait=courriersSemaine(),reste=Math.max(0,5-fait);
+    $('cr-semaine').textContent='Cette semaine : '+fait+' sur 5 envoyés';
+    var dv=all.filter(function(x){return x.statut===crStatut;});
+    $('cr-villes').innerHTML=[''].concat(CR_VILLES).map(function(v){var n=dv.filter(function(x){return !v||x.villeLogement===v;}).length;return '<button type="button" class="chip'+(crVille===v?' active':'')+'" data-crville="'+esc(v)+'">'+esc(v||'Toutes les villes')+' · '+n+'</button>';}).join('');
+    var ST=[['a_envoyer','À envoyer'],['envoye','Envoyés'],['repondu','Ont répondu'],['no_way','No way']];
+    $('cr-statuts').innerHTML=ST.map(function(t){var n=all.filter(function(x){return x.statut===t[0]&&(!crVille||x.villeLogement===crVille);}).length;return '<button type="button" class="chip'+(crStatut===t[0]?' active':'')+'" data-crstat="'+t[0]+'">'+t[1]+' · '+n+'</button>';}).join('');
+    var l=dv.filter(function(x){return !crVille||x.villeLogement===crVille;});
+    if(crStatut!=='a_envoyer')l.sort(function(a,b){return (b.envoyeLe||'')<(a.envoyeLe||'')?-1:1;});
+    if(!l.length){el.innerHTML='<div class="empty" style="padding:14px">Rien ici pour l\'instant.</div>';return;}
+    var r='<div class="crt-wrap"><table class="crt"><thead><tr><th>N°</th><th>Propriétaire et adresse d\'envoi</th><th>Son logement</th><th>Depuis</th><th></th></tr></thead><tbody>';
+    l.slice(0,crMax).forEach(function(x,i){
+      var sem=crStatut==='a_envoyer'&&i<reste;
+      var act=x.statut==='a_envoyer'?'<button type="button" class="btn xs rose" data-crenv="'+esc(x.id)+'">Envoyé</button><button type="button" class="btn ghost xs" data-crnoway="'+esc(x.id)+'">No way</button>'
+        :x.statut==='envoye'?'<span class="note">Envoyé le '+esc(fmtDate(x.envoyeLe))+'</span><button type="button" class="btn xs rose" data-crrep="'+esc(x.id)+'">A répondu</button><button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Annuler</button>'
+        :x.statut==='repondu'?'<span class="note">Dans ta prospection</span>'+(x.contact?'<button type="button" class="btn ghost xs" data-open="'+esc(x.contact)+'">Fiche</button>':'')
+        :'<button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Remettre</button>';
+      r+='<tr'+(sem?' class="semaine"':'')+'><td class="num">'+esc(x.ordre)+'</td><td><div class="adr"><b style="font-weight:500">'+esc(x.prenom+' '+x.nom)+'</b><br>'+esc(x.adresse)+'<br>'+esc(x.cp+' '+x.villeEnvoi)+'</div><button type="button" class="btn ghost xs" style="margin-top:4px" data-crcopie="'+esc(x.id)+'">Copier l\'adresse</button></td><td>'+esc(x.villeLogement)+(x.logement?'<div class="note">'+esc(x.logement)+'</div>':'')+(x.nbLogements>1?'<div class="note">'+x.nbLogements+' logements</div>':'')+'</td><td class="num">'+esc(x.depuis?x.depuis.slice(0,4):'')+'</td><td><div class="act">'+act+'</div></td></tr>';
+    });
+    r+='</tbody></table></div>';
+    if(l.length>crMax)r+='<button type="button" class="btn ghost sm" style="margin-top:8px" data-crplus>Voir les suivants ('+(l.length-crMax)+')</button>';
+    el.innerHTML=r;
+  }
+  function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
-    renderCanaux();kanbanFor('kanban','prospect',ETAPES);kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);
+    renderCanaux();kanbanFor('kanban','prospect',ETAPES);
+    if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
     if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
-    if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(canalFiltre&&canalFiltre!=='__sans'?' · '+canalFiltre:canalFiltre?' · canal non précisé':'');
+    if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(!canalFiltre?'':canalFiltre==='__sans'?' · canal non précisé':canalFiltre.indexOf('b:')===0?' · '+BRANCHES[Number(canalFiltre.slice(2))][0]:' · '+canalFiltre);
   }
   var CANAUX_ANNONCE=['Leboncoin','AlloVoisins','PAP','Groupes Facebook'];
   function piecesDe(c){var t=[c.nom,c.bien,c.notes].join(' ');var m=t.match(/\b[TF]\s?(\d)\b/i)||t.match(/(\d)\s*pi[eè]ces?/i);if(m)return m[1]+'P';if(/studio/i.test(t))return '1P';if(/villa|maison/i.test(t))return 'Maison';return '';}
@@ -1680,7 +1732,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
-  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops'];
+  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops','courriers'];
   var CLE_JETON='solina-jeton',CLE_COPIE='solina-copie-crm';
   var G={sha:null,connecte:false,D:null,derniere:0};
   var LIEN_CLE='https://github.com/settings/personal-access-tokens/new?name=Application%20Solina&description=Application%20Maison%20Solina%20(Mac%20et%20iPhone)&target_name=concinafanny-rgb&expires_in=365&contents=write';
@@ -1751,7 +1803,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     echec('Enregistrement impossible, réessaie dans un instant');
   }
 
-  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(d){return 'prix '+(d.article||'');},ops:function(d){return 'opérationnel '+(d.titre||'');},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
+  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(d){return 'prix '+(d.article||'');},ops:function(d){return 'opérationnel '+(d.titre||'');},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},courriers:function(d){return 'courrier '+(d.nom||'');},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
   function upsert(d,coll,doc){var a=d[coll],i=a.findIndex(function(x){return x.id===doc.id;});if(i>=0)a[i]=doc;else a.push(doc);}
 
   /* Persistence (générique) */
@@ -1979,7 +2031,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
   $('btn-csv').addEventListener('click',exporterContacts);
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
-  $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans')$('f-canal').value=canalFiltre;toggleEtape();});
+  $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans'&&canalFiltre.indexOf('b:')<0)$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
   $('f-type').addEventListener('change',toggleEtape);$('f-etape').addEventListener('change',toggleEtape);
   $('btn-today').addEventListener('click',function(){$('f-dernier').value=todayISO();});
@@ -2029,7 +2081,15 @@ h2,h3{font-weight:500;letter-spacing:0}
     var dr=e.target.closest('[data-delrev]');if(dr){if(!confirmer(dr))return;remove('revenus',dr.dataset.delrev);return;}
     var dc=e.target.closest('[data-delcharge]');if(dc){if(!confirmer(dc))return;remove('charges',dc.dataset.delcharge);return;}
     var dco=e.target.closest('[data-delconso]');if(dco){if(!confirmer(dco))return;remove('conso',dco.dataset.delconso);return;}
-    var ca=e.target.closest('button[data-canal]');if(ca){canalFiltre=ca.dataset.canal;renderKanban();return;}
+    var ca=e.target.closest('button[data-canal]');if(ca){canalFiltre=ca.dataset.canal;crMax=30;renderKanban();return;}
+    var cv=e.target.closest('[data-crville]');if(cv){crVille=cv.dataset.crville;crMax=30;renderCourriers();return;}
+    var cs=e.target.closest('[data-crstat]');if(cs){crStatut=cs.dataset.crstat;crMax=30;renderCourriers();return;}
+    if(e.target.closest('[data-crplus]')){crMax+=30;renderCourriers();return;}
+    var cc=e.target.closest('[data-crcopie]');if(cc){var xc=byId(S.courriers,cc.dataset.crcopie);if(xc){var tx=adresseCourrier(xc);var ok=function(){toast('Adresse copiée');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(ok).catch(function(){copieSecours(tx);ok();});else{copieSecours(tx);ok();}}return;}
+    var cen=e.target.closest('[data-crenv]');if(cen){var av=majCourrier(cen.dataset.crenv,{statut:'envoye',envoyeLe:todayISO()});if(av)toastAnnuler('Courrier envoyé',function(){save('courriers',av).catch(function(){});});return;}
+    var cnw=e.target.closest('[data-crnoway]');if(cnw){var av2=majCourrier(cnw.dataset.crnoway,{statut:'no_way'});if(av2)toastAnnuler('Retiré de la liste',function(){save('courriers',av2).catch(function(){});});return;}
+    var can=e.target.closest('[data-crannul]');if(can){majCourrier(can.dataset.crannul,{statut:'a_envoyer',envoyeLe:''});return;}
+    var crp=e.target.closest('[data-crrep]');if(crp){var xr=byId(S.courriers,crp.dataset.crrep);if(xr){saveContact({type:'prospect',categorie:'Propriétaire',prenom:xr.prenom,nom:xr.nom,adresse:xr.adresse+', '+xr.cp+' '+xr.villeEnvoi,ville:xr.villeLogement,bien:xr.logement||'',canal:'Envoi courrier',etape:'contacte',dernierContact:todayISO(),notes:'A répondu au courrier envoyé le '+fmtDate(xr.envoyeLe)+'. Logement : '+(xr.logement?xr.logement+', ':'')+xr.villeLogement+'. SIREN '+xr.siren+'.'},null).then(function(cid){majCourrier(xr.id,{statut:'repondu',contact:cid});openSheet(cid);}).catch(function(){});}return;}
     var mo=e.target.closest('[data-mois]');if(mo){var dm=new Date(poMois+'-01T00:00:00');dm.setMonth(dm.getMonth()+Number(mo.dataset.mois));poMois=monthISO(dm);renderPosts();return;}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     if(e.target.closest('a.joindre-b'))return;
