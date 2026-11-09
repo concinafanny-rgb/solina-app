@@ -209,11 +209,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
 @media (min-width:700px){
   .app{min-height:100%}
   .rail{display:flex;flex-direction:column;width:226px;flex:none;position:sticky;top:0;height:100vh;background:var(--terre);color:#fff;overflow-y:auto;padding-left:env(safe-area-inset-left,0px);scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
-  .rail .brand{flex-direction:column;align-items:flex-start;gap:2px;padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.16);margin-bottom:8px}
-  .rail .brand .mark{color:#fff;font-size:21px;letter-spacing:.08em}
+  .rail .brand{padding:16px 18px 12px;border-bottom:1px solid rgba(255,255,255,.16);margin-bottom:4px;white-space:nowrap}
+  .rail .brand .mark{color:#fff;font-size:19px;letter-spacing:.07em}
   .rail .brand .sub{color:rgba(255,255,255,.5)}
-  .rail .nsec{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42);padding:12px 18px 4px}
-  .rail button{display:flex;align-items:center;gap:10px;padding:8px 18px;color:rgba(255,255,255,.74);font-size:13.5px;text-align:left;border-left:2px solid transparent;width:100%}
+  .rail .nsec{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42);padding:10px 18px 3px}
+  .rail button{display:flex;align-items:center;gap:10px;padding:7px 18px;color:rgba(255,255,255,.74);font-size:13.5px;text-align:left;border-left:2px solid transparent;width:100%}
   .rail button svg{width:17px;height:17px}
   .rail button:hover{color:#fff;background:rgba(255,255,255,.07)}
   .rail button.active{color:#fff;border-left-color:#fff;background:rgba(255,255,255,.14);font-weight:500}
@@ -609,12 +609,12 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- MON ENTREPRISE -->
     <section class="panel" data-panel="entreprise">
-      <div class="ph"><div class="pl">Vue d'ensemble</div><h1>Mon entreprise</h1><div class="pd">Tout ce que demande Maison Solina, posé au même endroit. Ta routine te dit quand faire quoi, la carte te montre ce qui est déjà en place et ce qui reste à construire.</div></div>
+      <div class="ph"><div class="pl">Vue d'ensemble</div><h1>Mon entreprise</h1></div>
       <div class="section" style="margin-top:18px"><div class="section-head"><h2>Ma routine</h2></div><div id="ent-routine"></div></div>
       <div class="section"><div class="section-head"><h2>Formation et veille</h2></div>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
-          <div class="card"><div class="ctit">Formation School</div><p class="note" style="margin:0 0 10px">Chaque mercredi à 8h, le jour des lives, comme un rendez vous avec toi même. Colle ici le lien de ta formation.</p><div style="display:flex;gap:8px"><input data-lien="lienSchool" placeholder="Lien de la formation School" style="flex:1;min-width:0"><a class="btn primary sm" data-ouvrir="lienSchool" target="_blank" rel="noopener">Ouvrir</a></div></div>
-          <div class="card"><div class="ctit">Veille location saisonnière</div><p class="note" style="margin:0 0 10px">Un lundi sur deux, Claude fait le point : lois et fiscalité (LMNP, loi Le Meur, abattements), ce que les propriétaires doivent faire, Airbnb, Booking et les plateformes, règles des mairies, tourisme et hôtellerie. Un seul document qui garde tout, avec les dates de chaque mise à jour.</p><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
+          <div class="card"><div class="ctit">Formation School</div><div style="display:flex;gap:8px"><input data-lien="lienSchool" placeholder="Lien de la formation School" style="flex:1;min-width:0"><a class="btn primary sm" data-ouvrir="lienSchool" target="_blank" rel="noopener">Ouvrir</a></div></div>
+          <div class="card"><div class="ctit">Veille location saisonnière</div><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
         </div>
       </div>
       <div class="section"><div class="section-head"><h2>Ma carte</h2><span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="note" id="ent-bilan"></span><button type="button" class="btn sm" id="ent-modif">Modifier ma carte</button></span></div><div id="ent-carte"></div></div>
@@ -622,13 +622,13 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- NOTES VOCALES -->
     <section class="panel" data-panel="vocaux">
-      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes</h1><div class="pd">En rendez vous, écris pendant que la personne parle : tout s'enregistre tout seul, même si tu quittes l'application, et tu peux compléter en dictant. Une note écrite reste à toi, elle ne part chez Claude que si tu touches « Faire ranger par Claude ». Une note vocale, elle, est rangée par Claude automatiquement.</div></div><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-nnew>Écrire une note</button><button class="btn sm" data-micro>Note vocale</button></span></div>
+      <div class="phrow"><div class="ph"><div class="pl">Vue d'ensemble</div><h1>Notes</h1></div><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-nnew>Écrire une note</button><button class="btn sm" data-micro>Note vocale</button></span></div>
       <div class="list" id="vocaux-list" style="margin-top:18px"></div>
     </section>
 
     <!-- CONTACTS -->
     <section class="panel" data-panel="contacts">
-      <div class="phrow"><div class="ph"><div class="pl">Carnet</div><h1>Contacts</h1><div class="pd">Propriétaires, prestataires, partenaires, prescripteurs et apporteurs d'affaires, au même endroit.</div></div><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" id="btn-csv">Exporter en CSV</button><button class="btn primary sm" id="btn-new-contact">+ Nouveau</button></span></div>
+      <div class="phrow"><div class="ph"><div class="pl">Carnet</div><h1>Contacts</h1></div><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" id="btn-csv">Exporter en CSV</button><button class="btn primary sm" id="btn-new-contact">+ Nouveau</button></span></div>
       <div class="toolbar" style="margin-top:18px">
         <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" placeholder="Rechercher un nom, une ville, un métier…" autocomplete="off"></div>
       </div>
@@ -650,13 +650,13 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div id="canaux" style="margin-top:20px"></div>
       <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
-      <div class="section" id="sec-presc"><div class="section-head"><h2>Pipeline prescripteurs</h2><span class="note">Agences, notaires et conseillers à démarcher</span></div><div class="kanban" id="kanban-presc"></div></div>
+      <div class="section" id="sec-presc"><div class="section-head"><h2>Pipeline prescripteurs</h2></div><div class="kanban" id="kanban-presc"></div></div>
       <div class="section" style="margin-top:40px"><h1 style="margin:0 0 16px">Plan d'action</h1><div id="plan"></div></div>
     </section>
 
     <!-- RELANCES -->
     <section class="panel" data-panel="relances">
-      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1><div class="pd">Touche « Fait » et la tâche disparaît. Touche une tâche pour l'ouvrir. Les rappels qui reviennent chaque mois sont dans ton planning et apparaissent ici 3 jours avant.</div></div>
+      <div class="ph"><div class="pl">Suivi</div><h1>Tâches et relances</h1></div>
       <div class="section" style="margin-top:0">
         <div class="section-head"><h2>Tâches</h2><button class="btn primary sm" data-newtask>+ Tâche</button></div>
         <form class="addline" id="task-form" style="margin-bottom:10px">
@@ -671,13 +671,13 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- LOGEMENTS -->
     <section class="panel" data-panel="logements">
-      <div class="phrow"><div class="ph"><div class="pl">Mes logements</div><h1>Logements</h1><div class="pd">Chaque bien, son propriétaire, ses liens et tout ce qu'il y a à faire pour lui.</div></div><button class="btn primary sm" id="log-add">+ Logement</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Mes logements</div><h1>Logements</h1></div><button class="btn primary sm" id="log-add">+ Logement</button></div>
       <div class="grille-log" id="log-list" style="margin-top:18px"></div>
     </section>
 
     <!-- CHIFFRE D'AFFAIRES -->
     <section class="panel" data-panel="ca">
-      <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Finances Maison Solina</h1><div class="pd">Ton chiffre d'affaires, tes charges et ton prévisionnel au même endroit. Chaque mois, tu saisis les loyers encaissés par logement : la commission se calcule toute seule.</div></div>
+      <div class="phrow"><div class="ph"><div class="pl">Finances</div><h1>Finances Maison Solina</h1></div>
         <div class="field" style="min-width:150px"><label for="ca-mois">Mois</label><input type="month" id="ca-mois"></div></div>
       <div class="grid cards-4" style="margin-top:18px">
         <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">facturé ce mois</div></div>
@@ -688,7 +688,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="section">
         <div class="section-head"><h2 id="ca-mois-titre">Saisie du mois</h2><button class="btn sm" id="ca-add">+ Ligne</button></div>
         <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Facturé €</th><th>Facture</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Loyers encaissés = ce que le propriétaire a réellement reçu sur le mois. Les logements viennent du simulateur, plus bas.</p>
+        
       </div>
       <div class="section">
         <div class="section-head"><h2>Facturé sur 12 mois</h2></div>
@@ -701,7 +701,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="section">
         <div class="section-head"><h2>Mes charges</h2><button class="btn sm" id="charge-add">+ Charge</button></div>
         <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Pour une charge annuelle (assurance, abonnement annuel), saisis le montant divisé par 12.</p>
+        
       </div>
       <div class="section">
         <div class="section-head"><h2>Budget prévisionnel <span id="bud-an-t"></span></h2><span style="display:flex;gap:8px;align-items:center"><button class="btn sm" data-budan="-1" aria-label="Année précédente">‹</button><button class="btn sm" data-budan="1" aria-label="Année suivante">›</button></span></div>
@@ -711,13 +711,13 @@ h2,h3{font-weight:500;letter-spacing:0}
           <div class="field"><label for="p-treso">Épargne de trésorerie, % du net</label><input type="number" step="1" id="p-treso" data-param="treso"></div>
         </div>
         <div class="twrap"><table class="tbl" id="bud-table"><thead><tr><th>Mois</th><th class="r">CA prévu €</th><th class="r">CA réel</th><th class="r">URSSAF</th><th class="r">Impôt</th><th class="r">Charges</th><th class="r">Net</th><th class="r">À mettre de côté</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Tape ton chiffre d'affaires prévu pour chaque mois (en gris : ce que tu as fait le même mois l'an dernier, pris tant que tu ne mets rien). Le reste se calcule : cotisations URSSAF, impôt, tes charges, ce qui reste dans ta poche, et ce qu'il faut mettre de côté chaque mois. Impôt : 1,7 % si tu as le versement libératoire, sinon demande le bon taux à ton expert comptable.</p>
+        
       </div>
       <div class="section" style="margin-top:46px">
-      <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2><div class="pd">Ton prévisionnel : chaque logement, ce qu'il rapporte, puis toutes tes charges et les cotisations, jusqu'au net dans ta poche.</div></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
       <div class="section" style="margin-top:18px">
         <div class="twrap"><table class="tbl" id="biens-table"><thead><tr><th>Logement</th><th class="r">Ma commission %</th><th class="r">Prix / nuit €</th><th class="r">Occupation %</th><th class="r">Mois actifs / an</th><th class="r">Loyers / mois</th><th class="r">Commission / mois</th><th class="r">Commission / an</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        <p class="note" style="margin-top:8px">Loyers / mois = prix par nuit × 30 nuits × occupation. Commission = ton pourcentage sur ces loyers. Mets 0 % pour un logement qui ne te rapporte rien.</p>
+        
       </div>
       <div class="grid cards-2 section">
         <div class="card">
@@ -727,7 +727,7 @@ h2,h3{font-weight:500;letter-spacing:0}
               <div class="field"><label for="p-urssaf">Cotisations URSSAF %</label><input type="number" step="0.1" id="p-urssaf" data-param="urssaf"></div>
               <div class="field"><label for="p-plafond">Plafond à surveiller €</label><input type="number" id="p-plafond" data-param="plafond"></div>
             </div>
-            <div class="hint">Le plafond sert de repère : l'application te montre où tu en es par rapport à lui sur l'année. Les charges viennent du tableau Mes charges, plus haut.</div>
+            
           </div>
         </div>
         <div class="result">
@@ -746,7 +746,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- SIMULATEUR PROPRIÉTAIRE -->
     <section class="panel" data-panel="simprop">
-      <div class="ph"><div class="pl" style="color:#4F6B57">Pour un propriétaire</div><h1>Simulateur propriétaire</h1><div class="pd">Ce que le bien d'un propriétaire peut lui rapporter, et le document à son nom, avec ton logo, à lui envoyer.</div></div>
+      <div class="ph"><div class="pl" style="color:#4F6B57">Pour un propriétaire</div><h1>Simulateur propriétaire</h1></div>
       <div class="grid cards-2">
         <div class="card">
           <div class="ctit">Le bien</div>
@@ -769,7 +769,7 @@ h2,h3{font-weight:500;letter-spacing:0}
             <div class="sp-atouts"><label><input type="checkbox" data-atout="piscine"> Piscine</label><label><input type="checkbox" data-atout="vue mer"> Vue mer</label><label><input type="checkbox" data-atout="terrasse ou jardin"> Terrasse ou jardin</label><label><input type="checkbox" data-atout="parking"> Parking</label><label><input type="checkbox" data-atout="climatisation"> Climatisation</label><label><input type="checkbox" data-atout="plage à pied"> Plage à pied</label></div>
           </div>
           <div class="ctit" style="margin-top:18px">L'estimation</div>
-          <div class="sp-airdna"><a class="btn sm" data-ouvrir="lienAirdna" target="_blank" rel="noopener">Ouvrir AirDNA</a><span class="note">Cherche l'adresse dans AirDNA, puis reporte ici son prix moyen par nuit et son taux d'occupation.</span></div>
+          <div class="sp-airdna"><a class="btn sm" data-ouvrir="lienAirdna" target="_blank" rel="noopener">Ouvrir AirDNA</a></div>
           <div class="form">
             <div class="three">
               <div class="field"><label for="sp-prix">Prix / nuit €</label><input type="number" id="sp-prix" value="180"></div>
@@ -798,7 +798,7 @@ h2,h3{font-weight:500;letter-spacing:0}
               <div class="field"><label for="sp-conso">Consommables + linge</label><input type="number" id="sp-conso" value="600"></div>
               <div class="field"></div>
             </div>
-            <div class="hint">Taxe d'habitation : due si le propriétaire garde le logement à sa disposition une partie de l'année (résidence secondaire), souvent majorée sur la Côte d'Azur. S'il le loue toute l'année sans l'occuper, c'est en général la CFE à la place : regarde son avis d'imposition. Le ménage et la blanchisserie sont payés par les voyageurs.</div>
+            
           </div>
         </div>
         <div>
@@ -825,7 +825,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- OPÉRATIONNEL -->
     <section class="panel" data-panel="ops">
-      <div class="phrow"><div class="ph"><div class="pl">Opérationnel</div><h1>Opérationnel</h1><div class="pd">Tout ce qu'il faut avoir sous la main : le ménage, le linge et l'équipement à faire acheter, le kit Signature, les consommables et la mise en place d'un nouveau bien.</div></div></div>
+      <div class="phrow"><div class="ph"><div class="pl">Opérationnel</div><h1>Opérationnel</h1></div></div>
       <div class="chips ops-onglets" id="ops-onglets" style="margin-top:14px">
         <button class="chip" data-ops="menage">Ménage</button>
         <button class="chip" data-ops="equiper">Équiper un bien</button>
@@ -855,7 +855,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     </section>
 
     <section class="panel" data-panel="idees">
-      <div class="ph"><div class="pl">Opérationnel</div><h1>Boîte à idées</h1><div class="pd">Tout ce qui te passe par la tête, pour ne rien perdre.</div></div>
+      <div class="ph"><div class="pl">Opérationnel</div><h1>Boîte à idées</h1></div>
       <form class="addline" id="idea-form" style="margin-bottom:14px">
         <input id="idea-input" placeholder="Une idée…" autocomplete="off">
         <select id="idea-cat"><option>Offre</option><option>Marketing</option><option>Logements</option><option>Voyageurs</option><option>Partenariats</option><option>Organisation</option><option>Autre</option></select>
@@ -866,7 +866,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- RÉSEAUX -->
     <section class="panel" data-panel="reseaux">
-      <div class="ph"><div class="pl">Marketing</div><h1>Studio réseaux sociaux</h1><div class="pd">Ton planning éditorial mois par mois : quand poster, sur quel réseau, et le sujet. On prépare ensuite chaque publication ensemble.</div></div>
+      <div class="ph"><div class="pl">Marketing</div><h1>Studio réseaux sociaux</h1></div>
       <div class="moisnav"><button class="btn sm" data-mois="-1" aria-label="Mois précédent">‹</button><h2 id="po-mois-titre"></h2><button class="btn sm" data-mois="1" aria-label="Mois suivant">›</button></div>
       <div class="grid cards-4" id="po-stats" style="margin-top:14px"></div>
       <div class="section"><div class="list" id="post-list"></div></div>
@@ -1119,7 +1119,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   /* Navigation */
   function buildNav(){
     var rail=$('rail'),tabs=$('tabs'),plus=$('plusgrid');
-    rail.innerHTML='<div class="brand"><span class="mark">Maison Solina</span><span class="sub">Conciergerie · Côte d\'Azur</span></div>';
+    rail.innerHTML='<div class="brand"><span class="mark">Maison Solina</span></div>';
     RAIL.forEach(function(sec){
       var h=document.createElement('div');h.className='nsec';h.textContent=sec[0];rail.appendChild(h);
       sec[1].forEach(function(it){var b=document.createElement('button');b.innerHTML=ICONS[it[0]]+'<span>'+it[1]+'</span>';b.dataset.go=it[0];rail.appendChild(b);
@@ -1225,7 +1225,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     r.innerHTML='<div class="routine">'+ROUTINE.map(function(b){return '<div class="rt-bloc"><div class="rt-quand">'+esc(b[0])+'</div>'+b[2].map(function(x){return '<div class="rt-l"><span class="rt-qui '+x[1]+'">'+(x[1]==='auto'?'Claude':'Toi')+'</span><span>'+esc(x[0])+'</span></div>';}).join('')+'</div>';}).join('')+'</div>';
     var tot={ok:0,part:0,non:0},CA=carteData();
     $('ent-modif').textContent=carteEdit?'Terminer':'Modifier ma carte';$('ent-modif').classList.toggle('primary',carteEdit);
-    $('ent-carte').innerHTML=(carteEdit?'<p class="note" style="margin:0 0 10px">Change l\'état d\'un poste, son texte, ajoute ou retire des postes : tout s\'enregistre au fur et à mesure.</p>':'')+'<div class="carte-g">'+CA.map(function(b,bi){var C=CAT[b[1]]||CAT.divers,n={ok:0,part:0,non:0};b[2].forEach(function(x){n[x[1]]=(n[x[1]]||0)+1;tot[x[1]]=(tot[x[1]]||0)+1;});
+    $('ent-carte').innerHTML='<div class="carte-g">'+CA.map(function(b,bi){var C=CAT[b[1]]||CAT.divers,n={ok:0,part:0,non:0};b[2].forEach(function(x){n[x[1]]=(n[x[1]]||0)+1;tot[x[1]]=(tot[x[1]]||0)+1;});
       var lignes=carteEdit?b[2].map(function(x,i){var k=bi+'|'+i;return '<div class="cb-l cb-ed"><select data-ce="'+k+'|1">'+['ok','part','non'].map(function(e){return '<option value="'+e+'"'+(x[1]===e?' selected':'')+'>'+ETATS[e][0]+'</option>';}).join('')+'</select><input data-ce="'+k+'|0" value="'+esc(x[0])+'" placeholder="Poste"><input data-ce="'+k+'|2" value="'+esc(x[2]||'')+'" placeholder="Où, comment"><button type="button" class="btn ghost xs" data-cdel="'+k+'" aria-label="Retirer ce poste">×</button></div>';}).join('')+'<button type="button" class="btn ghost sm" data-cadd="'+bi+'" style="margin-top:8px">+ Ajouter un poste</button>'
         :b[2].map(function(x){var E=ETATS[x[1]]||ETATS.part;return '<div class="cb-l"><span class="cb-e" style="background:'+E[2]+';color:'+E[1]+'">'+E[0]+'</span><span><b>'+esc(x[0])+'</b><br><span class="note">'+esc(x[2]||'')+'</span></span></div>';}).join('');
       return '<details class="carte-b" style="border-top:4px solid '+C.coul+'"'+(carteEdit?' open':'')+'><summary><span class="cb-t">'+esc(b[0])+'</span><span class="cb-n">'+['ok','part','non'].filter(function(k){return n[k];}).map(function(k){return '<i style="background:'+ETATS[k][1]+'"></i>'+n[k];}).join(' ')+'</span></summary>'+lignes+'</details>';}).join('')+'</div>';
@@ -1564,7 +1564,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function blocCalc(catg,titre,sousTitre){
     var l=S.conso.filter(function(a){return a.categorie===catg;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!l.length)return '';
     var tot=0,manque=0;var rows=l.map(function(a){var q=qteArticle(a),pr=num(a.prix),t=q*pr;tot+=t;if(!pr)manque++;return '<tr><td><span class="oa">'+esc(a.article)+'</span><span class="os">'+esc([a.regle==='palier'||a.regle==='voyplus'?'':(num(a.base)+' '+(OPS_REGLE[a.regle]||'')),a.fournisseur,a.note].filter(Boolean).join(' · '))+'</span></td><td class="r tnum oq">'+q+'</td><td class="r"><input class="r oprix" type="number" step="0.01" min="0" inputmode="decimal" data-prixart="'+esc(a.id)+'" value="'+(pr?esc(a.prix):'')+'" placeholder="Prix"></td><td class="r tnum ot">'+(pr?eur(t,2):'')+'</td></tr>';}).join('');
-    return '<div class="section"><div class="section-head"><h2>'+esc(titre)+'</h2><span class="ops-total">'+(tot?eur(tot):'')+'</span></div>'+(sousTitre?'<p class="note" style="margin:-6px 0 10px">'+esc(sousTitre)+'</p>':'')+'<div class="twrap"><table class="tbl ops-tbl"><thead><tr><th>Article</th><th class="r">Qté</th><th class="r">Prix u. €</th><th class="r">Total</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Budget</td><td></td><td></td><td class="r tnum">'+eur(tot)+'</td></tr></tfoot></table></div>'+(manque?'<p class="note" style="margin-top:6px">'+manque+' prix à renseigner pour un budget complet. Tape le prix une fois, il sert pour tous les logements.</p>':'')+'</div>';
+    return '<div class="section"><div class="section-head"><h2>'+esc(titre)+'</h2><span class="ops-total">'+(tot?eur(tot):'')+'</span></div>'+'<div class="twrap"><table class="tbl ops-tbl"><thead><tr><th>Article</th><th class="r">Qté</th><th class="r">Prix u. €</th><th class="r">Total</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Budget</td><td></td><td></td><td class="r tnum">'+eur(tot)+'</td></tr></tfoot></table></div>'+(manque?'<p class="note" style="margin-top:6px">'+manque+' prix à renseigner pour un budget complet. Tape le prix une fois, il sert pour tous les logements.</p>':'')+'</div>';
   }
   function blocTexte(o){var lien=lienSur(o.lien);return '<div class="section ops-doc"><div class="section-head"><h2>'+esc(o.titre)+'</h2>'+(lien?'<a class="btn sm" href="'+esc(lien)+'" target="_blank" rel="noopener">Ouvrir dans Canva</a>':'')+'</div>'+(o.intro?'<p class="note" style="margin:-6px 0 12px">'+esc(o.intro)+'</p>':'')+'<div class="ops-blocs">'+(o.blocs||[]).map(function(b){return '<div class="ops-bloc"><h3>'+esc(b.titre||'')+'</h3><ul>'+(b.items||[]).map(function(it){return '<li>'+esc(it)+'</li>';}).join('')+'</ul></div>';}).join('')+'</div></div>';}
   function textes(rub){return (S.ops||[]).filter(function(o){return o.rubrique===rub;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);}).map(blocTexte).join('');}
