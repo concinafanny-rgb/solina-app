@@ -320,6 +320,23 @@ details.plier .fl{display:inline-block;transition:transform .2s}
 details.plier[open] .fl{transform:rotate(90deg)}
 .toast.actif{pointer-events:auto}
 @media (max-width:699px){.resume{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.tuile{min-height:0;padding:12px 14px}.tuile .n{font-size:28px}.tuile.zero{display:none}.tuile.petite .n{font-size:22px}}
+.routine{display:grid;gap:10px}
+.rt-bloc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.rt-quand{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--terre);font-weight:600;margin-bottom:6px}
+.rt-l{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:13.5px}
+.rt-qui{flex:none;font-size:10px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:2px 8px;font-weight:600}
+.rt-qui.auto{background:#EEE5F6;color:#634388}.rt-qui.toi{background:#F6E3D3;color:var(--terre)}
+.carte-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;align-items:start}
+.carte-b{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.carte-b summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.carte-b summary::-webkit-details-marker{display:none}
+.cb-t{font-weight:500;font-size:14px}
+.cb-n{font-size:12px;color:var(--muted);white-space:nowrap}
+.cb-n i,.pt{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 3px 0 6px}
+.cb-l{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.cb-l:first-of-type{margin-top:10px}
+.cb-l b{font-weight:500}
+.cb-e{flex:none;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 8px;font-weight:600;min-width:92px;text-align:center}
 .toast-annul{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;margin-left:12px;cursor:pointer;padding:0}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--terre);color:var(--terre);display:inline-flex;align-items:center;justify-content:center;background:var(--card);flex:none}
 .micbtn:hover{background:var(--terre);color:#fff}
@@ -512,6 +529,19 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="section-head"><h2>Mon développement</h2></div>
         <div class="resume" id="home-dev"></div>
       </div>
+    </section>
+
+    <!-- MON ENTREPRISE -->
+    <section class="panel" data-panel="entreprise">
+      <div class="ph"><div class="pl">Vue d'ensemble</div><h1>Mon entreprise</h1><div class="pd">Tout ce que demande Maison Solina, posé au même endroit. Ta routine te dit quand faire quoi, la carte te montre ce qui est déjà en place et ce qui reste à construire.</div></div>
+      <div class="section" style="margin-top:18px"><div class="section-head"><h2>Ma routine</h2></div><div id="ent-routine"></div></div>
+      <div class="section"><div class="section-head"><h2>Formation et veille</h2></div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
+          <div class="card"><div class="ctit">Formation School</div><p class="note" style="margin:0 0 10px">1 heure par semaine, toujours au même moment, comme un rendez vous avec toi même. Colle ici le lien de ta formation.</p><div style="display:flex;gap:8px"><input data-lien="lienSchool" placeholder="Lien de la formation School" style="flex:1;min-width:0"><a class="btn primary sm" data-ouvrir="lienSchool" target="_blank" rel="noopener">Ouvrir</a></div></div>
+          <div class="card"><div class="ctit">Veille location saisonnière</div><p class="note" style="margin:0 0 10px">Chaque lundi matin, Claude fait le point sur les nouveautés : lois (LMNP, loi Le Meur, meublés de tourisme), règles des mairies d'Antibes, Cannes et alentours, changements Airbnb et Booking. Tu reçois une notification et le résumé est rangé dans ton Drive.</p><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
+        </div>
+      </div>
+      <div class="section"><div class="section-head"><h2>Ma carte</h2><span class="note" id="ent-bilan"></span></div><div id="ent-carte"></div></div>
     </section>
 
     <!-- NOTES VOCALES -->
@@ -918,6 +948,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 (function(){
   'use strict';
   var ICONS={
+    entreprise:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5" r="2"/><circle cx="19.5" cy="5" r="2"/><circle cx="4.5" cy="19" r="2"/><circle cx="19.5" cy="19" r="2"/><path d="M6 6.5l3.8 3.6M18 6.5l-3.8 3.6M6 17.5l3.8-3.6M18 17.5l-3.8-3.6"/></svg>',
     accueil:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
     contacts:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
     prospection:'<svg viewBox="0 0 24 24"><path d="M4 5h16M6 12h12M9 19h6"/></svg>',
@@ -934,9 +965,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes vocales',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Chiffre d\'affaires',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
-    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes vocales']]],
+    ['Vue d\'ensemble',[['accueil','Tableau de bord'],['entreprise','Mon entreprise'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes vocales']]],
     ['Développement',[['prospection','Prospection']]],
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Chiffre d\'affaires'],['simprop','Simulateur propriétaire'],['charges','Charges']]],
@@ -1050,6 +1081,36 @@ h2,h3{font-weight:500;letter-spacing:0}
       l.forEach(function(x){var tit=x.k==='t'?titreTache(x.t).tit:'Relancer '+fullName(x.c);h+='<div class="wk-chip" '+(x.k==='t'?'data-tache="'+esc(x.t.id)+'"':'data-relance="'+esc(x.c.id)+'"')+st+' title="'+esc(tit)+'">'+esc(tit)+'</div>';});});
     return h;}
   function toastAnnuler(msg,fn){var t=$('toast');t.innerHTML=esc(msg)+'<button type="button" class="toast-annul">Annuler</button>';t.classList.add('show','actif');t.querySelector('button').onclick=function(){fn();t.classList.remove('show','actif');};clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show','actif');},5000);}
+  var ROUTINE=[
+    ['Chaque jour','Tout seul',[['Tri de tes mails, repérage des annonces Leboncoin, nouveaux prospects dans le CRM, événements du 06, notes vocales rangées','auto'],['Ta prospection : 20 minutes de socle puis le thème du jour (voir ta semaine type dans Prospection)','toi']]],
+    ['Chaque semaine','',[['Lundi : veille location saisonnière et point fiche Google','auto'],['Vendredi : relances, pipeline à jour, préparation de la semaine suivante','toi'],['1 heure de formation School, toujours au même créneau','toi']]],
+    ['Chaque mois','',[['Le 1er : déclaration URSSAF, planning réseaux sociaux avec Claude, point finances (factures de commission, encaissements, mise de côté, justificatifs rangés)','toi'],['Le 5 : relevé du mois envoyé à chaque propriétaire','toi']]],
+    ['Chaque trimestre','',[['Bilan : chiffres, objectifs, ce qui marche, ce que j\'ajuste, et une réussite à célébrer','toi']]],
+    ['Chaque année','',[['Décembre : avis de CFE à vérifier et payer avant le 15','toi'],['Mai : chiffre d\'affaires de l\'année sur ta déclaration de revenus','toi'],['Renouvellement assurance RC pro (date à noter)','toi']]]
+  ];
+  var CARTE=[
+    ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','part','À ranger dans le tiroir Documents'],['Respect de la réglementation','ok','Veille chaque lundi'],['Archivage des documents','part','Classement Drive à définir']]],
+    ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Chiffre d\'affaires'],['Suivi du chiffre d\'affaires','ok','Page Chiffre d\'affaires'],['Suivi des charges','ok','Page Charges'],['Encaissements et paiements','part','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','non','Au point finances du 1er'],['Prévisionnel et rentabilité par bien','part','Simulateur propriétaire, à compléter par bien']]],
+    ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, semaine type'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','non','Relevé mensuel le 5']]],
+    ['Communication et marketing','reseaux',[['Image de marque','ok','Plaquette du graphiste'],['Site internet et SEO','ok','Demandes du site suivies toutes les heures'],['Fiche Google Business','ok','Point chaque lundi'],['Réseaux sociaux et contenus','ok','Planning le 1er du mois, Studio réseaux sociaux'],['E réputation, réponses aux avis','part','Réponses rédigées avec Claude, à faire régulièrement'],['Publicité','non','Pas de budget pour l\'instant, choix validé']]],
+    ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Accès privés chiffrés'],['Channel manager','part','Prévu dans tes charges']]],
+    ['Stratégie et pilotage','divers',[['Objectifs','ok','1 signature par mois, 12 à 15 logements fin 2027'],['Plan d\'action','ok','Programme de prospection'],['Suivi des indicateurs','part','CA suivi, taux d\'occupation à ajouter'],['Prendre du recul','non','Bilan chaque trimestre']]],
+    ['Prestataires','logements',[['Ménage, protocole et photos de fin','ok','Page Opérationnel'],['Réseau de prestataires','part','Une seule personne ménage : prévoir un plan B'],['Maintenance et dépannage','part','Artisans de confiance à ajouter dans Contacts']]],
+    ['Formation et veille','reseaux',[['Formation School','part','Lien et créneau hebdomadaire ci dessus'],['Veille réglementaire','ok','Chaque lundi'],['Veille marché et événements','ok','Événements du 06 chaque jour']]],
+    ['Temps et équilibre','divers',[['Organisation des journées','ok','Tableau de bord et planning'],['Charge de travail','part','Semaine type, une chose à la fois'],['Équilibre vie pro, vie perso','non','À poser : horaires de fin de journée, jours off']]],
+    ['Offres et services','logements',[['Offres et tarifs','ok','Premium 25 %, opérationnel 15 %, mise en place 300 €'],['Kit Maison Solina Signature','ok','Page Opérationnel'],['Expériences voyageurs premium','part','Idées à nourrir dans la Boîte à idées']]],
+    ['Relation client','logements',[['Voyageurs : messages, accueil, séjour','ok','Messages automatiques Airbnb'],['Propriétaires : suivi et transparence','non','Relevé mensuel le 5'],['Gestion des avis','part','Voir E réputation']]],
+    ['Logements','logements',[['Annonces Airbnb et Booking','ok','Fiches logements'],['Ménage, linge, réassort','ok','Page Opérationnel'],['Prix et saisonnalité','ok','Conseils prix avec les événements'],['Mise en place d\'un nouveau bien','ok','Procédure dans Opérationnel']]]
+  ];
+  var ETATS={ok:['En place','#6E9B6A','#E5EFE2'],part:['À compléter','#B8901F','#FAF0D0'],non:['À mettre en place','#C0567F','#FBE6EE']};
+  function renderEntreprise(){
+    var r=$('ent-routine');if(!r)return;
+    r.innerHTML='<div class="routine">'+ROUTINE.map(function(b){return '<div class="rt-bloc"><div class="rt-quand">'+esc(b[0])+'</div>'+b[2].map(function(x){return '<div class="rt-l"><span class="rt-qui '+x[1]+'">'+(x[1]==='auto'?'Claude':'Toi')+'</span><span>'+esc(x[0])+'</span></div>';}).join('')+'</div>';}).join('')+'</div>';
+    var tot={ok:0,part:0,non:0};
+    $('ent-carte').innerHTML='<div class="carte-g">'+CARTE.map(function(b){var C=CAT[b[1]],n={ok:0,part:0,non:0};b[2].forEach(function(x){n[x[1]]++;tot[x[1]]++;});
+      return '<details class="carte-b" style="border-top:4px solid '+C.coul+'"><summary><span class="cb-t">'+esc(b[0])+'</span><span class="cb-n">'+['ok','part','non'].filter(function(k){return n[k];}).map(function(k){return '<i style="background:'+ETATS[k][1]+'"></i>'+n[k];}).join(' ')+'</span></summary>'+b[2].map(function(x){var E=ETATS[x[1]];return '<div class="cb-l"><span class="cb-e" style="background:'+E[2]+';color:'+E[1]+'">'+E[0]+'</span><span><b>'+esc(x[0])+'</b><br><span class="note">'+esc(x[2])+'</span></span></div>';}).join('')+'</details>';}).join('')+'</div>';
+    $('ent-bilan').innerHTML='<i class="pt" style="background:#6E9B6A"></i>'+tot.ok+' en place <i class="pt" style="background:#B8901F"></i>'+tot.part+' à compléter <i class="pt" style="background:#C0567F"></i>'+tot.non+' à mettre en place';
+  }
   var AG=null;
   try{var agc=localStorage.getItem('solina-agenda');if(agc)AG=JSON.parse(agc);}catch(e){}
   function heureDe(v){return v&&v.length>10?v.slice(11,16).replace(':','h'):'';}
@@ -1505,7 +1566,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
 
   function renderFinance(){renderBiens();renderCA();renderCharges();}
-  function renderAll(){renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
+  function renderAll(){renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
