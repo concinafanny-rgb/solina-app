@@ -662,6 +662,7 @@ h2,h3{font-weight:500;letter-spacing:0}
         <form class="addline" id="task-form" style="margin-bottom:10px">
           <input id="task-input" placeholder="Nouvelle tâche…" autocomplete="off">
           <input id="task-date" type="date" class="short">
+          <select id="task-cat" class="short" aria-label="Catégorie"><option value="">Catégorie</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select>
           <button class="btn primary" type="submit">Ajouter</button>
         </form>
         <div class="chips" id="task-filtres" style="margin:4px 0 8px;flex-wrap:wrap"></div><div id="task-kanban"></div>
@@ -999,7 +1000,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
     <div class="two"><div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div><div class="field"><label for="t-log">Logement</label><select id="t-log"></select></div></div>
-    <div class="field"><label for="t-cat">Catégorie (couleur)</label><select id="t-cat"><option value="">Automatique</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="divers">Divers</option></select></div>
+    <div class="field"><label for="t-cat">Catégorie (couleur)</label><select id="t-cat"><option value="">Automatique</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select></div>
     <div class="actions" id="t-liens"></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
     <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
@@ -1168,8 +1169,8 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'prescripteurs à démarcher','partenaires','prospection'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
     renderAgenda();
   }
-  var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
-  var CAT_ORDRE=['prospection','partenaires','logements','admin','reseaux','divers'];
+  var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
+  var CAT_ORDRE=['prospection','partenaires','logements','admin','reseaux','perso','divers'];
   function catContact(c){if(!c)return '';if(c.type==='prospect')return 'prospection';if(['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0)return 'partenaires';if(['client','prestataire'].indexOf(c.type)>=0)return 'logements';return '';}
   function catTache(t){if(t.categorie&&CAT[t.categorie])return t.categorie;var ti=(t.titre||'').toLowerCase();
     if(/^envoyer le message|^répondre sur/.test(ti))return 'prospection';
@@ -2120,7 +2121,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}saveContact(data,editingId).then(function(){toast('Enregistré');closeSheet();});});
   $('search').addEventListener('input',function(){query=this.value;renderContacts();});
   $('type-chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;filterType=c.dataset.type;this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===c);});renderContacts();});
-  $('task-form').addEventListener('submit',function(e){e.preventDefault();var v=$('task-input').value.trim();if(!v)return;save('taches',{id:uid('t'),titre:v,date:$('task-date').value||'',fait:false,statut:'a_faire',createdAt:new Date().toISOString()});$('task-input').value='';$('task-date').value='';});
+  $('task-form').addEventListener('submit',function(e){e.preventDefault();var v=$('task-input').value.trim();if(!v)return;save('taches',{id:uid('t'),titre:v,date:$('task-date').value||'',categorie:$('task-cat').value,fait:false,statut:'a_faire',createdAt:new Date().toISOString()});$('task-input').value='';$('task-date').value='';});
   $('idea-form').addEventListener('submit',function(e){e.preventDefault();var v=$('idea-input').value.trim();if(!v)return;save('idees',{id:uid('i'),titre:v,categorie:$('idea-cat').value,note:'',statut:'Idée',createdAt:new Date().toISOString()});$('idea-input').value='';toast('Idée notée');});
   $('post-form').addEventListener('submit',function(e){e.preventDefault();var t=$('po-titre').value.trim();if(!t){$('po-titre').focus();return;}var ex=postEdit?byId(S.posts,postEdit):null;var date=$('po-date').value||'';save('posts',Object.assign({},ex||{id:uid('p'),statut:'Idée',createdAt:new Date().toISOString()},{date:date,reseau:$('po-reseau').value,format:$('po-format').value,titre:t,legende:$('po-legende').value.trim()})).catch(function(){});if(date)poMois=date.slice(0,7);toast(ex?'Publication modifiée':'Ajoutée au planning');finEditionPost();renderPosts();});
   $('po-annuler').addEventListener('click',finEditionPost);
