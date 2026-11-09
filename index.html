@@ -372,6 +372,14 @@ details.anciens{margin-top:16px}
 .cb-ed input,.cb-ed select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun);min-width:0}
 .cb-ed select{grid-row:1;grid-column:1}.cb-ed input[data-ce$='|0']{grid-row:1;grid-column:2}.cb-ed [data-cdel]{grid-row:1;grid-column:3}
 .cb-ed input[data-ce$='|2']{grid-row:2;grid-column:1 / -1}
+.sp-atouts{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:4px;font-size:13.5px}
+.sp-atouts label{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;color:var(--brun)}
+.sp-atouts input{width:18px;height:18px;accent-color:#4F6B57}
+.sp-airdna{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.anciens-sep{grid-column:1 / -1;display:flex;align-items:center;gap:12px;margin:22px 0 4px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8C8580}
+.anciens-sep::before,.anciens-sep::after{content:"";flex:1;height:1px;background:var(--line)}
+.logc.ancien{background:#EEEBE8;border-color:#DDD8D3;color:#7E7873;cursor:pointer;text-align:left}
+.logc.ancien h3{color:#6F6964}
 .toast-annul{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;margin-left:12px;cursor:pointer;padding:0}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--terre);color:var(--terre);display:inline-flex;align-items:center;justify-content:center;background:var(--card);flex:none}
 .micbtn:hover{background:var(--terre);color:#fff}
@@ -707,56 +715,67 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="ph"><div class="pl" style="color:#4F6B57">Pour un propriétaire</div><h1>Simulateur propriétaire</h1><div class="pd">Ce que le bien d'un propriétaire peut lui rapporter, et le document à son nom, avec ton logo, à lui envoyer.</div></div>
       <div class="grid cards-2">
         <div class="card">
-          <div class="ctit">Le bien et la location</div>
+          <div class="ctit">Le bien</div>
           <div class="form">
             <div class="two">
-              <div class="field"><label for="sp-nom">Nom du bien</label><input id="sp-nom" placeholder="Villa des Pins"></div>
               <div class="field"><label for="sp-prop">Propriétaire</label><input id="sp-prop" placeholder="Madame Dupont"></div>
+              <div class="field"><label for="sp-nom">Nom du bien</label><input id="sp-nom" placeholder="Villa des Pins"></div>
             </div>
+            <div class="field"><label for="sp-adr">Adresse du logement</label><input id="sp-adr" placeholder="12 boulevard de la Garoupe, Antibes" autocomplete="off"></div>
+            <div class="three">
+              <div class="field"><label for="sp-type">Type</label><select id="sp-type"><option>Appartement</option><option>Maison</option><option>Villa</option><option>Studio</option></select></div>
+              <div class="field"><label for="sp-pieces">Pièces</label><input type="number" id="sp-pieces" value="3"></div>
+              <div class="field"><label for="sp-ch">Chambres</label><input type="number" id="sp-ch" value="2"></div>
+            </div>
+            <div class="three">
+              <div class="field"><label for="sp-surf">Surface m²</label><input type="number" id="sp-surf" placeholder="65"></div>
+              <div class="field"><label for="sp-voy">Voyageurs</label><input type="number" id="sp-voy" value="4"></div>
+              <div class="field"></div>
+            </div>
+            <div class="sp-atouts"><label><input type="checkbox" data-atout="piscine"> Piscine</label><label><input type="checkbox" data-atout="vue mer"> Vue mer</label><label><input type="checkbox" data-atout="terrasse ou jardin"> Terrasse ou jardin</label><label><input type="checkbox" data-atout="parking"> Parking</label><label><input type="checkbox" data-atout="climatisation"> Climatisation</label><label><input type="checkbox" data-atout="plage à pied"> Plage à pied</label></div>
+          </div>
+          <div class="ctit" style="margin-top:18px">L'estimation</div>
+          <div class="sp-airdna"><a class="btn sm" data-ouvrir="lienAirdna" target="_blank" rel="noopener">Ouvrir AirDNA</a><span class="note">Cherche l'adresse dans AirDNA, puis reporte ici son prix moyen par nuit et son taux d'occupation.</span></div>
+          <div class="form">
             <div class="three">
               <div class="field"><label for="sp-prix">Prix / nuit €</label><input type="number" id="sp-prix" value="180"></div>
               <div class="field"><label for="sp-occ">Occupation %</label><input type="number" id="sp-occ" value="60"></div>
               <div class="field"><label for="sp-nuits">Nuits ouvertes / an</label><input type="number" id="sp-nuits" value="200"></div>
             </div>
-            <div class="three">
-              <div class="field"><label for="sp-plat">Frais plateforme %</label><input type="number" step="0.1" id="sp-plat" value="3"></div>
+            <div class="two">
               <div class="field"><label for="sp-com">Commission MS %</label><input type="number" step="0.1" id="sp-com" value="25"></div>
-              <div class="field"><label for="sp-loyer">Loyer longue durée €/mois</label><input type="number" id="sp-loyer" value="1200"></div>
+              <div class="field"><label for="sp-fisc">Régime fiscal (information)</label>
+                <select id="sp-fisc"><option value="30">Micro-BIC non classé, abattement 30 %</option><option value="50">Micro-BIC classé, abattement 50 %</option><option value="0">Réel ou ne pas afficher</option></select></div>
             </div>
           </div>
           <div class="ctit" style="margin-top:18px">Charges annuelles du propriétaire</div>
           <div class="form">
             <div class="three">
               <div class="field"><label for="sp-tf">Taxe foncière</label><input type="number" id="sp-tf" value="1200"></div>
+              <div class="field"><label for="sp-th">Taxe d'habitation ou CFE</label><input type="number" id="sp-th" value="0"></div>
               <div class="field"><label for="sp-copro">Copropriété</label><input type="number" id="sp-copro" value="0"></div>
-              <div class="field"><label for="sp-assur">Assurance</label><input type="number" id="sp-assur" value="400"></div>
             </div>
             <div class="three">
+              <div class="field"><label for="sp-assur">Assurance</label><input type="number" id="sp-assur" value="400"></div>
               <div class="field"><label for="sp-energie">Énergie + eau</label><input type="number" id="sp-energie" value="1500"></div>
               <div class="field"><label for="sp-net">Internet</label><input type="number" id="sp-net" value="360"></div>
-              <div class="field"><label for="sp-conso">Consommables + linge</label><input type="number" id="sp-conso" value="600"></div>
             </div>
             <div class="two">
-              <div class="field"><label for="sp-entretien">Entretien, petites réparations</label><input type="number" id="sp-entretien" value="500"></div>
-              <div class="field"><label for="sp-fisc">Régime fiscal (information)</label>
-                <select id="sp-fisc"><option value="30">Micro-BIC non classé, abattement 30 %</option><option value="50">Micro-BIC classé, abattement 50 %</option><option value="0">Réel ou ne pas afficher</option></select></div>
+              <div class="field"><label for="sp-conso">Consommables + linge</label><input type="number" id="sp-conso" value="600"></div>
+              <div class="field"></div>
             </div>
-            <div class="hint">Le ménage et la blanchisserie sont payés par les voyageurs, ils ne pèsent pas sur le propriétaire. La fiscalité dépend de sa situation : le document le renvoie vers son conseiller.</div>
+            <div class="hint">Taxe d'habitation : due si le propriétaire garde le logement à sa disposition une partie de l'année (résidence secondaire), souvent majorée sur la Côte d'Azur. S'il le loue toute l'année sans l'occuper, c'est en général la CFE à la place : regarde son avis d'imposition. Le ménage et la blanchisserie sont payés par les voyageurs.</div>
           </div>
         </div>
         <div>
           <div class="result">
             <div class="rl">Par an, pour le propriétaire</div>
             <div class="rr"><span>Nuits louées</span><span id="sp-r-nuits">—</span></div>
-            <div class="rr"><span>Revenus bruts de location</span><span id="sp-r-brut">—</span></div>
-            <div class="rr"><span>Frais de plateforme</span><span id="sp-r-plat">—</span></div>
-            <div class="rr"><span>Loyers encaissés</span><span id="sp-r-loyers">—</span></div>
+            <div class="rr"><span>Revenus de location</span><span id="sp-r-brut">—</span></div>
             <div class="rr"><span>Commission Maison Solina</span><span id="sp-r-com">—</span></div>
             <div class="rr"><span>Charges du bien</span><span id="sp-r-charges">—</span></div>
             <div class="rr big"><span>Net avant impôt</span><span id="sp-r-net">—</span></div>
             <div class="rr"><span>Soit par mois</span><span id="sp-r-mois">—</span></div>
-            <div class="rr"><span>Location longue durée, net</span><span id="sp-r-ld">—</span></div>
-            <div class="rr"><span>Écart en faveur du court terme</span><span id="sp-r-ecart">—</span></div>
           </div>
           <div class="actions" style="margin-top:12px">
             <button class="btn primary" id="sp-doc">Créer le document PDF</button>
@@ -1477,7 +1496,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var el=$('log-list');if(!el)return;
     var tous=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');}),l=tous.filter(function(b){return b.actif!==false;}),anciens=tous.filter(function(b){return b.actif===false;});
     el.innerHTML=(l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
-      return '<button class="logc'+(b.photo?' avecphoto':'')+'" data-log="'+esc(b.id)+'">'+(b.photo?'<img class="logc-img" src="'+esc(b.photo)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'<span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(anciens.length?'<details class="plier anciens"><summary class="groupe">Anciens logements · '+anciens.length+' <span class="fl">›</span></summary><div class="list">'+anciens.map(function(b){return '<button class="row" data-log="'+esc(b.id)+'" style="text-align:left"><span class="body"><span class="t">'+esc(b.nom)+'</span><span class="s">Plus en contrat</span></span></button>';}).join('')+'</div></details>':'');
+      return '<button class="logc'+(b.photo?' avecphoto':'')+'" data-log="'+esc(b.id)+'">'+(b.photo?'<img class="logc-img" src="'+esc(b.photo)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'<span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(anciens.length?'<div class="anciens-sep"><span>Anciens logements</span></div>'+anciens.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;return '<div class="logc ancien" role="button" tabindex="0" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom)+'</h3><div class="s">'+esc([b.ville,p?fullName(p):''].filter(Boolean).join(' · ')||'Plus en contrat')+'</div><div class="fait"><button type="button" class="btn xs" data-reactiver="'+esc(b.id)+'">Remettre en logement actif</button></div></div>';}).join(''):'');
   }
   function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
@@ -1555,29 +1574,32 @@ h2,h3{font-weight:500;letter-spacing:0}
   /* Simulateur propriétaire */
   function spCalc(){
     var v=function(id){return num($(id).value);};
-    var nuits=Math.round(v('sp-nuits')*v('sp-occ')/100),brut=nuits*v('sp-prix'),plat=brut*v('sp-plat')/100,loyers=brut-plat,com=loyers*v('sp-com')/100;
-    var charges=v('sp-tf')+v('sp-copro')+v('sp-assur')+v('sp-energie')+v('sp-net')+v('sp-conso')+v('sp-entretien');
-    var net=loyers-com-charges;var ld=v('sp-loyer')*12-(v('sp-tf')+v('sp-copro')+v('sp-assur'));
-    var r={nuits:nuits,brut:brut,plat:plat,loyers:loyers,com:com,charges:charges,net:net,ld:ld,ecart:net-ld,abat:v('sp-fisc')};
-    $('sp-r-nuits').textContent=nuits+' nuits';$('sp-r-brut').textContent=eur(brut);$('sp-r-plat').textContent='− '+eur(plat);$('sp-r-loyers').textContent=eur(loyers);$('sp-r-com').textContent='− '+eur(com);$('sp-r-charges').textContent='− '+eur(charges);$('sp-r-net').textContent=eur(net);$('sp-r-mois').textContent=eur(net/12);$('sp-r-ld').textContent=eur(ld);$('sp-r-ecart').textContent=(r.ecart>=0?'+ ':'− ')+eur(Math.abs(r.ecart));
+    var nuits=Math.round(v('sp-nuits')*v('sp-occ')/100),brut=nuits*v('sp-prix'),plat=0,loyers=brut,com=loyers*v('sp-com')/100;
+    var charges=v('sp-tf')+v('sp-th')+v('sp-copro')+v('sp-assur')+v('sp-energie')+v('sp-net')+v('sp-conso');
+    var net=loyers-com-charges;
+    var r={nuits:nuits,brut:brut,plat:plat,loyers:loyers,com:com,charges:charges,net:net,abat:v('sp-fisc')};
+    $('sp-r-nuits').textContent=nuits+' nuits';$('sp-r-brut').textContent=eur(brut);$('sp-r-com').textContent='− '+eur(com);$('sp-r-charges').textContent='− '+eur(charges);$('sp-r-net').textContent=eur(net);$('sp-r-mois').textContent=eur(net/12);
     $('sp-prev').innerHTML='<div class="dh">'+esc(spTitle())+'</div>'+esc(spText(r));return r;
   }  var spMin=null;function spApercu(){clearTimeout(spMin);spMin=setTimeout(function(){var f=$('sp-frame');if(!f)return;try{f.srcdoc=spDocHTML(spCalc());}catch(e){}},250);}
 
   function spTitle(){return 'Proposition Maison Solina · '+($('sp-nom').value.trim()||'votre bien');}
+  function designation(){var t=$('sp-type').value,p=num($('sp-pieces').value),c=num($('sp-ch').value),sf=num($('sp-surf').value),vy=num($('sp-voy').value);
+    var at=[].slice.call(document.querySelectorAll('[data-atout]')).filter(function(x){return x.checked;}).map(function(x){return x.dataset.atout;});
+    var d=t+(t!=='Studio'&&p?' de '+p+' pièces':'')+(c?', '+c+' chambre'+(c>1?'s':''):'')+(sf?', '+sf+' m²':'')+(vy?', '+vy+' voyageurs':'');
+    if(at.length)d+=', '+(at.length>1?at.slice(0,-1).join(', ')+' et '+at[at.length-1]:at[0]);return d;}
   function spText(r){
     var nom=$('sp-nom').value.trim()||'votre bien',prop=$('sp-prop').value.trim();
     var L=[];
-    L.push((prop?prop+', v':'V')+'oici, en toute transparence, ce que '+nom+' peut vous rapporter en location courte durée, accompagné par Maison Solina.');
+    L.push((prop?prop+', v':'V')+'oici, en toute transparence, ce que '+nom+' peut vous rapporter en location courte durée, accompagné par Maison Solina.');L.push('');L.push('LE BIEN');L.push(designation()+($('sp-adr').value.trim()?', '+$('sp-adr').value.trim():'')+'.');
     L.push('');L.push('HYPOTHÈSES');
     L.push('Prix moyen par nuit : '+eur(num($('sp-prix').value))+'. Nuits ouvertes à la location : '+num($('sp-nuits').value)+' par an. Taux d\'occupation retenu : '+num($('sp-occ').value)+' %, soit '+r.nuits+' nuits louées.');
     L.push('');L.push('REVENUS');
-    L.push('Revenus bruts de location : '+eur(r.brut));L.push('Frais de plateforme ('+num($('sp-plat').value)+' %) : '+eur(r.plat));L.push('Loyers encaissés : '+eur(r.loyers));
+    L.push('Revenus de location : '+eur(r.brut));
     L.push('Commission Maison Solina ('+num($('sp-com').value)+' %, tout inclus, sans frais cachés) : '+eur(r.com));
     L.push('');L.push('CHARGES DU BIEN');
-    L.push('Taxe foncière, copropriété, assurance, énergie, internet, consommables et linge, entretien : '+eur(r.charges)+' par an. Le ménage et la blanchisserie sont réglés par les voyageurs et ne vous coûtent rien.');
+    L.push('Taxe foncière, taxe d\'habitation ou CFE, copropriété, assurance, énergie, internet, consommables et linge : '+eur(r.charges)+' par an. Le ménage et la blanchisserie sont réglés par les voyageurs et ne vous coûtent rien.');
     L.push('');L.push('RÉSULTAT');
     L.push('Net avant impôt : '+eur(r.net)+' par an, soit environ '+eur(r.net/12)+' par mois.');
-    L.push('À titre de comparaison, une location longue durée au loyer de '+eur(num($('sp-loyer').value))+' par mois laisserait environ '+eur(r.ld)+' par an après taxe foncière, copropriété et assurance. Écart en faveur de la courte durée : '+(r.ecart>=0?'+ ':'− ')+eur(Math.abs(r.ecart))+'.');
     if(r.abat){L.push('');L.push('FISCALITÉ (à titre indicatif)');L.push('En micro BIC, un abattement forfaitaire de '+r.abat+' % s\'applique sur les loyers encaissés, soit une base imposable d\'environ '+eur(r.loyers*(1-r.abat/100))+'. Votre situation personnelle peut changer ce calcul : nous vous conseillons d\'en parler à votre conseiller.');}
     L.push('');L.push('Ces chiffres sont une projection et non une garantie : la location saisonnière varie avec les saisons, les événements et la qualité du bien. Maison Solina vous donne chaque mois le détail réel, dépense par dépense.');
     return L.join('\n');
@@ -1586,10 +1608,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function piedDoc(n){return '<div class="pied"><div>Ces chiffres sont une projection et non une garantie : la location saisonnière varie avec les saisons, les événements et la qualité du bien.</div><div style="text-align:right;white-space:nowrap"><b>Maison Solina</b> · maisonsolina.fr<br>Page '+n+' sur 2</div></div>';}
   function spDocHTML(r){
     var v=function(id){return num($(id).value);};
-    var nom=$('sp-nom').value.trim()||'votre bien',prop=$('sp-prop').value.trim();
+    var nom=$('sp-nom').value.trim()||'votre bien',prop=$('sp-prop').value.trim(),adr=$('sp-adr').value.trim();
     var auj=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-    var ecart=r.ecart>=0?'+ '+eur(r.ecart):'− '+eur(Math.abs(r.ecart));
-    var max=Math.max(r.net,r.ld,1),bc=Math.max(4,Math.round(100*Math.max(r.net,0)/max)),bl=Math.max(4,Math.round(100*Math.max(r.ld,0)/max));
     var ligne=function(l,m,cls){return '<tr class="'+(cls||'')+'"><td>'+l+'</td><td class="m">'+m+'</td></tr>';};
     var fisc=r.abat?'<div class="bloc"><h2>Fiscalité, à titre indicatif</h2><p>En micro BIC, un abattement forfaitaire de '+r.abat+' % s’applique sur les loyers encaissés, soit une base imposable d’environ '+eur(r.loyers*(1-r.abat/100))+' par an. Votre situation personnelle peut changer ce calcul : nous vous conseillons d’en parler à votre conseiller.</p></div>':'';
     return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Estimation de revenus, '+esc(nom)+'</title>'+
@@ -1607,19 +1627,17 @@ h2,h3{font-weight:500;letter-spacing:0}
     '.pied{position:absolute;left:18mm;right:18mm;bottom:12mm;border-top:1px solid #E8D9CC;padding-top:4mm;font-size:8pt;color:#9A8577;display:flex;justify-content:space-between;gap:8mm}.pied b{color:#935E36;font-weight:500}</style></head><body><div class="page">'+
     '<div class="tete"><img src="'+LOGO_MS+'" alt="Maison Solina"><div class="d"><b>Estimation de revenus</b>'+esc(auj)+'</div></div>'+
     '<h1>'+esc(nom.charAt(0).toUpperCase()+nom.slice(1))+'</h1>'+
-    '<p class="sous">'+(prop?'Préparée pour '+esc(prop)+', ':'')+'location courte durée accompagnée par Maison Solina</p>'+
+    '<p class="sous"><b style="font-weight:500;color:#6E584B">'+esc(designation())+'</b>'+(adr?'<br>'+esc(adr):'')+'<br>'+(prop?'Préparée pour '+esc(prop)+', ':'')+'location courte durée accompagnée par Maison Solina</p>'+
     '<p class="intro">Voici, en toute transparence, ce que votre bien peut vous rapporter chaque année en location saisonnière, une fois toutes les charges déduites, avec un accompagnement complet de Maison Solina.</p>'+
     '<div class="cles"><div class="cle fort"><b>'+eur(r.net)+'</b><span>Net par an avant impôt</span></div><div class="cle"><b>'+eur(r.net/12)+'</b><span>Soit par mois</span></div><div class="cle"><b>'+r.nuits+'</b><span>Nuits louées par an</span></div></div>'+
     '<div class="bloc"><h2>Les hypothèses</h2><div class="hyp"><div><b>'+eur(v('sp-prix'))+'</b><span>Prix moyen par nuit</span></div><div><b>'+v('sp-nuits')+'</b><span>Nuits ouvertes par an</span></div><div><b>'+v('sp-occ')+' %</b><span>Taux d’occupation</span></div></div></div>'+
     '<div class="bloc"><h2>Le détail sur une année</h2><table>'+
-      ligne('Revenus bruts de location',eur(r.brut))+
-      (v('sp-plat')>0?ligne('Frais de plateforme ('+v('sp-plat')+' %)','− '+eur(r.plat),'moins')+ligne('Loyers encaissés',eur(r.loyers)):'')+
+      ligne('Revenus de location',eur(r.brut))+
       ligne('Commission Maison Solina ('+v('sp-com')+' %, tout inclus, sans frais cachés)','− '+eur(r.com),'moins')+
-      ligne('Charges du bien (taxe foncière, copropriété, assurance, énergie, internet, consommables et linge, entretien)','− '+eur(r.charges),'moins')+
+      ligne('Charges du bien (taxe foncière, taxe d’habitation ou CFE, copropriété, assurance, énergie, internet, consommables et linge)','− '+eur(r.charges),'moins')+
       ligne('Net avant impôt',eur(r.net),'total')+
     '</table><p class="note">Le ménage et la blanchisserie sont réglés par les voyageurs et ne vous coûtent rien.</p></div>'+
     piedDoc(1)+'</div><div class="page"><div class="tete petite"><img src="'+LOGO_MS+'" alt="Maison Solina"><div class="d"><b>Estimation de revenus</b>'+esc(nom.charAt(0).toUpperCase()+nom.slice(1))+'</div></div><div style="height:9mm"></div>'+
-    '<div class="bloc"><h2>Et en location longue durée ?</h2><div class="barres"><div class="barre"><span>Location saisonnière</span><i style="width:'+(bc*0.9)+'mm"></i><em>'+eur(r.net)+'</em></div><div class="barre"><span>Location longue durée</span><i class="ld" style="width:'+(bl*0.9)+'mm"></i><em>'+eur(r.ld)+'</em></div></div><p class="note">Longue durée : loyer de '+eur(v('sp-loyer'))+' par mois, moins la taxe foncière, la copropriété et l’assurance. '+(r.ecart>=0?'La location saisonnière vous rapporte '+eur(r.ecart)+' de plus par an.':'Avec ces hypothèses, la longue durée rapporte '+eur(-r.ecart)+' de plus par an : nous pouvons en parler ensemble.')+'</p></div>'+
     fisc+
     '<div class="bloc accomp"><h2>Ce que comprend l’accompagnement</h2><p style="margin:0">La mise en valeur de votre bien et de ses annonces, l’accueil de chaque voyageur, le ménage hôtelier et le linge, le suivi technique, des prix ajustés au fil des saisons, et chaque mois un compte rendu détaillé, dépense par dépense.</p></div>'+
     '<div class="bloc"><h2>Parlons de votre projet</h2><p style="margin:0">Je serais ravie de venir découvrir votre bien et d\u2019affiner ensemble cette estimation. <b style="color:#935E36;font-weight:500">Fanny Concina</b>, fondatrice de Maison Solina, 06 76 94 52 08, contact@maisonsolina.fr</p></div>'+
@@ -2025,6 +2043,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var co=e.target.closest('[data-cocher]');if(co){var tt=byId(S.taches,co.dataset.cocher);if(tt){co.closest('.row').classList.add('cochee');setTimeout(function(){changerStatut(tt,'fait');toastAnnuler(tt.repeter?'Fait, elle reviendra '+(REPET[tt.repeter]||''):'Tâche faite',function(){var t2=byId(S.taches,tt.id);if(t2)save('taches',Object.assign({},t2,{statut:'a_faire',fait:false,faitLe:''})).catch(function(){});});},250);}return;}
     var tc=e.target.closest('[data-tache]');if(tc){ouvrirTache(tc.dataset.tache);return;}
     if(e.target.closest('[data-newtask]')){ouvrirTache(null);return;}
+    var ra=e.target.closest('[data-reactiver]');if(ra){var br=byId(S.biens,ra.dataset.reactiver);if(br){save('biens',Object.assign({},br,{actif:true})).catch(function(){});toast(br.nom+' est de nouveau un logement actif');}return;}
     var lg=e.target.closest('[data-log]');if(lg){ouvrirLogement(lg.dataset.log);return;}
     if(e.target.closest('[data-lclose]')){fermerLogement();return;}
     if(e.target.closest('[data-tachelog]')){tLogDefaut=lEdit;fermerLogement();ouvrirTache(null);return;}
