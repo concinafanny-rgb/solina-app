@@ -340,11 +340,11 @@ details.plier[open] .fl{transform:rotate(90deg)}
 .n-titre{font:inherit;font-size:19px;font-weight:500;color:var(--brun);border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 0;width:100%;margin-top:6px}
 .n-texte{flex:1;min-height:52vh;margin-top:10px;font:inherit;font-size:15.5px;line-height:1.6;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card);color:var(--brun);resize:vertical}
 #n-dicter.enreg{background:var(--rouge);border-color:var(--rouge)}
-.kp{padding:8px 10px;gap:8px;align-items:flex-start}
-.kp .t{font-size:13.5px;font-weight:500;white-space:normal}
+.kp{padding:6px 9px;gap:6px;align-items:flex-start}
+.kp .t{font-size:13px;font-weight:500;white-space:normal}
 .kp .s{font-size:12px}
 .ecarter{font-size:11px;padding:2px 8px;color:var(--muted);flex:none}
-.kp-bas{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.kp-bas{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:2px}
 .kp .s{white-space:normal}
 .kp .body{flex:1;min-width:0}
 .kp-bas .pill{font-size:9.5px;padding:2px 6px}
@@ -364,6 +364,14 @@ details.anciens{margin-top:16px}
 .sp-apercu{background:#E9E4DF;border-radius:14px;padding:14px;height:560px;overflow:hidden;position:relative}
 .sp-apercu iframe{border:0;width:794px;height:2300px;transform:scale(.62);transform-origin:0 0;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12);pointer-events:none}
 @media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}.logc-img{width:92px}}
+.bud-in{width:100px;text-align:right;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun)}
+.bud-in::placeholder{color:#C2B0A3}
+#bud-table tr.bud-auj td{background:#FCF4EE}
+#bud-table td{white-space:nowrap}
+.cb-ed{display:grid;grid-template-columns:118px 1fr auto;gap:6px;align-items:center}
+.cb-ed input,.cb-ed select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun);min-width:0}
+.cb-ed select{grid-row:1;grid-column:1}.cb-ed input[data-ce$='|0']{grid-row:1;grid-column:2}.cb-ed [data-cdel]{grid-row:1;grid-column:3}
+.cb-ed input[data-ce$='|2']{grid-row:2;grid-column:1 / -1}
 .toast-annul{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;margin-left:12px;cursor:pointer;padding:0}
 .micbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--terre);color:var(--terre);display:inline-flex;align-items:center;justify-content:center;background:var(--card);flex:none}
 .micbtn:hover{background:var(--terre);color:#fff}
@@ -568,7 +576,7 @@ h2,h3{font-weight:500;letter-spacing:0}
           <div class="card"><div class="ctit">Veille location saisonnière</div><p class="note" style="margin:0 0 10px">Un lundi sur deux, Claude fait le point : lois et fiscalité (LMNP, loi Le Meur, abattements), ce que les propriétaires doivent faire, Airbnb, Booking et les plateformes, règles des mairies, tourisme et hôtellerie. Un seul document qui garde tout, avec les dates de chaque mise à jour.</p><div style="display:flex;gap:8px"><input data-lien="lienVeille" placeholder="Lien du document de veille (rempli par Claude)" style="flex:1;min-width:0"><a class="btn sm" data-ouvrir="lienVeille" target="_blank" rel="noopener">Lire</a></div></div>
         </div>
       </div>
-      <div class="section"><div class="section-head"><h2>Ma carte</h2><span class="note" id="ent-bilan"></span></div><div id="ent-carte"></div></div>
+      <div class="section"><div class="section-head"><h2>Ma carte</h2><span style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="note" id="ent-bilan"></span><button type="button" class="btn sm" id="ent-modif">Modifier ma carte</button></span></div><div id="ent-carte"></div></div>
     </section>
 
     <!-- NOTES VOCALES -->
@@ -597,7 +605,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
     <!-- PROSPECTION -->
     <section class="panel" data-panel="prospection">
-      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche. « Pas pour moi » retire un bien qui ne t'intéresse pas.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1><div class="pd">Chaque propriétaire avance d'étape en étape. Change l'étape avec le menu sous chaque carte, ou touche la carte pour ouvrir sa fiche. « No way » retire un bien qui ne t'intéresse pas.</div></div><button class="btn primary sm" id="btn-new-prospect">+ Prospect</button></div>
       <div class="section-head" style="margin-top:22px"><h2>Mes canaux</h2><span class="note">Choisis un canal pour voir sa pipeline</span></div>
       <div class="canaux" id="canaux"></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
@@ -652,6 +660,16 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="section-head"><h2>Mes charges</h2><button class="btn sm" id="charge-add">+ Charge</button></div>
         <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
         <p class="note" style="margin-top:8px">Pour une charge annuelle (assurance, abonnement annuel), saisis le montant divisé par 12.</p>
+      </div>
+      <div class="section">
+        <div class="section-head"><h2>Budget prévisionnel <span id="bud-an-t"></span></h2><span style="display:flex;gap:8px;align-items:center"><button class="btn sm" data-budan="-1" aria-label="Année précédente">‹</button><button class="btn sm" data-budan="1" aria-label="Année suivante">›</button></span></div>
+        <div class="grid cards-4" id="bud-cartes"></div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0">
+          <div class="field"><label for="p-impot">Impôt à mettre de côté, % du CA</label><input type="number" step="0.1" id="p-impot" data-param="impot"></div>
+          <div class="field"><label for="p-treso">Épargne de trésorerie, % du net</label><input type="number" step="1" id="p-treso" data-param="treso"></div>
+        </div>
+        <div class="twrap"><table class="tbl" id="bud-table"><thead><tr><th>Mois</th><th class="r">CA prévu €</th><th class="r">CA réel</th><th class="r">URSSAF</th><th class="r">Impôt</th><th class="r">Charges</th><th class="r">Net</th><th class="r">À mettre de côté</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        <p class="note" style="margin-top:8px">Tape ton chiffre d'affaires prévu pour chaque mois (en gris : ce que tu as fait le même mois l'an dernier, pris tant que tu ne mets rien). Le reste se calcule : cotisations URSSAF, impôt, tes charges, ce qui reste dans ta poche, et ce qu'il faut mettre de côté chaque mois. Impôt : 1,7 % si tu as le versement libératoire, sinon demande le bon taux à ton expert comptable.</p>
       </div>
       <div class="section" style="margin-top:46px">
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2><div class="pd">Ton prévisionnel : chaque logement, ce qu'il rapporte, puis toutes tes charges et les cotisations, jusqu'au net dans ta poche.</div></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
@@ -1122,9 +1140,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     ['Chaque année','',[['Décembre : avis de CFE à vérifier et payer avant le 15','toi'],['Mai : chiffre d\'affaires de l\'année sur ta déclaration de revenus','toi'],['Renouvellement assurance RC pro (date à noter)','toi']]]
   ];
   var CARTE=[
-    ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','part','À ranger dans le tiroir Documents'],['Respect de la réglementation','ok','Veille un lundi sur deux'],['Archivage des documents','part','Classement Drive à définir']]],
-    ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Chiffre d\'affaires'],['Suivi du chiffre d\'affaires','ok','Page Finances'],['Suivi des charges','ok','Page Finances'],['Encaissements et paiements','part','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','non','Au point finances du 1er'],['Prévisionnel et rentabilité par bien','part','Simulateur propriétaire, à compléter par bien']]],
-    ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, semaine type'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
+    ['Administratif et juridique','admin',[['Déclaration de chiffre d\'affaires URSSAF et cotisations','ok','Rappel le 1er de chaque mois'],['Assurance RC pro','ok','Dans tes charges, date d\'échéance à noter'],['Contrats propriétaires, voyageurs, prestataires','ok','Rangés dans le Drive'],['Respect de la réglementation','ok','Veille un lundi sur deux'],['Archivage des documents','ok','Sur le Drive']]],
+    ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Finances, rétrocessions et versements des plateformes à ajouter'],['Suivi du chiffre d\'affaires','ok','Page Finances'],['Suivi des charges','ok','Page Finances'],['Encaissements et paiements','ok','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','ok','Montant calculé chaque mois dans le budget prévisionnel (Finances)'],['Budget prévisionnel et rentabilité par bien','ok','Budget prévisionnel dans Finances, simulateur propriétaire']]],
+    ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, semaine type, « Pas pour moi »'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
     ['Communication et marketing','reseaux',[['Image de marque','ok','Plaquette du graphiste'],['Site internet et SEO','ok','Demandes du site suivies toutes les heures'],['Fiche Google Business','ok','Point chaque lundi'],['Réseaux sociaux et contenus','ok','Planning le 1er du mois, Studio réseaux sociaux'],['E réputation, réponses aux avis','part','Réponses rédigées avec Claude, à faire régulièrement'],['Publicité','part','Outils gratuits pour l\'instant, budget plus tard']]],
     ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Accès privés chiffrés'],['Channel manager','part','Bientôt : réservations, opérationnel et relevés propriétaires, relié à Maison Solina']]],
     ['Stratégie et pilotage','divers',[['Objectifs','ok','1 signature par mois, 12 à 15 logements fin 2027'],['Plan d\'action','ok','Programme de prospection'],['Suivi des indicateurs','part','CA suivi, taux d\'occupation à ajouter'],['Prendre du recul','non','Bilan chaque trimestre']]],
@@ -1135,13 +1153,21 @@ h2,h3{font-weight:500;letter-spacing:0}
     ['Relation client','logements',[['Voyageurs : messages, accueil, séjour','ok','Messages automatiques Airbnb'],['Propriétaires : suivi et transparence','part','Relevé mensuel, bientôt via le channel manager'],['Gestion des avis','part','Voir E réputation']]],
     ['Logements','logements',[['Annonces Airbnb et Booking','ok','Fiches logements'],['Ménage, linge, réassort','ok','Page Opérationnel'],['Prix et saisonnalité','ok','Conseils prix avec les événements'],['Mise en place d\'un nouveau bien','ok','Procédure dans Opérationnel']]]
   ];
+  var carteEdit=false;
+  function carteData(){var c=S.params&&Array.isArray(S.params.carte)?S.params.carte:CARTE;return JSON.parse(JSON.stringify(c));}
+  function majCarte(fn){var c=carteData();fn(c);S.params.carte=c;saveParams();renderEntreprise();}
+  document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||!t.dataset.ce)return;var p=t.dataset.ce.split('|').map(Number);majCarte(function(c){var it=c[p[0]]&&c[p[0]][2][p[1]];if(it)it[p[2]]=p[2]===1?t.value:t.value.trim();});});
+  document.addEventListener('click',function(e){if(e.target.closest('#ent-modif')){carteEdit=!carteEdit;renderEntreprise();return;}var d=e.target.closest('[data-cdel]');if(d){var p=d.dataset.cdel.split('|').map(Number);majCarte(function(c){c[p[0]][2].splice(p[1],1);});return;}var a=e.target.closest('[data-cadd]');if(a){var bi=Number(a.dataset.cadd);majCarte(function(c){c[bi][2].push(['Nouveau poste','non','']);});}});
   var ETATS={ok:['En place','#6E9B6A','#E5EFE2'],part:['À compléter','#B8901F','#FAF0D0'],non:['À mettre en place','#C0567F','#FBE6EE']};
   function renderEntreprise(){
     var r=$('ent-routine');if(!r)return;
     r.innerHTML='<div class="routine">'+ROUTINE.map(function(b){return '<div class="rt-bloc"><div class="rt-quand">'+esc(b[0])+'</div>'+b[2].map(function(x){return '<div class="rt-l"><span class="rt-qui '+x[1]+'">'+(x[1]==='auto'?'Claude':'Toi')+'</span><span>'+esc(x[0])+'</span></div>';}).join('')+'</div>';}).join('')+'</div>';
-    var tot={ok:0,part:0,non:0};
-    $('ent-carte').innerHTML='<div class="carte-g">'+CARTE.map(function(b){var C=CAT[b[1]],n={ok:0,part:0,non:0};b[2].forEach(function(x){n[x[1]]++;tot[x[1]]++;});
-      return '<details class="carte-b" style="border-top:4px solid '+C.coul+'"><summary><span class="cb-t">'+esc(b[0])+'</span><span class="cb-n">'+['ok','part','non'].filter(function(k){return n[k];}).map(function(k){return '<i style="background:'+ETATS[k][1]+'"></i>'+n[k];}).join(' ')+'</span></summary>'+b[2].map(function(x){var E=ETATS[x[1]];return '<div class="cb-l"><span class="cb-e" style="background:'+E[2]+';color:'+E[1]+'">'+E[0]+'</span><span><b>'+esc(x[0])+'</b><br><span class="note">'+esc(x[2])+'</span></span></div>';}).join('')+'</details>';}).join('')+'</div>';
+    var tot={ok:0,part:0,non:0},CA=carteData();
+    $('ent-modif').textContent=carteEdit?'Terminer':'Modifier ma carte';$('ent-modif').classList.toggle('primary',carteEdit);
+    $('ent-carte').innerHTML=(carteEdit?'<p class="note" style="margin:0 0 10px">Change l\'état d\'un poste, son texte, ajoute ou retire des postes : tout s\'enregistre au fur et à mesure.</p>':'')+'<div class="carte-g">'+CA.map(function(b,bi){var C=CAT[b[1]]||CAT.divers,n={ok:0,part:0,non:0};b[2].forEach(function(x){n[x[1]]=(n[x[1]]||0)+1;tot[x[1]]=(tot[x[1]]||0)+1;});
+      var lignes=carteEdit?b[2].map(function(x,i){var k=bi+'|'+i;return '<div class="cb-l cb-ed"><select data-ce="'+k+'|1">'+['ok','part','non'].map(function(e){return '<option value="'+e+'"'+(x[1]===e?' selected':'')+'>'+ETATS[e][0]+'</option>';}).join('')+'</select><input data-ce="'+k+'|0" value="'+esc(x[0])+'" placeholder="Poste"><input data-ce="'+k+'|2" value="'+esc(x[2]||'')+'" placeholder="Où, comment"><button type="button" class="btn ghost xs" data-cdel="'+k+'" aria-label="Retirer ce poste">×</button></div>';}).join('')+'<button type="button" class="btn ghost sm" data-cadd="'+bi+'" style="margin-top:8px">+ Ajouter un poste</button>'
+        :b[2].map(function(x){var E=ETATS[x[1]]||ETATS.part;return '<div class="cb-l"><span class="cb-e" style="background:'+E[2]+';color:'+E[1]+'">'+E[0]+'</span><span><b>'+esc(x[0])+'</b><br><span class="note">'+esc(x[2]||'')+'</span></span></div>';}).join('');
+      return '<details class="carte-b" style="border-top:4px solid '+C.coul+'"'+(carteEdit?' open':'')+'><summary><span class="cb-t">'+esc(b[0])+'</span><span class="cb-n">'+['ok','part','non'].filter(function(k){return n[k];}).map(function(k){return '<i style="background:'+ETATS[k][1]+'"></i>'+n[k];}).join(' ')+'</span></summary>'+lignes+'</details>';}).join('')+'</div>';
     $('ent-bilan').innerHTML='<i class="pt" style="background:#6E9B6A"></i>'+tot.ok+' en place <i class="pt" style="background:#B8901F"></i>'+tot.part+' à compléter <i class="pt" style="background:#C0567F"></i>'+tot.non+' à mettre en place';
   }
   var AG=null;
@@ -1228,14 +1254,15 @@ h2,h3{font-weight:500;letter-spacing:0}
     if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(canalFiltre&&canalFiltre!=='__sans'?' · '+canalFiltre:canalFiltre?' · canal non précisé':'');
   }
   var CANAUX_ANNONCE=['Leboncoin','AlloVoisins','PAP','Groupes Facebook'];
+  function piecesDe(c){var t=[c.nom,c.bien,c.notes].join(' ');var m=t.match(/\b[TF]\s?(\d)\b/i)||t.match(/(\d)\s*pi[eè]ces?/i);if(m)return m[1]+'P';if(/studio/i.test(t))return '1P';if(/villa|maison/i.test(t))return 'Maison';return '';}
   function carteProspect(c){
     var annonce=CANAUX_ANNONCE.indexOf(c.canal)>=0&&!c.prenom&&!c.civilite;
     var titre=annonce?'Prospect '+c.canal:fullName(c);
-    var sous=annonce?[c.pseudo||'Pseudo à noter',c.ville]:(c.type==='prescripteur'?[c.categorie,c.ville]:[c.categorie&&c.categorie!=='Propriétaire'?c.categorie:'',c.ville,c.bien&&c.bien!==c.nom?c.bien:'']);
+    var sous=annonce?[c.ville,piecesDe(c),c.pseudo]:(c.type==='prescripteur'?[c.categorie,c.ville]:[c.categorie&&c.categorie!=='Propriétaire'?c.categorie:'',c.ville,c.bien&&c.bien!==c.nom?c.bien:'']);
     sous=sous.filter(Boolean).join(' · ');
     var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
-    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+couleurType(c.type)+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">Pas pour moi</button>':'')+'</span>':'')+'</span></div>';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+couleurType(c.type)+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
   }
   function kanbanFor(id,type,etapes){
     var k=$(id);if(!k)return;k.innerHTML='';
@@ -1609,7 +1636,28 @@ h2,h3{font-weight:500;letter-spacing:0}
     note.className='note';note.textContent='Dans la fenêtre qui s\u2019ouvre, choisis « Enregistrer en PDF ».';
   }
 
-  function renderFinance(){renderBiens();renderCA();renderCharges();}
+  var budAn=(new Date().getMonth()>=9?new Date().getFullYear()+1:new Date().getFullYear());
+  function caReelMois(m){return S.revenus.filter(function(r){return r.mois===m;}).reduce(function(a,r){return a+comRev(r);},0);}
+  function renderBudget(){
+    var tb=$('bud-table');if(!tb)return;
+    var B=(S.params.budget&&typeof S.params.budget==='object')?S.params.budget:{},prevu=(B[budAn]||[]);
+    var u=num(S.params.urssaf),im=S.params.impot===undefined||S.params.impot===''?1.7:num(S.params.impot),tr=S.params.treso===undefined||S.params.treso===''?10:num(S.params.treso),ch=chargesMois();
+    if(document.activeElement!==$('p-impot'))$('p-impot').value=im;if(document.activeElement!==$('p-treso'))$('p-treso').value=tr;
+    $('bud-an-t').textContent=budAn;
+    var T={p:0,r:0,u:0,i:0,c:0,n:0,m:0},auj=monthISO(),h='';
+    for(var k=0;k<12;k++){var m=budAn+'-'+String(k+1).padStart(2,'0'),ref=caReelMois((budAn-1)+'-'+String(k+1).padStart(2,'0')),saisi=prevu[k]!==undefined&&prevu[k]!==''&&prevu[k]!==null;
+      var ca=saisi?num(prevu[k]):ref,reel=m<=auj?caReelMois(m):null,base=reel!==null&&reel>0?reel:ca;
+      var uu=base*u/100,ii=base*im/100,nn=base-uu-ii-ch,mm=uu+ii+Math.max(0,nn)*tr/100;
+      T.p+=ca;T.r+=reel||0;T.u+=uu;T.i+=ii;T.c+=ch;T.n+=nn;T.m+=mm;
+      h+='<tr'+(m===auj?' class="bud-auj"':'')+'><td>'+esc(fmtMois(m))+'</td><td class="r"><input type="number" class="bud-in" data-budm="'+k+'" value="'+(saisi?esc(prevu[k]):'')+'" placeholder="'+Math.round(ref)+'"></td><td class="r">'+(reel===null?'<span class="note">à venir</span>':eur(reel))+'</td><td class="r">'+eur(uu)+'</td><td class="r">'+eur(ii)+'</td><td class="r">'+eur(ch)+'</td><td class="r"'+(nn<0?' style="color:var(--rouge)"':'')+'>'+eur(nn)+'</td><td class="r"><b>'+eur(mm)+'</b></td></tr>';}
+    tb.querySelector('tbody').innerHTML=h;
+    tb.querySelector('tfoot').innerHTML='<tr><td>Total '+budAn+'</td><td class="r">'+eur(T.p)+'</td><td class="r">'+eur(T.r)+'</td><td class="r">'+eur(T.u)+'</td><td class="r">'+eur(T.i)+'</td><td class="r">'+eur(T.c)+'</td><td class="r">'+eur(T.n)+'</td><td class="r">'+eur(T.m)+'</td></tr>';
+    var dm=new Date();dm.setMonth(dm.getMonth()-1);var mp=monthISO(dm),fp=caReelMois(mp),mise=fp*(u+im)/100+Math.max(0,fp*(1-(u+im)/100)-ch)*tr/100;
+    $('bud-cartes').innerHTML='<div class="card"><div class="num">'+eur(mise)+'</div><div class="lbl">à mettre de côté pour '+esc(fmtMois(mp))+' (facturé '+eur(fp)+')</div></div><div class="card"><div class="num">'+eur(T.p)+'</div><div class="lbl">CA prévu en '+budAn+'</div></div><div class="card"><div class="num">'+eur(T.n)+'</div><div class="lbl">net prévu dans ta poche en '+budAn+'</div></div><div class="card"><div class="num">'+eur(T.n/12)+'</div><div class="lbl">soit par mois en moyenne</div></div>';
+  }
+  document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||t.dataset.budm===undefined)return;var B=(S.params.budget&&typeof S.params.budget==='object')?JSON.parse(JSON.stringify(S.params.budget)):{};var a=B[budAn]||[];while(a.length<12)a.push('');a[Number(t.dataset.budm)]=t.value===''?'':num(t.value);B[budAn]=a;S.params.budget=B;saveParams();});
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-budan]');if(b){budAn+=Number(b.dataset.budan);renderBudget();}});
+  function renderFinance(){renderBiens();renderCA();renderCharges();renderBudget();}
   function renderAll(){renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
