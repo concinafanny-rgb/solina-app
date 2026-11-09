@@ -637,7 +637,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
       <div class="section" id="sec-presc"><div class="section-head"><h2>Pipeline prescripteurs</h2><span class="note">Agences, notaires et conseillers à démarcher</span></div><div class="kanban" id="kanban-presc"></div></div>
-      <div class="section" style="margin-top:34px"><div class="section-head"><div class="ph" style="margin:0"><div class="pl">Plan d'action</div><h2>Programme de prospection</h2></div></div><div id="plan" style="margin-top:14px"></div></div>
+      <div class="section" style="margin-top:40px"><h1 style="margin:0 0 16px">Plan d'action</h1><div id="plan"></div></div>
     </section>
 
     <!-- RELANCES -->
@@ -1065,7 +1065,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Dépôt de flyers','Cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
   var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
@@ -1282,7 +1282,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var ch=function(v,lib,l){var on=canalFiltre===v;return '<button type="button" class="chip'+(on?' active':'')+'" data-canal="'+(on?'':esc(v))+'">'+esc(lib)+' · '+enc(l)+'</button>';};
     var br=function(i){return pros.filter(function(c){return canalDe(c)&&brancheDe(canalDe(c))===i;});};
     var sans=pros.filter(function(c){return !canalDe(c);});
-    h+='<div class="canaux-autres"><span class="note">Ailleurs :</span>'+ch('b:1','Réseau et partenaires',br(1))+ch('b:2','Ils viennent à moi',br(2))+(sans.length?ch('__sans','Canal non précisé',sans):'')+(canalFiltre?'<button type="button" class="chip" data-canal="">Tout voir</button>':'')+'</div>';
+    if(canalFiltre&&BRANCHES[0][1].indexOf(canalFiltre)<0)h+='<div class="canaux-autres"><button type="button" class="chip" data-canal="">Tout voir</button></div>';
     el.innerHTML=h;
   }
   /* Envoi courrier : propriétaires repérés dans l'annuaire des entreprises (collection courriers) */
@@ -1353,7 +1353,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var docs=(S.plan||[]).slice().sort(function(a,b){return num(a.ordre)-num(b.ordre);});
     if(!docs.length){el.innerHTML='<div class="empty"><b>Pas encore de plan</b>Demande à Claude de construire le plan de prospection ici.</div>';return;}
     el.innerHTML=docs.map(function(d){
-      var head='<div class="section-head"><h2>'+esc(d.titre||'')+'</h2></div>'+(d.intro?'<div class="pd" style="font-size:13px;color:var(--muted);margin:-4px 0 10px;max-width:640px">'+esc(d.intro)+'</div>':'');
+      var head='<div class="section-head"><h2>'+esc(d.titre||'')+'</h2></div>';
       var rows=d.rows||[];
       if(d.type==='cards'){
         return '<div class="section" style="margin-top:0">'+head+'<div class="grid cards-4">'+rows.map(function(r){return '<div class="card"><div class="num">'+esc(r.valeur||'')+'</div><div class="lbl">'+esc(r.libelle||'')+'</div></div>';}).join('')+'</div></div>';
