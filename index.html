@@ -360,7 +360,8 @@ details.anciens{margin-top:16px}
 [data-panel="simprop"] .ctit{color:#4F6B57}
 .sp-apercu{background:#E9E4DF;border-radius:14px;padding:14px;height:560px;overflow:hidden;position:relative}
 .sp-apercu iframe{border:0;width:794px;height:2300px;transform:scale(.62);transform-origin:0 0;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12);pointer-events:none}
-@media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}.bud-in{width:100px;text-align:right;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun)}
+@media (max-width:699px){.sp-apercu{height:420px}.sp-apercu iframe{transform:scale(.42)}}
+.bud-in{width:100px;text-align:right;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--brun)}
 .bud-in::placeholder{color:#C2B0A3}
 #bud-table tr.bud-auj td{background:#FCF4EE}
 #bud-table td{white-space:nowrap}
@@ -1304,7 +1305,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function renderContacts(){
     var q=query.trim().toLowerCase();
-    var list=S.contacts.filter(function(c){if(filterType&&c.type!==filterType)return false;if(!q)return true;return [fullName(c),c.categorie,c.ville,c.bien,c.notes,c.email,c.tel,c.source].join(' ').toLowerCase().indexOf(q)>=0;}).sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');});
+    var list=S.contacts.filter(function(c){if(c.etape==='ecarte')return false;if(filterType&&c.type!==filterType)return false;if(!q)return true;return [fullName(c),c.categorie,c.ville,c.bien,c.notes,c.email,c.tel,c.source].join(' ').toLowerCase().indexOf(q)>=0;}).sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');});
     $('contact-list').innerHTML=list.length?list.map(function(c){return contactRow(c);}).join(''):'<div class="empty"><b>Aucun contact ici</b>'+(S.contacts.length?'Change le filtre ou la recherche.':'Ajoute ton premier contact avec « + Nouveau », ou demande à Claude de les ajouter pour toi.')+'</div>';
   }
   var canalFiltre='';
