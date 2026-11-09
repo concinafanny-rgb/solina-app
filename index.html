@@ -406,6 +406,20 @@ details.anciens{margin-top:16px}
 .canal.active{border-color:var(--terre);box-shadow:0 0 0 1px var(--terre) inset}
 .canal b{display:block;font-weight:500;font-size:13.5px;color:var(--brun)}
 .canal span{font-size:12px;color:var(--muted)}
+.cfm{position:fixed;inset:0;z-index:80;background:rgba(70,50,40,.32);display:flex;align-items:center;justify-content:center;padding:16px}
+.cfm[hidden]{display:none}
+.cfm-b{background:var(--card);border-radius:18px;padding:22px 22px 18px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(70,50,40,.25)}
+.cfm-b p{margin:0 0 18px;font-size:15.5px;color:var(--brun);line-height:1.45}
+.cfm-a{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.evt{display:grid;grid-template-columns:86px 1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.evt-d{background:#F1EAF6;color:#634388;border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;line-height:1.35;align-self:start}
+.evt-d b{display:block;font-size:20px;font-weight:500;line-height:1.1}
+.evt h3{margin:0 0 3px;font-size:15px;font-weight:500;color:var(--brun)}
+.evt .s{font-size:12.5px;color:var(--muted)}
+.evt .idee{font-size:13px;margin-top:8px;background:#FBF6EF;border-radius:10px;padding:8px 10px;color:var(--brun)}
+.evt .prix{font-size:12.5px;margin-top:6px;color:#7A6656}
+.evt-a{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.tache .suppr-t{color:var(--muted);font-size:15px;padding:0 6px;min-height:26px;line-height:1}
 .rosebtn{background:#D9799F;border-color:#D9799F;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
 .rosebtn:hover{background:#C7648B;border-color:#C7648B}
 .canal.pros{background:#FBE6EE;border-color:#F3CADB}
@@ -833,6 +847,12 @@ h2,h3{font-weight:500;letter-spacing:0}
     </section>
 
     <!-- IDÉES -->
+    <section class="panel" data-panel="evenements">
+      <div class="ph"><div class="pl">Communication</div><h1>Événements</h1></div>
+      <div class="chips" id="evt-filtres" style="flex-wrap:wrap;margin-bottom:12px"></div>
+      <div id="evt-liste"></div>
+    </section>
+
     <section class="panel" data-panel="idees">
       <div class="ph"><div class="pl">Opérationnel</div><h1>Boîte à idées</h1><div class="pd">Tout ce qui te passe par la tête, pour ne rien perdre.</div></div>
       <form class="addline" id="idea-form" style="margin-bottom:14px">
@@ -957,6 +977,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   </form>
 </div>
 
+<div class="cfm" id="cfm" hidden><div class="cfm-b" role="alertdialog" aria-modal="true" aria-labelledby="cfm-t"><p id="cfm-t">Êtes vous sûre de vouloir supprimer ?</p><div class="cfm-a"><button type="button" class="btn" id="cfm-non">Annuler</button><button type="button" class="btn danger" id="cfm-oui">Oui, supprimer</button></div></div></div>
 <div class="sheet" id="nsheet" role="dialog" aria-modal="true" aria-label="Note">
   <div class="sheet-head"><button class="btn ghost sm" data-nclose>← Retour</button><span class="eyebrow" id="n-etat"></span></div>
   <input id="n-titre" class="n-titre" autocomplete="off" aria-label="Titre de la note">
@@ -1047,19 +1068,20 @@ h2,h3{font-weight:500;letter-spacing:0}
     charges:'<svg viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5z"/><path d="M8 10v4M12 10v4M16 10v4"/></svg>',
     ops:'<svg viewBox="0 0 24 24"><path d="M9 4h6v3H9z"/><path d="M7 6H5v15h14V6h-2"/><path d="M9 12l2 2 4-4"/></svg>',
     conso:'<svg viewBox="0 0 24 24"><path d="M3 4h2l3 12h11l2-8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>',
+    evenements:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"/></svg>',
     idees:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
     logements:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['entreprise','Mon entreprise'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
     ['Développement',[['prospection','Prospection'],['simprop','Simulateur propriétaire']]],
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Finances']]],
-    ['Communication',[['reseaux','Studio réseaux sociaux'],['idees','Boîte à idées']]]
+    ['Communication',[['reseaux','Studio réseaux sociaux'],['evenements','Événements'],['idees','Boîte à idées']]]
   ];
   var TABS=[['accueil','Accueil'],['relances','Tâches'],['contacts','Contacts'],['prospection','Prospection'],['plus','Plus']];
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
@@ -1074,7 +1096,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
 
   var $=function(id){return document.getElementById(id);};
-  var S={ops:[],vocaux:[],contacts:[],taches:[],biens:[],revenus:[],charges:[],conso:[],idees:[],posts:[],plan:[],params:Object.assign({},DEFAULT_PARAMS)};
+  var S={evenements:[],courriers:[],ops:[],vocaux:[],contacts:[],taches:[],biens:[],revenus:[],charges:[],conso:[],idees:[],posts:[],plan:[],params:Object.assign({},DEFAULT_PARAMS)};
   var db=null, mcp=null, filterType='', consoCat='', query='', editingId=null, caMois='';
 
   function todayISO(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -1161,7 +1183,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     return 'divers';}
   function rappelLoin(t){return !!(t.repeter&&t.date&&daysDiff(t.date)>3);}
   function elementsAFaire(){var a=[];tachesOuvertes().forEach(function(t){if(rappelLoin(t))return;a.push({k:'t',t:t,date:t.date||'',cat:catTache(t),imp:!!t.importante});});S.contacts.forEach(function(c){if(c.relance)a.push({k:'r',c:c,date:c.relance,cat:catContact(c)||'divers',imp:false});});return a;}
-  function titreTache(t){var tit=t.titre||'',m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook) : (.*)$/);return m?{tit:m[2],canal:m[1]}:{tit:tit,canal:''};}
+  function titreTache(t){var tit=t.titre||'',m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook) : (.*)$/);if(!m)return {tit:tit,canal:''};var c=t.contact?byId(S.contacts,t.contact):null;if(c&&!c.prenom&&!c.civilite){var cn=c.canal||m[1];return {tit:['Prospect '+cn,c.ville,piecesDe(c)].filter(Boolean).join(' · '),canal:m[1]};}return {tit:m[2],canal:m[1]};}
   function chipsTaches(j){var t=todayISO();if(j<t)return '';var par={};
     tachesOuvertes().forEach(function(x){if(x.date&&(j===t?x.date<=t:x.date===j))(par[catTache(x)]=par[catTache(x)]||[]).push({k:'t',t:x});});
     S.contacts.forEach(function(c){if(c.relance&&(j===t?c.relance<=t:c.relance===j)){var k=catContact(c)||'divers';(par[k]=par[k]||[]).push({k:'r',c:c});}});
@@ -1312,11 +1334,37 @@ h2,h3{font-weight:500;letter-spacing:0}
         :x.statut==='envoye'?'<span class="note">Envoyé le '+esc(fmtDate(x.envoyeLe))+'</span><button type="button" class="btn xs rose" data-crrep="'+esc(x.id)+'">A répondu</button><button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Annuler</button>'
         :x.statut==='repondu'?'<span class="note">Dans ta prospection</span>'+(x.contact?'<button type="button" class="btn ghost xs" data-open="'+esc(x.contact)+'">Fiche</button>':'')
         :'<button type="button" class="btn ghost xs" data-crannul="'+esc(x.id)+'">Remettre</button>';
-      r+='<tr'+(sem?' class="semaine"':'')+'><td><div class="adr">'+(x.societe?'<b style="font-weight:500">SCI '+esc(x.societe.replace(/^SCI\s+/,''))+'</b>'+(x.nom?'<br>Gérant : '+esc(x.prenom+' '+x.nom):''):'<b style="font-weight:500">'+esc(x.nom+' '+x.prenom)+'</b>')+(crNouveau(x)?' <span class="pill today" style="font-size:9.5px;padding:1px 6px">Nouveau</span>':'')+'<br>'+esc(x.adresse)+'<br>'+esc(x.cp+' '+x.villeEnvoi)+(x.pays?'<br>'+esc(x.pays):'')+'</div><span class="act" style="margin-top:4px"><button type="button" class="btn ghost xs" data-crcopie="'+esc(x.id)+'">Copier l\'adresse</button><a class="btn ghost xs" href="https://data.inpi.fr/entreprises/'+esc(x.siren)+'" target="_blank" rel="noopener">Fiche INPI</a></span></td><td>'+esc(x.villeLogement)+(x.logement?'<div class="note">'+esc(x.logement)+'</div>':'')+(x.nbLogements>1?'<div class="note">'+x.nbLogements+' logements</div>':'')+'<div class="note">'+(x.naf==='55.20Z'?'Hébergement touristique':'Location de logements')+'</div></td><td class="num">'+esc(x.depuis?x.depuis.slice(0,4):'')+'</td><td><div class="act">'+act+'</div></td></tr>';
+      r+='<tr'+(sem?' class="semaine"':'')+'><td><div class="adr">'+(x.societe?'<b style="font-weight:500">SCI '+esc(x.societe.replace(/^SCI\s+/,''))+'</b>'+(x.nom?'<br>Gérant : '+esc(x.prenom+' '+x.nom):''):'<b style="font-weight:500">'+esc(x.nom+' '+x.prenom)+'</b>')+(crNouveau(x)?' <span class="pill today" style="font-size:9.5px;padding:1px 6px">Nouveau</span>':'')+'<br>'+esc(x.adresse)+'<br>'+esc(x.cp+' '+x.villeEnvoi)+(x.pays?'<br>'+esc(x.pays):'')+'</div><span class="act" style="margin-top:4px"><button type="button" class="btn ghost xs" data-crcopie="'+esc(x.id)+'">Copier l\'adresse</button><button type="button" class="btn xs" data-crlettre="'+esc(x.id)+'">Lettre</button><a class="btn ghost xs" href="https://data.inpi.fr/entreprises/'+esc(x.siren)+'" target="_blank" rel="noopener">Fiche INPI</a></span></td><td>'+esc(x.villeLogement)+(x.logement?'<div class="note">'+esc(x.logement)+'</div>':'')+'<div class="note"><b style="font-weight:500">'+(x.nbLogements||1)+' logement'+((x.nbLogements||1)>1?'s':'')+'</b> déclaré'+((x.nbLogements||1)>1?'s':'')+' en location</div>'+'<div class="note">'+(x.naf==='55.20Z'?'Hébergement touristique':'Location de logements')+'</div></td><td class="num">'+esc(x.depuis?x.depuis.slice(0,4):'')+'</td><td><div class="act">'+act+'</div></td></tr>';
     });
     r+='</tbody></table></div>';
     if(l.length>crMax)r+='<button type="button" class="btn ghost sm" style="margin-top:8px" data-crplus>Voir les suivants ('+(l.length-crMax)+')</button>';
     el.innerHTML=r;
+  }
+  function ecarterProspect(id){var ce=byId(S.contacts,id);if(ce){var avant=ce.etape||'a_contacter',liees=S.taches.filter(function(t){return t.contact===ce.id&&statutTache(t)!=='fait';});saveContact(Object.assign({},ce,{etape:'ecarte',relance:''}),ce.id);liees.forEach(function(t){save('taches',Object.assign({},t,{statut:'fait',fait:true,faitLe:todayISO()})).catch(function(){});});toastAnnuler('Retiré de ta prospection',function(){var c2=byId(S.contacts,ce.id);if(c2)saveContact(Object.assign({},c2,{etape:avant,relance:ce.relance||''}),ce.id);liees.forEach(function(t){var t2=byId(S.taches,t.id);if(t2)save('taches',Object.assign({},t2,{statut:'a_faire',fait:false,faitLe:''})).catch(function(){});});});}}
+  function lettreHTML(x){
+    var loin=!/^(06|83|04)/.test(x.cp||'')||!!x.pays;var vl=x.villeLogement||'la Côte d\u2019Azur';
+    var auj=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    var dest=adresseCourrier(x).split('\n').map(esc).join('<br>');
+    var accroche=x.forme==='SCI'?'Votre société possède un logement à '+esc(vl)+(loin?', loin de chez vous':'')+'. ':'Vous louez un logement à '+esc(vl)+(loin?' et vous vivez loin de la Côte d\u2019Azur':'')+'. ';
+    return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Lettre Maison Solina</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap">'+
+    '<style>@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0}body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;color:#6E584B;font-size:10.5pt;line-height:1.6;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{width:794px;height:1123px;overflow:hidden;padding:14mm 20mm 14mm;position:relative}.logo img{height:20mm}.exp{font-size:8.5pt;color:#9A8577;margin-top:2mm;line-height:1.5}.dest{position:absolute;left:110mm;top:52mm;width:85mm;font-size:10.5pt;line-height:1.5;color:#3F332B}.date{margin-top:44mm;text-align:right;font-size:9.5pt;color:#9A8577}.objet{margin:8mm 0 6mm;font-weight:500;color:#935E36}p{margin:0 0 4mm}.sign{margin-top:8mm}.sign b{display:block;font-weight:500;color:#935E36}.pied{position:absolute;left:20mm;right:20mm;bottom:12mm;border-top:1px solid #E8D9CC;padding-top:3mm;font-size:7.5pt;color:#9A8577;line-height:1.5}</style></head><body><div class="page">'+
+    '<div class="logo"><img src="'+LOGO_MS+'" alt="Maison Solina"></div><div class="exp">Maison Solina, conciergerie premium sur la Côte d\u2019Azur<br>06 76 94 52 08 · contact@maisonsolina.fr · maisonsolina.fr</div>'+
+    '<div class="dest">'+dest+'</div><div class="date">'+esc(auj)+'</div>'+
+    '<div class="objet">Votre logement à '+esc(vl)+'</div>'+
+    '<p>Madame, Monsieur,</p>'+
+    '<p>'+accroche+'Je m\u2019appelle Fanny Concina et j\u2019ai fondé Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J\u2019accompagne des propriétaires qui louent leur bien en courte durée et qui veulent en tirer le meilleur, l\u2019esprit tranquille.</p>'+
+    '<p>Sur place, je m\u2019occupe de tout : la mise en valeur de votre logement et de ses annonces, l\u2019accueil de chaque voyageur, le ménage hôtelier et le linge, le suivi technique, et des prix ajustés au fil des saisons et des grands événements de la Côte. Chaque mois, vous recevez un compte rendu clair, dépense par dépense.</p>'+
+    '<p>Je vous propose de préparer gratuitement une estimation de ce que votre logement peut vous rapporter en location saisonnière, une fois toutes les charges déduites. Un simple appel ou un message suffit, et je vous la fais parvenir sous quelques jours.</p>'+
+    '<p>Je serais ravie d\u2019échanger avec vous.</p>'+
+    '<p>Bien à vous,</p><div class="sign"><b>Fanny Concina</b>Fondatrice de Maison Solina<br>06 76 94 52 08<br>contact@maisonsolina.fr</div>'+
+    '<div class="pied">Vos coordonnées proviennent de l\u2019annuaire public des entreprises (répertoire SIRENE de l\u2019INSEE). Si vous ne souhaitez plus recevoir de courrier de Maison Solina, il vous suffit de nous l\u2019indiquer par mail ou par téléphone : nous retirerons aussitôt vos coordonnées.</div>'+
+    '</div></body></html>';
+  }
+  function lettreCourrier(x){
+    var html=lettreHTML(x),fichier='Lettre Maison Solina, '+((x.societe||x.nom||'')+' '+(x.prenom||'')).trim().replace(/[\/:*?"<>|]/g,' ')+'.pdf';
+    if(natif()){window.webkit.messageHandlers.solina.postMessage({action:'pdf',html:html,nom:fichier});toast('Choisis où enregistrer la lettre');return;}
+    var w=window.open('','_blank');if(!w){toast('Autorise l\u2019ouverture de fenêtres pour créer la lettre');return;}
+    w.document.open();w.document.write(html.replace('</body>','<script>setTimeout(function(){window.print();},700);<\/script></body>'));w.document.close();
   }
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
@@ -1380,7 +1428,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function badgeDate(date,fait){if(fait)return '';if(!date)return '';var d=daysDiff(date);if(d<0)return '<span class="pill late">'+(d===-1?'Hier':'Retard '+(-d)+' j')+'</span>';if(d===0)return '<span class="pill today">Aujourd\'hui</span>';if(d===1)return '<span class="dtxt">Demain</span>';return '<span class="dtxt">'+esc(fmtDate(date))+'</span>';}
   function carteTache(t){var cat=catTache(t),C=CAT[cat];var lg=t.logement?byId(S.biens,t.logement):null;var tt=titreTache(t);
     var l2='<span class="pill" style="background:#fff;color:'+C.texte+'">'+esc(C.nom)+'</span>'+(tt.canal?'<span class="dtxt">'+esc(tt.canal)+'</span>':'')+(t.repeter?'<span class="dtxt">'+esc(REPET[t.repeter]||'')+'</span>':'')+(t.importante?'<span class="pill imp">Important</span>':'')+(lg?'<span class="dtxt">'+esc(lg.nom)+'</span>':'')+lienAnnonce(t);
-    return '<div class="row tache compacte" data-tache="'+esc(t.id)+'" style="border-left:4px solid '+C.coul+';background:'+C.fond+';border-color:'+C.coul+'44;border-left-color:'+C.coul+'"><span class="body"><span class="t">'+esc(tt.tit)+'</span><span class="ligne2">'+l2+'</span></span><span class="r rfait">'+badgeDate(t.date,false)+'<button type="button" class="btn xs fait-b" data-cocher="'+esc(t.id)+'">Fait</button></span></div>';}
+    return '<div class="row tache compacte" data-tache="'+esc(t.id)+'" style="border-left:4px solid '+C.coul+';background:'+C.fond+';border-color:'+C.coul+'44;border-left-color:'+C.coul+'"><span class="body"><span class="t">'+esc(tt.tit)+'</span><span class="ligne2">'+l2+'</span></span><span class="r rfait">'+badgeDate(t.date,false)+'<button type="button" class="btn xs fait-b" data-cocher="'+esc(t.id)+'">Fait</button><button type="button" class="btn ghost xs suppr-t" data-supptache="'+esc(t.id)+'" aria-label="Supprimer la tâche" title="Supprimer">×</button></span></div>';}
   function liensCliquables(txt){return esc(txt).replace(/https?:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener" class="lienx">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});}
   function carteRelance(c,complet){var C=CAT[catContact(c)||'divers'];return '<div class="row tache compacte" data-relance="'+esc(c.id)+'" style="border-left:4px solid '+C.coul+';background:'+C.fond+';border-color:'+C.coul+'44;border-left-color:'+C.coul+'"><span class="body"><span class="t">Relancer '+esc(fullName(c))+'</span><span class="ligne2 reporter"><span class="pill" style="background:#fff;color:'+C.texte+'">'+esc(C.nom)+'</span>'+(complet?boutonsJoindre(c,true)+'<button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="3">+3 j</button><button type="button" class="btn xs" data-reporter="'+esc(c.id)+'" data-j="7">+7 j</button>':'')+'</span></span><span class="r rfait">'+badgeDate(c.relance,false)+'<button type="button" class="btn xs fait-b" data-relfait="'+esc(c.id)+'">Fait</button></span></div>';}
   function tachesOuvertes(){return S.taches.filter(function(t){return statutTache(t)!=='fait';});}
@@ -1541,6 +1589,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('ops-contenu').addEventListener('change',function(e){if(e.target.closest('[data-prixart]'))renderOps();});
   function renderConso(){renderOps();}
 
+  var CFM=null;function demander(msg,fn,oui){$('cfm-t').textContent=msg||'Êtes vous sûre de vouloir supprimer ?';$('cfm-oui').textContent=oui||'Oui, supprimer';CFM=fn;$('cfm').hidden=false;setTimeout(function(){$('cfm-oui').focus();},30);}
   function confirmer(b){if(b.dataset.armed==='1')return true;var t=b.innerHTML;b.dataset.armed='1';b.innerHTML='Supprimer ?';b.classList.add('arme');setTimeout(function(){b.dataset.armed='';b.innerHTML=t;b.classList.remove('arme');},3500);return false;}
   function lienSur(v){return /^https?:\/\//i.test(v||'')?v:'';}
   function renderLiens(){document.querySelectorAll('[data-lien]').forEach(function(el){if(document.activeElement!==el)el.value=S.params[el.dataset.lien]||'';});document.querySelectorAll('[data-ouvrir]').forEach(function(a){var u=lienSur(S.params[a.dataset.ouvrir]);if(u){a.href=u;a.style.opacity='';a.style.pointerEvents='';}else{a.removeAttribute('href');a.style.opacity='.45';a.style.pointerEvents='none';}});}
@@ -1605,6 +1654,28 @@ h2,h3{font-weight:500;letter-spacing:0}
     COFFRE.entrees=null;COFFRE.bien=null;renderCoffre();majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
   function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;COFFRE.entrees=null;COFFRE.bien=null;COFFRE.montrer={};}
+  var evtFiltre='';
+  var MOIS_C=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  function evtDates(e){var d=e.debut||'',f=e.fin||d;if(!d)return {g:'?',p:''};var a=d.split('-'),b=f.split('-');var j=String(Number(a[2])),mo=MOIS_C[Number(a[1])-1];if(f===d)return {g:j,p:mo+' '+a[0]};if(a[1]===b[1]&&a[0]===b[0])return {g:j+' au '+Number(b[2]),p:mo+' '+a[0]};return {g:j+' '+mo,p:'au '+Number(b[2])+' '+MOIS_C[Number(b[1])-1]};}
+  function renderEvenements(){
+    var el=$('evt-liste');if(!el)return;var auj=todayISO();
+    var l=(S.evenements||[]).filter(function(e){return (e.fin||e.debut||'9')>=auj;}).sort(function(a,b){return (a.debut||'')<(b.debut||'')?-1:1;});
+    var villes=[];l.forEach(function(e){if(e.ville&&villes.indexOf(e.ville)<0)villes.push(e.ville);});villes.sort(function(a,b){return a.localeCompare(b,'fr');});
+    if(evtFiltre&&villes.indexOf(evtFiltre)<0)evtFiltre='';
+    $('evt-filtres').innerHTML=l.length?[''].concat(villes).map(function(v){return '<button type="button" class="chip'+(evtFiltre===v?' active':'')+'" data-evtv="'+esc(v)+'">'+esc(v||'Toutes les villes')+' · '+l.filter(function(e){return !v||e.ville===v;}).length+'</button>';}).join(''):'';
+    l=l.filter(function(e){return !evtFiltre||e.ville===evtFiltre;});
+    if(!l.length){el.innerHTML='<div class="empty"><b>Aucun événement à venir</b>Claude ajoute ici chaque jour les événements repérés autour de tes logements.</div>';return;}
+    var h='',mois='';
+    l.forEach(function(e){var m=(e.debut||'').slice(0,7);if(m!==mois){mois=m;h+='<div class="eyebrow" style="margin:18px 0 8px">'+esc(m?fmtMois(m):'Date à confirmer')+'</div>';}
+      var d=evtDates(e),nouveau=(e.createdAt||'').slice(0,10)>=isoD(new Date(Date.now()-3*864e5));
+      h+='<div class="evt"><div class="evt-d"><b>'+esc(d.g)+'</b>'+esc(d.p)+'</div><div><h3>'+esc(e.titre||'')+(nouveau?' <span class="pill today" style="font-size:9.5px;padding:1px 6px;vertical-align:middle">Nouveau</span>':'')+'</h3><div class="s">'+esc([e.ville,e.type,e.lieu].filter(Boolean).join(' · '))+'</div>'+(e.prix?'<div class="prix">'+esc(e.prix)+'</div>':'')+(e.idee?'<div class="idee">Idée de com : '+esc(e.idee)+'</div>':'')+'<div class="evt-a">'+(e.lien?'<a class="lienx" href="'+esc(e.lien)+'" target="_blank" rel="noopener">Voir l\'événement</a>':'')+'<button type="button" class="btn xs" data-evtidee="'+esc(e.id)+'">'+(e.ideeCreee?'Dans la boîte à idées':'Mettre dans la boîte à idées')+'</button><span style="flex:1"></span><button type="button" class="btn ghost xs" data-evtdel="'+esc(e.id)+'">Supprimer</button></div></div></div>';});
+    el.innerHTML=h;
+  }
+  document.addEventListener('click',function(e){
+    var v=e.target.closest('[data-evtv]');if(v){evtFiltre=v.dataset.evtv;renderEvenements();return;}
+    var d=e.target.closest('[data-evtdel]');if(d){var id=d.dataset.evtdel;demander('Êtes vous sûre de vouloir supprimer cet événement ?',function(){remove('evenements',id);});return;}
+    var i=e.target.closest('[data-evtidee]');if(i){var ev=byId(S.evenements,i.dataset.evtidee);if(!ev||ev.ideeCreee){if(ev)go('idees');return;}var d2=evtDates(ev);save('idees',{id:uid('i'),titre:ev.titre+' ('+d2.g+' '+d2.p+')',note:[ev.idee,ev.ville,ev.lien].filter(Boolean).join('\n'),categorie:'Communication',statut:'Idée',createdAt:new Date().toISOString()}).catch(function(){});save('evenements',Object.assign({},ev,{ideeCreee:true})).catch(function(){});toast('Ajouté à la boîte à idées');return;}
+  });
   function renderIdees(){
     var list=S.idees.slice().sort(function(a,b){return (b.createdAt||'')<(a.createdAt||'')?-1:1;});
     $('idea-list').innerHTML=list.map(function(i){return '<div class="idea"><span class="pill">'+esc(i.categorie||'Autre')+'</span><h3>'+esc(i.titre)+'</h3>'+(i.note?'<p>'+esc(i.note)+'</p>':'')+'<div class="foot"><select data-ideastatut="'+esc(i.id)+'"><option'+(i.statut==='Idée'?' selected':'')+'>Idée</option><option'+(i.statut==='À creuser'?' selected':'')+'>À creuser</option><option'+(i.statut==='Lancée'?' selected':'')+'>Lancée</option><option'+(i.statut==='Abandonnée'?' selected':'')+'>Abandonnée</option></select><button class="btn ghost xs" data-delidea="'+esc(i.id)+'">×</button></div></div>';}).join('')||'<div class="empty" style="grid-column:1/-1"><b>La boîte est vide</b>Note ta première idée ci-dessus.</div>';
@@ -1730,11 +1801,11 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||t.dataset.budm===undefined)return;var B=(S.params.budget&&typeof S.params.budget==='object')?JSON.parse(JSON.stringify(S.params.budget)):{};var a=B[budAn]||[];while(a.length<12)a.push('');a[Number(t.dataset.budm)]=t.value===''?'':num(t.value);B[budAn]=a;S.params.budget=B;saveParams();});
   document.addEventListener('click',function(e){var b=e.target.closest('[data-budan]');if(b){budAn+=Number(b.dataset.budan);renderBudget();}});
   function renderFinance(){renderBiens();renderCA();renderCharges();renderBudget();}
-  function renderAll(){renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
+  function renderAll(){renderEvenements();renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
-  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops','courriers'];
+  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops','courriers','evenements'];
   var CLE_JETON='solina-jeton',CLE_COPIE='solina-copie-crm';
   var G={sha:null,connecte:false,D:null,derniere:0};
   var LIEN_CLE='https://github.com/settings/personal-access-tokens/new?name=Application%20Solina&description=Application%20Maison%20Solina%20(Mac%20et%20iPhone)&target_name=concinafanny-rgb&expires_in=365&contents=write';
@@ -1805,7 +1876,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     echec('Enregistrement impossible, réessaie dans un instant');
   }
 
-  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(d){return 'prix '+(d.article||'');},ops:function(d){return 'opérationnel '+(d.titre||'');},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},courriers:function(d){return 'courrier '+(d.nom||'');},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
+  var LIB={contacts:function(d){return 'fiche '+fullName(d);},taches:function(d){return 'tâche '+(d.titre||'');},biens:function(d){return 'logement '+(d.nom||'');},revenus:function(d){return 'chiffre d’affaires '+(d.mois||'');},charges:function(){return 'charges';},conso:function(d){return 'prix '+(d.article||'');},ops:function(d){return 'opérationnel '+(d.titre||'');},idees:function(d){return 'idée '+(d.titre||'');},posts:function(d){return 'publication '+(d.titre||'');},plan:function(){return 'plan de prospection';},courriers:function(d){return 'courrier '+(d.nom||'');},evenements:function(d){return 'événement '+(d.titre||'');},vocaux:function(d){return 'note vocale '+(d.titre||'');}};
   function upsert(d,coll,doc){var a=d[coll],i=a.findIndex(function(x){return x.id===doc.id;});if(i>=0)a[i]=doc;else a.push(doc);}
 
   /* Persistence (générique) */
@@ -1972,7 +2043,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function renderVocaux(){
     var el=$('vocaux-list');if(!el)return;
     var l=S.vocaux.slice().sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1;});
-    el.innerHTML=l.length?l.map(function(v){if(v.ecrite)return ligneNoteEcrite(v);var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" style="cursor:default"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte)+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r">'+'<span class="pill '+({a_traiter:'today',range:'ok',a_verifier:'warn',audio:''}[v.statut||'audio']||'')+'">'+esc({a_traiter:'À ranger',range:'Rangé',a_verifier:'À vérifier',audio:'Audio seul'}[v.statut||'audio']||'')+'</span><br>'+((v.statut||'audio')==='audio'&&natif()?'<button class="btn xs" style="margin-top:6px" data-transcrire="'+esc(v.id)+'">Transcrire</button><br>':'')+(v.statut==='a_verifier'?'<button class="btn xs" style="margin-top:6px" data-vuvocal="'+esc(v.id)+'">C\'est bon</button><br>':'')+'<button class="btn ghost xs" style="margin-top:6px" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
+    el.innerHTML=l.length?l.map(function(v){if(v.ecrite)return ligneNoteEcrite(v);var d=v.date?new Date(v.date):null;var lit=LECTURE.id===v.id;return '<div class="row" role="button" tabindex="0" data-note="'+esc(v.id)+'"><button class="playbtn'+(lit?' en-lecture':'')+'" data-ecouter="'+esc(v.id)+'" aria-label="'+(lit?'Pause':'Écouter')+'">'+(lit?'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>':'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>')+'</button><span class="body"><span class="t">'+esc(v.titre)+'</span><span class="s">'+(d?esc(d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}))+' à '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0'):'')+' · '+fmtDuree(v.duree)+'</span>'+(v.texte?'<span class="vtexte">'+esc(v.texte)+'</span>':'')+(v.traitement?'<span class="vtrait'+(v.statut==='a_verifier'?' att':'')+'">'+esc(v.traitement)+'</span>':'')+'</span><span class="r">'+'<span class="pill '+({a_traiter:'today',range:'ok',a_verifier:'warn',audio:''}[v.statut||'audio']||'')+'">'+esc({a_traiter:'À ranger',range:'Rangé',a_verifier:'À vérifier',audio:'Audio seul'}[v.statut||'audio']||'')+'</span><br>'+((v.statut||'audio')==='audio'&&natif()?'<button class="btn xs" style="margin-top:6px" data-transcrire="'+esc(v.id)+'">Transcrire</button><br>':'')+(v.statut==='a_verifier'?'<button class="btn xs" style="margin-top:6px" data-vuvocal="'+esc(v.id)+'">C\'est bon</button><br>':'')+'<button class="btn ghost xs" style="margin-top:6px" data-delvocal="'+esc(v.id)+'">Supprimer</button></span></div>';}).join(''):'<div class="empty"><b>Aucune note vocale</b>Appuie sur le micro en haut de l\'écran pour en enregistrer une.</div>';
   }
   var NE={id:null,doc:null,reco:null,base:'',min:null};
   function lireBrouillon(){try{return JSON.parse(localStorage.getItem('solina-brouillon')||'null');}catch(e){return null;}}
@@ -2007,9 +2078,9 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('n-texte').addEventListener('input',noteModifiee);$('n-titre').addEventListener('input',noteModifiee);$('n-contact').addEventListener('change',noteModifiee);
   $('n-dicter').addEventListener('click',basculerDictee);
   $('n-ranger').addEventListener('click',function(){if(!NE.id)return;if(!$('n-texte').value.trim()){toast('La note est vide');return;}NE.doc=Object.assign(docNote(),{statut:'a_traiter'});try{localStorage.setItem('solina-brouillon',JSON.stringify(NE.doc));}catch(e){}envoyerNote();toast('Claude range ta note dans l’heure');fermerNote();});
-  $('n-del').addEventListener('click',function(){var b=this;if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Confirmer';return;}var id=NE.id;arreterDictee();clearTimeout(NE.min);NE.id=null;if(byId(S.vocaux,id))remove('vocaux',id);try{localStorage.removeItem('solina-note-ouverte');localStorage.removeItem('solina-brouillon');}catch(e){}$('nsheet').classList.remove('open');document.body.style.overflow='';toast('Note supprimée');});
+  $('n-del').addEventListener('click',function(){var id=NE.id;demander('Êtes vous sûre de vouloir supprimer cette note ?',function(){arreterDictee();clearTimeout(NE.min);NE.id=null;if(byId(S.vocaux,id))remove('vocaux',id);try{localStorage.removeItem('solina-note-ouverte');localStorage.removeItem('solina-brouillon');}catch(e){}$('nsheet').classList.remove('open');document.body.style.overflow='';toast('Note supprimée');});});
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&NE.id){NE.doc=docNote();try{localStorage.setItem('solina-brouillon',JSON.stringify(NE.doc));}catch(e){}envoyerNote();}});
-  document.addEventListener('click',function(e){if(e.target.closest('[data-nnew]')){go('vocaux');ouvrirNote(null);return;}if(e.target.closest('[data-nclose]')){fermerNote();return;}var n=e.target.closest('[data-note]');if(n){ouvrirNote(n.dataset.note);}});
+  document.addEventListener('click',function(e){if(e.target.closest('[data-nnew]')){go('vocaux');ouvrirNote(null);return;}if(e.target.closest('[data-nclose]')){fermerNote();return;}var n=e.target.closest('[data-note]');if(n&&!e.target.closest('button,a,select,audio')){ouvrirNote(n.dataset.note);}});
   $('rec-stop').addEventListener('click',arreterMicro);
   $('rec-save').addEventListener('click',enregistrerNote);
   $('rec-annuler').addEventListener('click',annulerMicro);
@@ -2027,7 +2098,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(st!==statutTache(doc))changerStatut(doc,st);else save('taches',doc).catch(function(){});
     toast(ex?'Tâche modifiée':'Tâche ajoutée');fermerTache();
   });
-  $('t-del').addEventListener('click',function(){var b=this;if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Confirmer la suppression';return;}if(tEdit)remove('taches',tEdit);fermerTache();toast('Tâche supprimée');});
+  $('t-del').addEventListener('click',function(){var id=tEdit;demander('Êtes vous sûre de vouloir supprimer cette tâche ?',function(){if(id)remove('taches',id);fermerTache();toast('Tâche supprimée');});});
 
   /* ===== Events ===== */
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
@@ -2039,6 +2110,10 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-today').addEventListener('click',function(){$('f-dernier').value=todayISO();});
   ['f-tel','f-email','f-adresse','f-ville'].forEach(function(i){$(i).addEventListener('input',majJoindre);});
   $('btn-agenda').addEventListener('click',planRelance);
+  $('cfm-non').addEventListener('click',function(){CFM=null;$('cfm').hidden=true;});
+  $('cfm').addEventListener('click',function(e){if(e.target===this){CFM=null;this.hidden=true;}});
+  $('cfm-oui').addEventListener('click',function(){var f=CFM;CFM=null;$('cfm').hidden=true;if(f)f();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('cfm').hidden){CFM=null;$('cfm').hidden=true;}});
   $('btn-delete').addEventListener('click',function(){$('confirm-delete').hidden=false;});
   $('btn-delete-no').addEventListener('click',function(){$('confirm-delete').hidden=true;});
   $('btn-delete-yes').addEventListener('click',function(){if(editingId){remove('contacts',editingId);toast('Fiche supprimée');}closeSheet();});
@@ -2074,6 +2149,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('click',function(e){
     if(e.target.closest('a.lienx,#t-liens a,#f-liens a'))return;
     var cp=e.target.closest('[data-copier]');if(cp){copierMessage(cp);return;}
+    var st=e.target.closest('[data-supptache]');if(st){var tid=st.dataset.supptache;demander('Êtes vous sûre de vouloir supprimer cette tâche ?',function(){remove('taches',tid);toast('Tâche supprimée');});return;}
+    var ec0=e.target.closest('[data-ecarter]');if(ec0){var cid=ec0.dataset.ecarter;demander('Êtes vous sûre de vouloir retirer ce prospect ?',function(){ecarterProspect(cid);},'Oui, retirer');return;}
     var o=e.target.closest('[data-open]');if(o){openSheet(o.dataset.open);return;}
     var d=e.target.closest('[data-done]');if(d){var c=byId(S.contacts,d.dataset.done);if(c){saveContact(Object.assign({},c,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),c.id).then(function(){toast('Relance faite');});}return;}
     var x=e.target.closest('[data-deltask]');if(x){e.preventDefault();if(x.dataset.armed!=='1'){x.dataset.armed='1';x.textContent='Supprimer ?';x.classList.add('arme');setTimeout(function(){x.dataset.armed='';x.textContent='×';x.classList.remove('arme');},3500);return;}remove('taches',x.dataset.deltask);return;}
@@ -2088,6 +2165,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var cs=e.target.closest('[data-crstat]');if(cs){crStatut=cs.dataset.crstat;crMax=30;renderCourriers();return;}
     if(e.target.closest('[data-crplus]')){crMax+=30;renderCourriers();return;}
     var cc=e.target.closest('[data-crcopie]');if(cc){var xc=byId(S.courriers,cc.dataset.crcopie);if(xc){var tx=adresseCourrier(xc);var ok=function(){toast('Adresse copiée');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(ok).catch(function(){copieSecours(tx);ok();});else{copieSecours(tx);ok();}}return;}
+    var clt=e.target.closest('[data-crlettre]');if(clt){var xl=byId(S.courriers,clt.dataset.crlettre);if(xl)lettreCourrier(xl);return;}
     var cen=e.target.closest('[data-crenv]');if(cen){var av=majCourrier(cen.dataset.crenv,{statut:'envoye',envoyeLe:todayISO()});if(av)toastAnnuler('Courrier envoyé',function(){save('courriers',av).catch(function(){});});return;}
     var cnw=e.target.closest('[data-crnoway]');if(cnw){var av2=majCourrier(cnw.dataset.crnoway,{statut:'no_way'});if(av2)toastAnnuler('Retiré de la liste',function(){save('courriers',av2).catch(function(){});});return;}
     var can=e.target.closest('[data-crannul]');if(can){majCourrier(can.dataset.crannul,{statut:'a_envoyer',envoyeLe:''});return;}
@@ -2096,7 +2174,6 @@ h2,h3{font-weight:500;letter-spacing:0}
     var ep=e.target.closest('[data-editpost]');if(ep&&!e.target.closest('select,button')){editerPost(ep.dataset.editpost);return;}
     if(e.target.closest('a.joindre-b'))return;
     if(e.target.closest('[data-voircanaux]')){voirCanaux=!voirCanaux;renderCanaux();return;}
-    var ec=e.target.closest('[data-ecarter]');if(ec){var ce=byId(S.contacts,ec.dataset.ecarter);if(ce){var avant=ce.etape||'a_contacter',liees=S.taches.filter(function(t){return t.contact===ce.id&&statutTache(t)!=='fait';});ec.closest('.row').classList.add('cochee');saveContact(Object.assign({},ce,{etape:'ecarte',relance:''}),ce.id);liees.forEach(function(t){save('taches',Object.assign({},t,{statut:'fait',fait:true,faitLe:todayISO()})).catch(function(){});});toastAnnuler('Retiré de ta prospection',function(){var c2=byId(S.contacts,ce.id);if(c2)saveContact(Object.assign({},c2,{etape:avant,relance:ce.relance||''}),ce.id);liees.forEach(function(t){var t2=byId(S.taches,t.id);if(t2)save('taches',Object.assign({},t2,{statut:'a_faire',fait:false,faitLe:''})).catch(function(){});});});}return;}
     var fc=e.target.closest('[data-filtrecat]');if(fc){catFiltre=fc.dataset.filtrecat;renderTaskBoard('task-kanban');go('relances');return;}
     var cfb=e.target.closest('[data-catf]');if(cfb){catFiltre=cfb.dataset.catf;renderTaskBoard('task-kanban');return;}
     var rf=e.target.closest('[data-relfait]');if(rf){var cf=byId(S.contacts,rf.dataset.relfait);if(cf){var ancienne=cf.relance;rf.closest('.row').classList.add('cochee');saveContact(Object.assign({},cf,{dernierContact:todayISO(),relance:'',agendaOk:false,agendaDate:'',agendaEventId:''}),cf.id).then(function(){toastAnnuler('Relance faite',function(){var c2=byId(S.contacts,cf.id);if(c2)saveContact(Object.assign({},c2,{relance:ancienne}),cf.id);});});}return;}
