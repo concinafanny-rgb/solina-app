@@ -1085,7 +1085,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','Réseau co-hôtes Airbnb','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
   var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
@@ -1181,7 +1181,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     return 'divers';}
   function rappelLoin(t){return !!(t.repeter&&t.date&&daysDiff(t.date)>3);}
   function elementsAFaire(){var a=[];tachesOuvertes().forEach(function(t){if(rappelLoin(t))return;a.push({k:'t',t:t,date:t.date||'',cat:catTache(t),imp:!!t.importante});});S.contacts.forEach(function(c){if(c.relance)a.push({k:'r',c:c,date:c.relance,cat:catContact(c)||'divers',imp:false});});return a;}
-  function titreTache(t){var tit=t.titre||'',m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook) : (.*)$/);if(!m)return {tit:tit,canal:''};var c=t.contact?byId(S.contacts,t.contact):null;if(c&&!c.prenom&&!c.civilite){var cn=c.canal||m[1];return {tit:['Prospect '+cn,c.ville,piecesDe(c)].filter(Boolean).join(' · '),canal:m[1]};}return {tit:m[2],canal:m[1]};}
+  function titreTache(t){var tit=t.titre||'',m=tit.match(/^Envoyer le message (Leboncoin|AlloVoisins|Facebook) : (.*)$/)||tit.match(/^Répondre sur (AlloVoisins|Facebook|Airbnb) : (.*)$/);if(!m)return {tit:tit,canal:''};var c=t.contact?byId(S.contacts,t.contact):null;if(c&&!c.prenom&&!c.civilite){var cn=c.canal||m[1];return {tit:['Prospect '+cn,c.ville,piecesDe(c)].filter(Boolean).join(' · '),canal:m[1]};}return {tit:m[2],canal:m[1]};}
   function chipsTaches(j){var t=todayISO();if(j<t)return '';var par={};
     tachesOuvertes().forEach(function(x){if(x.date&&(j===t?x.date<=t:x.date===j))(par[catTache(x)]=par[catTache(x)]||[]).push({k:'t',t:x});});
     S.contacts.forEach(function(c){if(c.relance&&(j===t?c.relance<=t:c.relance===j)){var k=catContact(c)||'divers';(par[k]=par[k]||[]).push({k:'r',c:c});}});
@@ -1267,6 +1267,31 @@ h2,h3{font-weight:500;letter-spacing:0}
       html+='</div>';
     });
     el.innerHTML=html+'</div></div>';
+  }
+  var CRF={sha:null,lu:false,file:Promise.resolve()};var CHEMIN_CR='donnees/courriers.json';
+  async function lireCourriers(){
+    try{
+      var r=await fetch(urlChemin(CHEMIN_CR)+'?ref='+DEPOT.branche+'&t='+Date.now(),{headers:entetes(),cache:'no-store'});if(!r.ok)return false;
+      var j=await r.json(),txt;if(j.content&&j.encoding==='base64')txt=depuisB64(j.content);else{var b=await fetch(j.git_url,{headers:entetes(),cache:'no-store'}).then(function(x){return x.json();});txt=depuisB64(b.content);}
+      var d=JSON.parse(txt);CRF.sha=j.sha;CRF.lu=true;S.courriers=Array.isArray(d.courriers)?d.courriers:[];rafraichir();return true;
+    }catch(e){console.error(e);return false;}
+  }
+  function saveCourrier(doc){
+    doc.updatedAt=new Date().toISOString();upsert(S,'courriers',cloner(doc));rafraichir();var c=cloner(doc);
+    CRF.file=CRF.file.then(async function(){
+      for(var essai=0;essai<3;essai++){
+        try{
+          var r=await fetch(urlChemin(CHEMIN_CR)+'?ref='+DEPOT.branche+'&t='+Date.now(),{headers:entetes(),cache:'no-store'});if(!r.ok)throw Err('autre','lecture');
+          var j=await r.json(),txt;if(j.content&&j.encoding==='base64')txt=depuisB64(j.content);else{var b=await fetch(j.git_url,{headers:entetes(),cache:'no-store'}).then(function(x){return x.json();});txt=depuisB64(b.content);}
+          var d=JSON.parse(txt);d.courriers=d.courriers||[];upsert(d,'courriers',c);
+          var w=await fetch(urlChemin(CHEMIN_CR),{method:'PUT',cache:'no-store',headers:Object.assign({'Content-Type':'application/json'},entetes()),body:JSON.stringify({message:'Application : courrier '+(c.nom||c.societe||''),content:versB64(JSON.stringify(d,null,2)+'\n'),sha:j.sha,branch:DEPOT.branche})});
+          if(w.status===409||w.status===422)continue;if(!w.ok)throw Err('autre','écriture');
+          CRF.sha=(await w.json()).content.sha;return;
+        }catch(e){console.error(e);break;}
+      }
+      toast('Le courrier n\u2019a pas pu être enregistré');
+    });
+    return CRF.file.then(function(){return c.id;});
   }
   async function lireAgenda(){
     try{
@@ -1803,7 +1828,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
-  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops','courriers','evenements'];
+  var COLLS=['contacts','taches','biens','revenus','charges','conso','idees','posts','plan','vocaux','ops','evenements'];
   var CLE_JETON='solina-jeton',CLE_COPIE='solina-copie-crm';
   var G={sha:null,connecte:false,D:null,derniere:0};
   var LIEN_CLE='https://github.com/settings/personal-access-tokens/new?name=Application%20Solina&description=Application%20Maison%20Solina%20(Mac%20et%20iPhone)&target_name=concinafanny-rgb&expires_in=365&contents=write';
@@ -1818,7 +1843,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function appliquer(d){COLLS.forEach(function(k){S[k]=cloner(d[k]);});S.params=Object.assign({},d.params);}
   function garderCopie(){try{localStorage.setItem(CLE_COPIE,JSON.stringify(G.D));}catch(e){}}
   function enEdition(){var a=document.activeElement;return !!(a&&a.closest&&a.closest('table.tbl'));}
-  function rafraichir(){if(!enEdition())renderAll();}
+  var rafT=null;function rafraichir(){clearTimeout(rafT);rafT=setTimeout(function(){if(!enEdition())renderAll();},30);}
 
   async function lireDepot(){
     var r;
@@ -1879,6 +1904,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   /* Persistence (générique) */
   function save(coll,doc){
+    if(coll==='courriers')return saveCourrier(doc);
     doc.updatedAt=new Date().toISOString();
     var c=cloner(doc),base=G.D&&G.D[coll]?byId(G.D[coll],doc.id):null,diff=null,retire=[];
     if(base){diff={};Object.keys(c).forEach(function(k){if(JSON.stringify(c[k])!==JSON.stringify(base[k]))diff[k]=c[k];});Object.keys(base).forEach(function(k){if(!(k in c))retire.push(k);});}
@@ -1908,7 +1934,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     if(!jeton()){montrerConnexion('');return false;}
     try{
       var depart=Date.now();var f=await lireDepot();if(G.ecrit&&G.ecrit>depart)return true;var change=f.sha!==G.sha;
-      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();G.refus=0;try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
+      G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();if(!CRF.lu)lireCourriers();G.refus=0;try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
       if(change){appliquer(f.data);attente.forEach(function(l){l.modif(S);});garderCopie();rafraichir();}
       return true;
     }catch(e){
@@ -2115,7 +2141,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-delete').addEventListener('click',function(){$('confirm-delete').hidden=false;});
   $('btn-delete-no').addEventListener('click',function(){$('confirm-delete').hidden=true;});
   $('btn-delete-yes').addEventListener('click',function(){if(editingId){remove('contacts',editingId);toast('Fiche supprimée');}closeSheet();});
-  $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}saveContact(data,editingId).then(function(){toast('Enregistré');closeSheet();});});
+  $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}saveContact(data,editingId).catch(function(){});toast('Enregistré');closeSheet();});
   $('search').addEventListener('input',function(){query=this.value;renderContacts();});
   $('type-chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;filterType=c.dataset.type;this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===c);});renderContacts();});
   $('task-form').addEventListener('submit',function(e){e.preventDefault();var v=$('task-input').value.trim();if(!v)return;save('taches',{id:uid('t'),titre:v,date:$('task-date').value||'',categorie:$('task-cat').value,fait:false,statut:'a_faire',createdAt:new Date().toISOString()});$('task-input').value='';$('task-date').value='';});
@@ -2158,7 +2184,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var dr=e.target.closest('[data-delrev]');if(dr){if(!confirmer(dr))return;remove('revenus',dr.dataset.delrev);return;}
     var dc=e.target.closest('[data-delcharge]');if(dc){if(!confirmer(dc))return;remove('charges',dc.dataset.delcharge);return;}
     var dco=e.target.closest('[data-delconso]');if(dco){if(!confirmer(dco))return;remove('conso',dco.dataset.delconso);return;}
-    var ca=e.target.closest('button[data-canal]');if(ca){canalFiltre=ca.dataset.canal;crMax=30;renderKanban();return;}
+    var ca=e.target.closest('button[data-canal]');if(ca){canalFiltre=ca.dataset.canal;crMax=30;renderKanban();if(canalFiltre==='Envoi courrier')lireCourriers();return;}
     var cv=e.target.closest('[data-crville]');if(cv){crVille=cv.dataset.crville;crMax=30;renderCourriers();return;}
     var cs=e.target.closest('[data-crstat]');if(cs){crStatut=cs.dataset.crstat;crMax=30;renderCourriers();return;}
     if(e.target.closest('[data-crplus]')){crMax+=30;renderCourriers();return;}
