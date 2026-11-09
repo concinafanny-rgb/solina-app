@@ -420,7 +420,11 @@ details.anciens{margin-top:16px}
 .rosebtn{background:#D9799F;border-color:#D9799F;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
 .rosebtn:hover{background:#C7648B;border-color:#C7648B}
 .canal.pros{background:#FBE6EE;border-color:#F3CADB}
-#canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+.canal.pros.tout{background:#fff;border-color:#E9C3D3}
+.canal.pros.tout b{color:#6E584B}
+#canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
+#canaux .canal{padding:9px 10px}
+#canaux .canal b{font-size:13px}
 .canal.pros b{color:#A2416C}
 .canal.pros.active{border-color:#D9799F;box-shadow:0 0 0 1.5px #D9799F inset;background:#F8D7E4}
 .canaux-autres{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
@@ -647,7 +651,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div id="canaux" style="margin-top:20px"></div>
       <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
-      <div class="section" id="sec-presc"><div class="section-head"><h2>Pipeline prescripteurs</h2></div><div class="kanban" id="kanban-presc"></div></div>
+      <details class="section" id="sec-presc"><summary class="section-head" style="cursor:pointer;list-style:none"><h2 id="presc-titre">Agences et notaires à démarcher</h2><span class="note">Afficher</span></summary><div class="kanban" id="kanban-presc" style="margin-top:10px"></div></details>
       <div class="section" style="margin-top:40px"><h1 style="margin:0 0 16px">Plan d'action</h1><div id="plan"></div></div>
     </section>
 
@@ -1316,15 +1320,19 @@ h2,h3{font-weight:500;letter-spacing:0}
   function filtreCanal(c){if(!canalFiltre)return true;if(canalFiltre==='__sans')return !canalDe(c);if(canalFiltre.indexOf('b:')===0)return !!canalDe(c)&&brancheDe(canalDe(c))===Number(canalFiltre.slice(2));return canalDe(c)===canalFiltre;}
   function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
   var voirCanaux=false;
+  var CANAL_COUL={'Leboncoin':['#E8789A','#FCE6EE','#A93A62'],'AlloVoisins':['#C9507A','#F7DCE6','#8E2F55'],'PAP':['#F0A3B5','#FDF0F3','#A8506A'],'Réseau co-hôtes Airbnb':['#E2667F','#FDE4E8','#A23349'],'LinkedIn':['#B5739D','#F3E6EF','#7A3F67'],'Flyers et cartes commerçants':['#E59BB8','#FBEEF4','#9C4A6D'],'Envoi courrier':['#C08497','#F5E8EC','#7E4659']};
+  function coulCanal(k){return CANAL_COUL[k]||null;}
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
     var pros=S.contacts.filter(function(c){return (c.type==='prospect'||c.type==='prescripteur')&&c.etape!=='ecarte';});
     var enc=function(l){return l.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length;};
-    var h='<div class="canaux">'+BRANCHES[0][1].map(function(k){
+    var tout=!canalFiltre;
+    var h='<div class="canaux"><button type="button" class="canal pros tout'+(tout?' active':'')+'" data-canal=""><b>Tout</b><span>'+enc(pros.filter(function(c){return c.type==='prospect';}))+' en cours</span></button>'+BRANCHES[0][1].map(function(k){
       var l=pros.filter(function(c){return canalDe(c)===k;}),on=canalFiltre===k,n=enc(l),sous;
       if(k==='Envoi courrier'){var ae=(S.courriers||[]).filter(function(x){return x.statut==='a_envoyer';}).length;sous=courriersSemaine()+'/5 cette semaine'+(n?' · '+n+' en cours':'');if(!ae&&!n)sous='Aucun';}
       else sous=l.length?n+' en cours':'Aucun';
-      return '<button type="button" class="canal pros'+(on?' active':'')+'" data-canal="'+(on?'':esc(k))+'"><b>'+esc(k)+'</b><span>'+esc(sous)+'</span></button>';}).join('')+'</div>';
+      var C=coulCanal(k)||['#D9799F','#FBE6EE','#A2416C'];
+      return '<button type="button" class="canal pros'+(on?' active':'')+'" data-canal="'+(on?'':esc(k))+'" style="background:'+C[1]+';border-color:'+(on?C[0]:C[0]+'55')+';border-left:4px solid '+C[0]+(on?';box-shadow:0 0 0 1.5px '+C[0]+' inset':'')+'"><b style="color:'+C[2]+'">'+esc(k)+'</b><span>'+esc(sous)+'</span></button>';}).join('')+'</div>';
     var ch=function(v,lib,l){var on=canalFiltre===v;return '<button type="button" class="chip'+(on?' active':'')+'" data-canal="'+(on?'':esc(v))+'">'+esc(lib)+' · '+enc(l)+'</button>';};
     var br=function(i){return pros.filter(function(c){return canalDe(c)&&brancheDe(canalDe(c))===i;});};
     var sans=pros.filter(function(c){return !canalDe(c);});
@@ -1393,7 +1401,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
     renderCanaux();kanbanFor('kanban','prospect',ETAPES);
-    if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);
+    if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);if($('presc-titre'))$('presc-titre').textContent='Agences et notaires à démarcher · '+S.contacts.filter(function(c){return c.type==='prescripteur'&&['signe','perdu','ecarte'].indexOf(c.etape)<0;}).length;
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
     if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
     if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(!canalFiltre?'':canalFiltre==='__sans'?' · canal non précisé':canalFiltre.indexOf('b:')===0?' · '+BRANCHES[Number(canalFiltre.slice(2))][0]:' · '+canalFiltre);
@@ -1407,7 +1415,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     sous=sous.filter(Boolean).join(' · ');
     var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
-    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+couleurType(c.type)+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:couleurType(c.type))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
   }
   function kanbanFor(id,type,etapes){
     var k=$(id);if(!k)return;k.innerHTML='';
