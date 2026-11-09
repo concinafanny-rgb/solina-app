@@ -1320,7 +1320,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function filtreCanal(c){if(!canalFiltre)return true;if(canalFiltre==='__sans')return !canalDe(c);if(canalFiltre.indexOf('b:')===0)return !!canalDe(c)&&brancheDe(canalDe(c))===Number(canalFiltre.slice(2));return canalDe(c)===canalFiltre;}
   function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
   var voirCanaux=false;
-  var CANAL_COUL={'Leboncoin':['#E8789A','#FCE6EE','#A93A62'],'AlloVoisins':['#C9507A','#F7DCE6','#8E2F55'],'PAP':['#F0A3B5','#FDF0F3','#A8506A'],'Réseau co-hôtes Airbnb':['#E2667F','#FDE4E8','#A23349'],'LinkedIn':['#B5739D','#F3E6EF','#7A3F67'],'Flyers et cartes commerçants':['#E59BB8','#FBEEF4','#9C4A6D'],'Envoi courrier':['#C08497','#F5E8EC','#7E4659']};
+  var CANAL_COUL={'Leboncoin':['#EC5A13','#FFEBDF','#B4430B'],'AlloVoisins':['#2FA36B','#E3F4EA','#1F7049'],'PAP':['#3FA2D9','#E3F3FB','#1E6F9A'],'Réseau co-hôtes Airbnb':['#FF385C','#FFE6EB','#C21D3F'],'LinkedIn':['#0A66C2','#E1EDFA','#0A4C8F'],'Flyers et cartes commerçants':['#C8553D','#F8E4DC','#8E3824'],'Envoi courrier':['#F2B705','#FFF5D1','#7D5F00']};
   function coulCanal(k){return CANAL_COUL[k]||null;}
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
