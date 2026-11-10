@@ -420,6 +420,8 @@ details.anciens{margin-top:16px}
 .rosebtn{background:#D9799F;border-color:#D9799F;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
 .rosebtn:hover{background:#C7648B;border-color:#C7648B}
 .canal.pros{background:#FBE6EE;border-color:#F3CADB}
+.terrabtn{background:#C8553D;border-color:#C8553D;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
+.terrabtn:hover{background:#B04630;border-color:#B04630}
 .canal.pros.tout{background:#fff;border-color:#E9C3D3}
 .canal.pros.tout b{color:#6E584B}
 #canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
@@ -646,6 +648,11 @@ h2,h3{font-weight:500;letter-spacing:0}
     </section>
 
     <!-- PROSPECTION -->
+    <section class="panel" data-panel="demandes">
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Demandes reçues</h1></div><button class="btn terrabtn" id="btn-new-demande">+ Nouvelle demande</button></div>
+      <div class="section" style="margin-top:20px"><div class="kanban" id="kanban-dem"></div></div>
+    </section>
+
     <section class="panel" data-panel="prospection">
       <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1></div><button class="btn rosebtn" id="btn-new-prospect">+ Nouveau prospect</button></div>
       <div id="canaux" style="margin-top:20px"></div>
@@ -663,7 +670,7 @@ h2,h3{font-weight:500;letter-spacing:0}
         <form class="addline" id="task-form" style="margin-bottom:10px">
           <input id="task-input" placeholder="Nouvelle tâche…" autocomplete="off">
           <input id="task-date" type="date" class="short">
-          <select id="task-cat" class="short" aria-label="Catégorie"><option value="">Catégorie</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select>
+          <select id="task-cat" class="short" aria-label="Catégorie"><option value="">Catégorie</option><option value="prospection">Prospection</option><option value="demandes">Demandes reçues</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select>
           <button class="btn primary" type="submit">Ajouter</button>
         </form>
         <div class="chips" id="task-filtres" style="margin:4px 0 8px;flex-wrap:wrap"></div><div id="task-kanban"></div>
@@ -1001,7 +1008,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="field" style="justify-content:flex-end"><span style="display:flex;align-items:center;gap:10px;min-height:42px"><input type="checkbox" id="t-imp" style="width:20px;height:20px;accent-color:var(--terre)"><label for="t-imp" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--brun);font-weight:400">Tâche importante</label></span></div>
     </div>
     <div class="two"><div class="field"><label for="t-contact">Contact concerné</label><select id="t-contact"></select></div><div class="field"><label for="t-log">Logement</label><select id="t-log"></select></div></div>
-    <div class="field"><label for="t-cat">Catégorie (couleur)</label><select id="t-cat"><option value="">Automatique</option><option value="prospection">Prospection</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select></div>
+    <div class="field"><label for="t-cat">Catégorie (couleur)</label><select id="t-cat"><option value="">Automatique</option><option value="prospection">Prospection</option><option value="demandes">Demandes reçues</option><option value="partenaires">Partenaires</option><option value="logements">Logements et propriétaires</option><option value="admin">Administratif</option><option value="reseaux">Communication</option><option value="perso">Perso</option><option value="divers">Divers</option></select></div>
     <div class="actions" id="t-liens"></div>
     <div class="field"><label for="t-notes">Notes</label><textarea id="t-notes" style="min-height:180px"></textarea></div>
     <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-tclose>Annuler</button><span style="flex:1"></span><button type="button" class="btn danger" id="t-del" hidden>Supprimer</button></div>
@@ -1070,6 +1077,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     charges:'<svg viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5z"/><path d="M8 10v4M12 10v4M16 10v4"/></svg>',
     ops:'<svg viewBox="0 0 24 24"><path d="M9 4h6v3H9z"/><path d="M7 6H5v15h14V6h-2"/><path d="M9 12l2 2 4-4"/></svg>',
     conso:'<svg viewBox="0 0 24 24"><path d="M3 4h2l3 12h11l2-8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>',
+    demandes:'<svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>',
     evenements:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"/></svg>',
     idees:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
@@ -1077,10 +1085,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
-    ['Développement',[['prospection','Prospection'],['simprop','Simulateur propriétaire']]],
+    ['Développement',[['prospection','Prospection'],['demandes','Demandes reçues'],['simprop','Simulateur propriétaire']]],
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Finances']]],
     ['Communication',[['reseaux','Studio réseaux sociaux'],['evenements','Événements'],['idees','Boîte à idées']]],
@@ -1090,7 +1098,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','Réseau co-hôtes Airbnb','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','Réseau co-hôtes Airbnb','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Site internet','Fiche Google','Rencontre','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
   var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
@@ -1171,9 +1179,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'prescripteurs à démarcher','partenaires','prospection'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
     renderAgenda();
   }
-  var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
-  var CAT_ORDRE=['prospection','partenaires','logements','admin','reseaux','perso','divers'];
-  function catContact(c){if(!c)return '';if(c.type==='prospect')return 'prospection';if(['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0)return 'partenaires';if(['client','prestataire'].indexOf(c.type)>=0)return 'logements';return '';}
+  var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},demandes:{nom:'Demandes reçues',coul:'#C8553D',fond:'#F8E4DC',texte:'#8E3824'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
+  var CAT_ORDRE=['prospection','demandes','partenaires','logements','admin','reseaux','perso','divers'];
+  function estProspection(c){return !!c&&c.type==='prospect'&&!!c.canal&&BRANCHES[0][1].indexOf(c.canal)>=0;}
+  function catContact(c){if(!c)return '';if(c.type==='prospect')return estProspection(c)?'prospection':'demandes';if(['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0)return 'partenaires';if(['client','prestataire'].indexOf(c.type)>=0)return 'logements';return '';}
   function catTache(t){if(t.categorie&&CAT[t.categorie])return t.categorie;var ti=(t.titre||'').toLowerCase();
     if(/^envoyer le message|^répondre sur/.test(ti))return 'prospection';
     if(/urssaf|factur|compta|impôt|impot|déclar|declar|banque|assurance|tva|cfe/.test(ti))return 'admin';
@@ -1327,7 +1336,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var pros=S.contacts.filter(function(c){return (c.type==='prospect'||c.type==='prescripteur')&&c.etape!=='ecarte';});
     var enc=function(l){return l.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length;};
     var tout=!canalFiltre;
-    var h='<div class="canaux"><button type="button" class="canal pros tout'+(tout?' active':'')+'" data-canal=""><b>Tout</b><span>'+enc(pros.filter(function(c){return c.type==='prospect';}))+' en cours</span></button>'+BRANCHES[0][1].map(function(k){
+    var h='<div class="canaux"><button type="button" class="canal pros tout'+(tout?' active':'')+'" data-canal=""><b>Tout</b><span>'+enc(pros.filter(estProspection))+' en cours</span></button>'+BRANCHES[0][1].map(function(k){
       var l=pros.filter(function(c){return canalDe(c)===k;}),on=canalFiltre===k,n=enc(l),sous;
       if(k==='Envoi courrier'){var ae=(S.courriers||[]).filter(function(x){return x.statut==='a_envoyer';}).length;sous=courriersSemaine()+'/5 cette semaine'+(n?' · '+n+' en cours':'');if(!ae&&!n)sous='Aucun';}
       else sous=l.length?n+' en cours':'Aucun';
@@ -1400,7 +1409,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
-    renderCanaux();kanbanFor('kanban','prospect',ETAPES);
+    renderCanaux();kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c);});kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte';});
     if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);if($('presc-titre'))$('presc-titre').textContent='Agences et notaires à démarcher · '+S.contacts.filter(function(c){return c.type==='prescripteur'&&['signe','perdu','ecarte'].indexOf(c.etape)<0;}).length;
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
     if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
@@ -1415,12 +1424,12 @@ h2,h3{font-weight:500;letter-spacing:0}
     sous=sous.filter(Boolean).join(' · ');
     var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
-    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:couleurType(c.type))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:(c.type==='prospect'?'#C8553D':couleurType(c.type)))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
   }
-  function kanbanFor(id,type,etapes){
+  function kanbanFor(id,type,etapes,pred){
     var k=$(id);if(!k)return;k.innerHTML='';
     etapes.forEach(function(e){
-      var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&filtreCanal(c);}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
+      var items=S.contacts.filter(function(c){return c.type===type&&(c.etape||'a_contacter')===e[0]&&(pred?pred(c):filtreCanal(c));}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:1;});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];
       col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){return '<div class="kcarte">'+carteProspect(c)+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+etapes.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===(c.etape||'a_contacter')?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       k.appendChild(col);
@@ -2137,6 +2146,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
   $('btn-csv').addEventListener('click',exporterContacts);
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
+  $('btn-new-demande').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();$('f-canal').value='';toggleEtape();});
   $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans'&&canalFiltre.indexOf('b:')<0)$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
   $('f-type').addEventListener('change',toggleEtape);$('f-etape').addEventListener('change',toggleEtape);
