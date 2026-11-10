@@ -422,6 +422,9 @@ details.anciens{margin-top:16px}
 .canal.pros{background:#FBE6EE;border-color:#F3CADB}
 .terrabtn{background:#C8553D;border-color:#C8553D;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
 .terrabtn:hover{background:#B04630;border-color:#B04630}
+#dem-canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
+#dem-canaux .canal{padding:9px 10px}
+#dem-canaux .canal b{font-size:13px}
 .canal.pros.tout{background:#fff;border-color:#E9C3D3}
 .canal.pros.tout b{color:#6E584B}
 #canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
@@ -650,7 +653,8 @@ h2,h3{font-weight:500;letter-spacing:0}
     <!-- PROSPECTION -->
     <section class="panel" data-panel="demandes">
       <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Demandes reçues</h1></div><button class="btn terrabtn" id="btn-new-demande">+ Nouvelle demande</button></div>
-      <div class="section" style="margin-top:20px"><div class="kanban" id="kanban-dem"></div></div>
+      <div id="dem-canaux" style="margin-top:20px"></div>
+      <div class="section" style="margin-top:18px"><div class="kanban" id="kanban-dem"></div></div>
     </section>
 
     <section class="panel" data-panel="prospection">
@@ -958,7 +962,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       </select></div>
     <div class="field" id="field-raison" hidden><label for="f-raison">Pourquoi perdu</label><select id="f-raison"><option value="">À préciser</option></select></div>
     <div class="field" id="field-pseudo"><label for="f-pseudo">Pseudo sur l'annonce (Leboncoin, AlloVoisins, PAP)</label><input id="f-pseudo" autocomplete="off" placeholder="Le nom affiché sur l'annonce"></div>
-    <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"></select></div><input type="hidden" id="f-source"></div>
+    <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"></select></div><div class="field"><label for="f-source">De la part de</label><input id="f-source" placeholder="Nom de la personne qui recommande, précision" autocomplete="off"></div></div>
     <div class="actions" id="f-liens" hidden></div>
     <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Ce qu'il faut retenir : le bien, la situation, ce qui a été dit…"></textarea></div>
     <div class="hr"></div>
@@ -1098,7 +1102,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Rencontre','Instagram','Publicité','Bouche à oreille','Parrainage clients']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre','Instagram','Publicité']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
   var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
@@ -1330,8 +1334,23 @@ h2,h3{font-weight:500;letter-spacing:0}
   function filtreCanal(c){if(!canalFiltre)return true;if(canalFiltre==='__sans')return !canalDe(c);if(canalFiltre.indexOf('b:')===0)return !!canalDe(c)&&brancheDe(canalDe(c))===Number(canalFiltre.slice(2));return canalDe(c)===canalFiltre;}
   function carteCanal(k,l,list){var enc=list.filter(function(c){return ['signe','perdu','pas_interesse','ecarte'].indexOf(c.etape)<0;}).length,sig=list.filter(function(c){return c.etape==='signe';}).length;return '<button class="canal'+(canalFiltre===k?' active':'')+'" data-canal="'+esc(k)+'"><b>'+esc(l)+'</b><span>'+(list.length?enc+' en cours'+(sig?' · '+sig+' signé'+(sig>1?'s':''):''):'Aucun pour l\'instant')+'</span></button>';}
   var voirCanaux=false;
-  var CANAL_COUL={'Leboncoin':['#EC5A13','#FFEBDF','#B4430B'],'AlloVoisins':['#2FA36B','#E3F4EA','#1F7049'],'PAP':['#3FA2D9','#E3F3FB','#1E6F9A'],'Réseau co-hôtes Airbnb':['#FF385C','#FFE6EB','#C21D3F'],'LinkedIn':['#0A66C2','#E1EDFA','#0A4C8F'],'Flyers et cartes commerçants':['#C8553D','#F8E4DC','#8E3824'],'Envoi courrier':['#F2B705','#FFF5D1','#7D5F00']};
+  var CANAL_COUL={'Leboncoin':['#EC5A13','#FFEBDF','#B4430B'],'AlloVoisins':['#2FA36B','#E3F4EA','#1F7049'],'PAP':['#3FA2D9','#E3F3FB','#1E6F9A'],'Réseau co-hôtes Airbnb':['#FF385C','#FFE6EB','#C21D3F'],'LinkedIn':['#0A66C2','#E1EDFA','#0A4C8F'],'Flyers et cartes commerçants':['#C8553D','#F8E4DC','#8E3824'],'Envoi courrier':['#F2B705','#FFF5D1','#7D5F00'],'Site internet':['#935E36','#F3E7DC','#6B4022'],'Formulaire estimation':['#D08C4A','#FAEBDB','#8A5420'],'Fiche Google':['#4285F4','#E5EEFD','#1F5BC4'],'Recommandation':['#8E6BB0','#EEE5F6','#5E3F82'],'Rencontre':['#4E9A96','#E1F0EE','#2F6764'],'Instagram':['#C13584','#F8E1EE','#8A1F5C'],'Publicité':['#7A7A7A','#EFEFEF','#4A4A4A']};
   function coulCanal(k){return CANAL_COUL[k]||null;}
+  var demFiltre='';
+  var DEM_CANAUX=['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre'];
+  function renderDemCanaux(){
+    var el=$('dem-canaux');if(!el)return;
+    var dem=S.contacts.filter(function(c){return c.type==='prospect'&&!estProspection(c)&&c.etape!=='ecarte';});
+    var enc=function(l){return l.filter(function(c){return ['signe','perdu'].indexOf(c.etape)<0;}).length;};
+    var tuile=function(k,lib,l,C){var on=demFiltre===k;var n=enc(l);return '<button type="button" class="canal pros'+(on?' active':'')+'" data-demcanal="'+(on?'':esc(k))+'" style="background:'+C[1]+';border-color:'+(on?C[0]:C[0]+'55')+';border-left:4px solid '+C[0]+(on?';box-shadow:0 0 0 1.5px '+C[0]+' inset':'')+'"><b style="color:'+C[2]+'">'+esc(lib)+'</b><span>'+(l.length?n+' en cours':'Aucune')+'</span></button>';};
+    var h='<div class="canaux"><button type="button" class="canal pros tout'+(!demFiltre?' active':'')+'" data-demcanal="" style="'+(!demFiltre?'border-color:#C8553D;box-shadow:0 0 0 1.5px #C8553D inset;background:#F8E4DC':'')+'"><b>Tout</b><span>'+enc(dem)+' en cours</span></button>';
+    DEM_CANAUX.forEach(function(k){h+=tuile(k,k==='Recommandation'?'Recommandé':k,dem.filter(function(c){return c.canal===k;}),coulCanal(k));});
+    var autres=dem.filter(function(c){return c.canal&&DEM_CANAUX.indexOf(c.canal)<0;});autres.forEach(function(c){});
+    var sans=dem.filter(function(c){return !c.canal;});
+    if(sans.length)h+=tuile('__sans','À préciser',sans,['#BB9F89','#F3E6DD','#6E584B']);
+    el.innerHTML=h+'</div>';
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-demcanal]');if(b){demFiltre=b.dataset.demcanal;renderKanban();}});
   function renderCanaux(){
     var el=$('canaux');if(!el)return;
     var pros=S.contacts.filter(function(c){return (c.type==='prospect'||c.type==='prescripteur')&&c.etape!=='ecarte';});
@@ -1410,7 +1429,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
-    renderCanaux();kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c);});kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte';});
+    renderCanaux();kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c);});renderDemCanaux();kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte'&&(!demFiltre||(demFiltre==='__sans'?!c.canal:c.canal===demFiltre));});
     if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);if($('presc-titre'))$('presc-titre').textContent='Agences et notaires à démarcher · '+S.contacts.filter(function(c){return c.type==='prescripteur'&&['signe','perdu','ecarte'].indexOf(c.etape)<0;}).length;
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
     if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
@@ -2147,7 +2166,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
   $('btn-csv').addEventListener('click',exporterContacts);
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
-  $('btn-new-demande').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();$('f-canal').value='';toggleEtape();});
+  $('btn-new-demande').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();$('f-canal').value=(demFiltre&&demFiltre!=='__sans')?demFiltre:'';toggleEtape();});
   $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans'&&canalFiltre.indexOf('b:')<0)$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
   $('f-type').addEventListener('change',toggleEtape);$('f-etape').addEventListener('change',toggleEtape);
