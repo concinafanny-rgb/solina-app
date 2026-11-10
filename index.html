@@ -958,9 +958,9 @@ h2,h3{font-weight:500;letter-spacing:0}
         <option value="visite">RDV fait + propal</option>
         <option value="signature">En cours</option>
         <option value="signe">Signé</option>
-        <option value="perdu">Perdu</option>
+        <option value="perdu">En pause</option>
       </select></div>
-    <div class="field" id="field-raison" hidden><label for="f-raison">Pourquoi perdu</label><select id="f-raison"><option value="">À préciser</option></select></div>
+    <div class="field" id="field-raison" hidden><label for="f-raison">Pourquoi en pause</label><select id="f-raison"><option value="">À préciser</option></select></div>
     <div class="field" id="field-pseudo"><label for="f-pseudo">Pseudo sur l'annonce (Leboncoin, AlloVoisins, PAP)</label><input id="f-pseudo" autocomplete="off" placeholder="Le nom affiché sur l'annonce"></div>
     <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"></select></div><div class="field"><label for="f-source">De la part de</label><input id="f-source" placeholder="Nom de la personne qui recommande, précision" autocomplete="off"></div></div>
     <div class="actions" id="f-liens" hidden></div>
@@ -1104,8 +1104,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
   var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre','Instagram','Publicité']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
-  var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','Perdu']];
-  var RAISONS=['Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
+  var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','En pause']];
+  var RAISONS=['Pas pour le moment','Travaux en cours','Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
   var DEFAULT_PARAMS={urssaf:21.2,plafond:40000};
   var CHARGE_CATS=['Abonnements et logiciels','Assurance','Véhicule et déplacements','Banque','Marketing et site','Matériel','Comptabilité','Téléphone','Autre'];
   var POST_STATUTS=['Idée','À préparer','À tourner','Prêt','À valider','Programmé','Publié'];
@@ -1444,7 +1444,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     sous=sous.filter(Boolean).join(' · ');
     var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
-    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:(c.type==='prospect'?'#C8553D':couleurType(c.type)))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:var(--rouge)">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:(c.type==='prospect'?'#C8553D':couleurType(c.type)))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:#9A8577;font-style:italic">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
   }
   function kanbanFor(id,type,etapes,pred){
     var k=$(id);if(!k)return;k.innerHTML='';
