@@ -403,6 +403,10 @@ details.anciens{margin-top:16px}
 .canal.active{border-color:var(--terre);box-shadow:0 0 0 1px var(--terre) inset}
 .canal b{display:block;font-weight:500;font-size:13.5px;color:var(--brun)}
 .canal span{font-size:12px;color:var(--muted)}
+.test-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:8px}
+.test-r{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px;font-size:14px;color:var(--brun)}
+.test-r b{font-size:18px;font-weight:500;color:var(--terre)}
+
 .tb-retour{font-size:26px;line-height:1;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--terre);margin-right:10px;display:inline-flex;align-items:center;justify-content:center;padding-bottom:3px}
 .tb-retour[hidden]{display:none}
 #kanban,#kanban-dem,#kanban-part{transform:rotateX(180deg)}
@@ -752,6 +756,9 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
       <div class="section" style="margin-top:18px">
         <div class="twrap"><table class="tbl" id="biens-table"><thead><tr><th>Logement</th><th class="r">Ma commission %</th><th class="r">Prix / nuit €</th><th class="r">Occupation %</th><th class="r">Mois actifs / an</th><th class="r">Loyers / mois</th><th class="r">Commission / mois</th><th class="r">Commission / an</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        <div class="card" id="test-bien" style="margin-top:14px;padding:14px 16px"><div class="ctit">Tester un nouveau bien <span class="note">(n'entre pas dans le prévisionnel)</span></div>
+          <div class="test-g"><div class="field"><label for="tb-prix">Prix / nuit €</label><input id="tb-prix" type="number" min="0" value="180"></div><div class="field"><label for="tb-occ">Occupation %</label><input id="tb-occ" type="number" min="0" max="100" value="55"></div><div class="field"><label for="tb-mois">Mois actifs / an</label><input id="tb-mois" type="number" min="1" max="12" value="11"></div><div class="field"><label for="tb-com">Ma commission %</label><input id="tb-com" type="number" min="0" max="100" value="25"></div></div>
+          <div class="test-r" id="tb-res"></div></div>
         
       </div>
       <div class="grid cards-2 section">
@@ -1790,6 +1797,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function renderConso(){renderOps();}
 
   function voirDoc(html){var f=$('dv-frame');$('docview').hidden=false;document.body.style.overflow='hidden';f.srcdoc=html;}
+  function testBien(){var v=function(id){return num($(id).value);};var loy=v('tb-prix')*30*v('tb-occ')/100,com=loy*v('tb-com')/100;$('tb-res').innerHTML='<span>Loyers / mois <b>'+eur(loy)+'</b></span><span>Ma commission / mois <b>'+eur(com)+'</b></span><span>Ma commission / an <b>'+eur(com*v('tb-mois'))+'</b></span><span>Loyers / an pour le propriétaire <b>'+eur(loy*v('tb-mois'))+'</b></span>';}
+  ['tb-prix','tb-occ','tb-mois','tb-com'].forEach(function(id){$(id).addEventListener('input',testBien);});testBien();
   var CFM=null;function demander(msg,fn,oui){$('cfm-t').textContent=msg||'Êtes vous sûre de vouloir supprimer ?';$('cfm-oui').textContent=oui||'Oui, supprimer';CFM=fn;$('cfm').hidden=false;setTimeout(function(){$('cfm-oui').focus();},30);}
   function confirmer(b){if(b.dataset.armed==='1')return true;var t=b.innerHTML;b.dataset.armed='1';b.innerHTML='Supprimer ?';b.classList.add('arme');setTimeout(function(){b.dataset.armed='';b.innerHTML=t;b.classList.remove('arme');},3500);return false;}
   function lienSur(v){return /^https?:\/\//i.test(v||'')?v:'';}
