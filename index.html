@@ -423,7 +423,12 @@ details.anciens{margin-top:16px}
 .cfm-b{background:var(--card);border-radius:18px;padding:22px 22px 18px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(70,50,40,.25)}
 .cfm-b p{margin:0 0 18px;font-size:15.5px;color:var(--brun);line-height:1.45}
 .cfm-a{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-.evt{display:grid;grid-template-columns:86px 1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.evt-mois-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:18px 22px;align-items:start}
+@media (max-width:699px){.evt-mois-g{grid-template-columns:1fr}}
+.evt-mois h2{font-size:24px;margin:0 0 10px;text-transform:capitalize}
+.evt.fort{border-color:#E8A9A4;box-shadow:inset 4px 0 0 #D9534F}
+.evt .idee,.evt .prix{font-size:12px}
+.evt{display:grid;grid-template-columns:70px 1fr;gap:12px;padding:11px 13px !important;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
 .evt-d{background:#F1EAF6;color:#634388;border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;line-height:1.35;align-self:start}
 .evt-d b{display:block;font-size:20px;font-weight:500;line-height:1.1}
 .evt h3{margin:0 0 3px;font-size:15px;font-weight:500;color:var(--brun)}
@@ -732,13 +737,8 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="grid cards-4" style="margin-top:18px">
         <div class="card"><div class="num" id="ca-k-mois">0 €</div><div class="lbl">facturé ce mois</div></div>
         <div class="card"><div class="num" id="ca-k-annee">0 €</div><div class="lbl">facturé cette année</div></div>
-        <div class="card"><div class="num" id="ca-k-loyers">0 €</div><div class="lbl">loyers encaissés ce mois</div></div>
+        <div class="card"><div class="num" id="ca-k-loyers">0 €</div><div class="lbl">loyers encaissés pour tes propriétaires ce mois</div></div>
         <div class="card"><div class="num" id="ca-k-tva" style="font-size:22px;padding-top:6px">—</div><div class="lbl" id="ca-k-tva-l">du plafond</div></div>
-      </div>
-      <div class="section">
-        <div class="section-head"><h2 id="ca-mois-titre">Saisie du mois</h2><button class="btn sm" id="ca-add">+ Ligne</button></div>
-        <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Facturé €</th><th>Facture</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        
       </div>
       <div class="section">
         <div class="section-head"><h2>Facturé sur 12 mois</h2></div>
@@ -748,22 +748,7 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="section-head"><h2 id="ca-log-titre">Par logement</h2></div>
         <div class="twrap"><table class="tbl" id="ca-log"><thead><tr><th>Logement</th><th class="r">Loyers encaissés</th><th class="r">Facturé</th><th class="r">Mois facturés</th><th class="r">Part du CA</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
       </div>
-      <div class="section">
-        <div class="section-head"><h2>Mes charges</h2><button class="btn sm" id="charge-add">+ Charge</button></div>
-        <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        
-      </div>
-      <div class="section">
-        <div class="section-head"><h2>Budget prévisionnel <span id="bud-an-t"></span></h2><span style="display:flex;gap:8px;align-items:center"><button class="btn sm" data-budan="-1" aria-label="Année précédente">‹</button><button class="btn sm" data-budan="1" aria-label="Année suivante">›</button></span></div>
-        <div class="grid cards-4" id="bud-cartes"></div>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0">
-          <div class="field"><label for="p-impot">Impôt à mettre de côté, % du CA</label><input type="number" step="0.1" id="p-impot" data-param="impot"></div>
-          <div class="field"><label for="p-treso">Épargne de trésorerie, % du net</label><input type="number" step="1" id="p-treso" data-param="treso"></div>
-        </div>
-        <div class="twrap"><table class="tbl" id="bud-table"><thead><tr><th>Mois</th><th class="r">CA prévu €</th><th class="r">CA réel</th><th class="r">URSSAF</th><th class="r">Impôt</th><th class="r">Charges</th><th class="r">Net</th><th class="r">À mettre de côté</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
-        
-      </div>
-      <div class="section" style="margin-top:46px">
+      <div class="section" style="margin-top:28px">
       <div class="phrow"><div class="ph"><div class="pl">Prévisionnel</div><h2>Simulateur de chiffre d'affaires</h2></div><button class="btn primary sm" id="bien-add">+ Logement</button></div>
       <div class="section" style="margin-top:18px">
         <div class="twrap"><table class="tbl" id="biens-table"><thead><tr><th>Logement</th><th class="r">Ma commission %</th><th class="r">Prix / nuit €</th><th class="r">Occupation %</th><th class="r">Mois actifs / an</th><th class="r">Loyers / mois</th><th class="r">Commission / mois</th><th class="r">Commission / an</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
@@ -790,6 +775,26 @@ h2,h3{font-weight:500;letter-spacing:0}
           <div class="rr"><span>Net avant impôt sur l'année</span><span id="s-an">—</span></div>
           <div class="rr"><span>Plafond</span><span id="s-tva">—</span></div>
         </div>
+      </div>
+      <div class="section" style="margin-top:28px">
+        <div class="section-head"><h2>Budget prévisionnel <span id="bud-an-t"></span></h2><span style="display:flex;gap:8px;align-items:center"><button class="btn sm" data-budan="-1" aria-label="Année précédente">‹</button><button class="btn sm" data-budan="1" aria-label="Année suivante">›</button></span></div>
+        <div class="grid cards-4" id="bud-cartes"></div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0">
+          <div class="field"><label for="p-impot">Impôt sur le revenu à mettre de côté (% du chiffre d'affaires)</label><input type="number" step="0.1" id="p-impot" data-param="impot"></div>
+          <div class="field"><label for="p-treso">Réserve de sécurité (% du net)</label><input type="number" step="1" id="p-treso" data-param="treso"></div>
+        </div>
+        <div class="twrap"><table class="tbl" id="bud-table"><thead><tr><th>Mois</th><th class="r">CA prévu €</th><th class="r">CA réel</th><th class="r">URSSAF</th><th class="r">Impôt</th><th class="r">Charges</th><th class="r">Net</th><th class="r">À mettre de côté</th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        
+      </div>
+      <div class="section">
+        <div class="section-head"><h2 id="ca-mois-titre">Loyers encaissés du mois</h2><button class="btn sm" id="ca-add">+ Ligne</button></div>
+        <div class="twrap"><table class="tbl" id="ca-table"><thead><tr><th>Logement</th><th class="r">Loyers encaissés €</th><th class="r">Commission %</th><th class="r">Facturé €</th><th>Facture</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        
+      </div>
+      <div class="section">
+        <div class="section-head"><h2>Mes charges</h2><button class="btn sm" id="charge-add">+ Charge</button></div>
+        <div class="twrap"><table class="tbl" id="charges-table"><thead><tr><th>Charge</th><th>Catégorie</th><th class="r">Par mois €</th><th class="r">Par an €</th><th>Note</th><th></th></tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+        
       </div>
     </div>
     </section>
@@ -1862,11 +1867,12 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('evt-filtres').innerHTML=l.length?[''].concat(villes).map(function(v){return '<button type="button" class="chip'+(evtFiltre===v?' active':'')+'" data-evtv="'+esc(v)+'">'+esc(v||'Toutes les villes')+' · '+l.filter(function(e){return !v||e.ville===v;}).length+'</button>';}).join(''):'';
     l=l.filter(function(e){return !evtFiltre||e.ville===evtFiltre;});
     if(!l.length){el.innerHTML='<div class="empty"><b>Aucun événement à venir</b>Claude ajoute ici chaque jour les événements repérés autour de tes logements.</div>';return;}
-    var h='',mois='';
-    l.forEach(function(e){var m=(e.debut||'').slice(0,7);if(m!==mois){mois=m;h+='<div class="eyebrow" style="margin:18px 0 8px">'+esc(m?fmtMois(m):'Date à confirmer')+'</div>';}
+    var parMois={},ordre=[];
+    l.forEach(function(e){var m=(e.debut||'').slice(0,7)||'?';if(!parMois[m]){parMois[m]='';ordre.push(m);}var h='';
+      var important=/(\+\s?(5\d|[6-9]\d|1\d\d)\s?%)|très gros|majeur|minimum de nuits/i.test(e.prix||'');
       var d=evtDates(e),nouveau=(e.createdAt||'').slice(0,10)>=isoD(new Date(Date.now()-3*864e5));
-      h+='<div class="evt"><div class="evt-d"><b>'+esc(d.g)+'</b>'+esc(d.p)+'</div><div><h3>'+esc(e.titre||'')+(nouveau?' <span class="pill today" style="font-size:9.5px;padding:1px 6px;vertical-align:middle">Nouveau</span>':'')+'</h3><div class="s">'+esc([e.ville,e.type,e.lieu].filter(Boolean).join(' · '))+'</div>'+(e.prix?'<div class="prix">'+esc(e.prix)+'</div>':'')+(e.idee?'<div class="idee">Idée de com : '+esc(e.idee)+'</div>':'')+'<div class="evt-a">'+(e.lien?'<a class="lienx" href="'+esc(e.lien)+'" target="_blank" rel="noopener">Voir l\'événement</a>':'')+'<button type="button" class="btn xs" data-evtidee="'+esc(e.id)+'">'+(e.ideeCreee?'Dans la boîte à idées':'Mettre dans la boîte à idées')+'</button><span style="flex:1"></span><button type="button" class="btn ghost xs" data-evtdel="'+esc(e.id)+'">Supprimer</button></div></div></div>';});
-    el.innerHTML=h;
+      h+='<div class="evt'+(important?' fort':'')+'"><div class="evt-d"><b>'+esc(d.g)+'</b>'+esc(d.p)+'</div><div><h3>'+esc(e.titre||'')+(important?' <span class="pill" style="background:#F6DADA;color:#B3261E;font-size:9.5px;padding:1px 6px;vertical-align:middle">Changer les prix</span>':'')+(nouveau?' <span class="pill today" style="font-size:9.5px;padding:1px 6px;vertical-align:middle">Nouveau</span>':'')+'</h3><div class="s">'+esc([e.ville,e.type,e.lieu].filter(Boolean).join(' · '))+'</div>'+(e.prix?'<div class="prix">'+esc(e.prix)+'</div>':'')+(e.idee?'<div class="idee">Idée de com : '+esc(e.idee)+'</div>':'')+'<div class="evt-a">'+(e.lien?'<a class="lienx" href="'+esc(e.lien)+'" target="_blank" rel="noopener">Voir l\'événement</a>':'')+'<button type="button" class="btn xs" data-evtidee="'+esc(e.id)+'">'+(e.ideeCreee?'Dans la boîte à idées':'Mettre dans la boîte à idées')+'</button><span style="flex:1"></span><button type="button" class="btn ghost xs" data-evtdel="'+esc(e.id)+'">Supprimer</button></div></div></div>';parMois[m]+=h;});
+    el.innerHTML='<div class="evt-mois-g">'+ordre.map(function(m){return '<div class="evt-mois"><h2>'+esc(m!=='?'?fmtMois(m):'Date à confirmer')+'</h2>'+parMois[m]+'</div>';}).join('')+'</div>';
   }
   document.addEventListener('click',function(e){
     var v=e.target.closest('[data-evtv]');if(v){evtFiltre=v.dataset.evtv;renderEvenements();return;}
