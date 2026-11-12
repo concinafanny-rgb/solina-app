@@ -1675,7 +1675,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       '<td><input class="r" type="number" data-f="occupation" value="'+esc(b.occupation)+'"></td>'+
       '<td><input class="r" type="number" data-f="moisActifs" value="'+esc((b.moisActifs===''||b.moisActifs==null)?12:b.moisActifs)+'" min="0" max="12"></td>'+
       '<td class="r tnum">'+eur(bienLoyersMois(b))+'</td><td class="r calc tnum">'+eur(bienCommissionMois(b))+'</td><td class="r calc tnum">'+eur(bienCommissionAn(b))+'</td>'+
-      '<td><button class="del" data-delbien="'+esc(b.id)+'" aria-label="Supprimer">×</button></td></tr>';}).join('')||'<tr><td colspan="9" class="empty">Ajoute ton premier logement avec « + Logement ».</td></tr>';
+      '<td><button class="del" data-delbien="'+esc(b.id)+'" aria-label="Ranger dans les anciens logements" title="Ranger dans les anciens logements">×</button></td></tr>';}).join('')||'<tr><td colspan="9" class="empty">Ajoute ton premier logement avec « + Logement ».</td></tr>';
     var tm=list.reduce(function(a,b){return a+bienCommissionMois(b);},0),ta=list.reduce(function(a,b){return a+bienCommissionAn(b);},0);
     tf.innerHTML='<tr><td colspan="6">Total commissions</td><td class="r tnum">'+eur(tm)+'</td><td class="r tnum">'+eur(ta)+'</td><td></td></tr>';
     // résultat
@@ -2319,7 +2319,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var x=e.target.closest('[data-deltask]');if(x){e.preventDefault();if(x.dataset.armed!=='1'){x.dataset.armed='1';x.textContent='Supprimer ?';x.classList.add('arme');setTimeout(function(){x.dataset.armed='';x.textContent='×';x.classList.remove('arme');},3500);return;}remove('taches',x.dataset.deltask);return;}
     var di=e.target.closest('[data-delidea]');if(di){if(!confirmer(di))return;remove('idees',di.dataset.delidea);return;}
     var dp=e.target.closest('[data-delpost]');if(dp){if(!confirmer(dp))return;remove('posts',dp.dataset.delpost);return;}
-    var db1=e.target.closest('[data-delbien]');if(db1){if(!confirmer(db1))return;remove('biens',db1.dataset.delbien);return;}
+    var db1=e.target.closest('[data-delbien]');if(db1){var bb=byId(S.biens,db1.dataset.delbien);if(bb)demander('Passer '+(bb.nom||'ce logement')+' dans les anciens logements ? Rien ne sera effacé.',function(){save('biens',Object.assign({},bb,{actif:false})).catch(function(){});toast('Rangé dans les anciens logements');},'Oui, le ranger');return;}
     var dr=e.target.closest('[data-delrev]');if(dr){if(!confirmer(dr))return;remove('revenus',dr.dataset.delrev);return;}
     var dc=e.target.closest('[data-delcharge]');if(dc){if(!confirmer(dc))return;remove('charges',dc.dataset.delcharge);return;}
     var dco=e.target.closest('[data-delconso]');if(dco){if(!confirmer(dco))return;remove('conso',dco.dataset.delconso);return;}
