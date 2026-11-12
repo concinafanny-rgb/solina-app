@@ -425,6 +425,16 @@ details.anciens{margin-top:16px}
 #dem-canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
 #dem-canaux .canal{padding:9px 10px}
 #dem-canaux .canal b{font-size:13px}
+.orbtn{background:#D4A72C;border-color:#D4A72C;color:#fff;font-size:15px;font-weight:500;padding:11px 20px;min-height:46px;border-radius:14px}
+.orbtn:hover{background:#BF9420;border-color:#BF9420}
+#part-canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:7px}
+#part-canaux .canal{padding:9px 10px}
+#part-canaux .canal b{font-size:13px}
+.part-jour{margin-top:12px;font-size:13.5px;color:var(--brun);background:#FAF0D0;border-radius:12px;padding:9px 14px;display:inline-block}
+.kp-act{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.kp-act .btn{font-size:11.5px;padding:3px 8px;min-height:26px}
+.kp-coord{font-size:12px;color:var(--muted);margin-top:2px;word-break:break-word}
+.kp-coord a{color:var(--terre)}
 .canal.pros.tout{background:#fff;border-color:#E9C3D3}
 .canal.pros.tout b{color:#6E584B}
 #canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
@@ -651,6 +661,13 @@ h2,h3{font-weight:500;letter-spacing:0}
     </section>
 
     <!-- PROSPECTION -->
+    <section class="panel" data-panel="partenaires">
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection partenaires</h1></div><button class="btn orbtn" id="btn-new-part">+ Nouveau partenaire</button></div>
+      <div id="part-canaux" style="margin-top:20px"></div>
+      <div class="part-jour" id="part-jour"></div>
+      <div class="section" style="margin-top:14px"><div class="kanban" id="kanban-part"></div></div>
+    </section>
+
     <section class="panel" data-panel="demandes">
       <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Demandes reçues</h1></div><button class="btn terrabtn" id="btn-new-demande">+ Nouvelle demande</button></div>
       <div id="dem-canaux" style="margin-top:20px"></div>
@@ -658,11 +675,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     </section>
 
     <section class="panel" data-panel="prospection">
-      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection</h1></div><button class="btn rosebtn" id="btn-new-prospect">+ Nouveau prospect</button></div>
+      <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection propriétaires</h1></div><button class="btn rosebtn" id="btn-new-prospect">+ Nouveau prospect</button></div>
       <div id="canaux" style="margin-top:20px"></div>
       <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
       <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
-      <details class="section" id="sec-presc"><summary class="section-head" style="cursor:pointer;list-style:none"><h2 id="presc-titre">Agences et notaires à démarcher</h2><span class="note">Afficher</span></summary><div class="kanban" id="kanban-presc" style="margin-top:10px"></div></details>
       <div class="section" style="margin-top:40px"><h1 style="margin:0 0 16px">Plan d'action</h1><div id="plan"></div></div>
     </section>
 
@@ -1081,6 +1097,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     charges:'<svg viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5z"/><path d="M8 10v4M12 10v4M16 10v4"/></svg>',
     ops:'<svg viewBox="0 0 24 24"><path d="M9 4h6v3H9z"/><path d="M7 6H5v15h14V6h-2"/><path d="M9 12l2 2 4-4"/></svg>',
     conso:'<svg viewBox="0 0 24 24"><path d="M3 4h2l3 12h11l2-8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>',
+    partenaires:'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5M10.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5"/></svg>',
     demandes:'<svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>',
     evenements:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z"/></svg>',
     idees:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
@@ -1089,10 +1106,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection propriétaires',partenaires:'Prospection partenaires',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
-    ['Développement',[['prospection','Prospection'],['demandes','Demandes reçues'],['simprop','Simulateur propriétaire']]],
+    ['Développement',[['prospection','Prospection propriétaires'],['partenaires','Prospection partenaires'],['demandes','Demandes reçues'],['simprop','Simulateur propriétaire']]],
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Finances']]],
     ['Communication',[['reseaux','Studio réseaux sociaux'],['evenements','Événements'],['idees','Boîte à idées']]],
@@ -1103,7 +1120,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
   var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','PAP','LinkedIn','Flyers et cartes commerçants','Envoi courrier']],['Réseau et partenaires',['Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre','Instagram','Publicité']],['Autre',['Autre']]];
-  var ETAPES_PRESC=[['a_contacter','À contacter'],['contacte','Contacté'],['rdv','RDV'],['devis','Convention envoyée'],['signe','Partenariat signé'],['perdu','Sans suite']];
+  var ETAPES_PRESC=[['a_contacter','À contacter'],['mail','Mail envoyé'],['relance','Relancé'],['rencontre','Appel ou visite'],['discussion','En discussion'],['signe','Partenaire'],['perdu','En pause']];
+  var ETAPE_PART_ANCIENNE={contacte:'mail',rdv:'rencontre',devis:'discussion'};
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','En pause']];
   var RAISONS=['Pas pour le moment','Travaux en cours','Pas intéressé','A choisi une autre conciergerie','Gère lui même','Vend ou loue à l\'année','Trouve trop cher','Ne répond plus','Fin de collaboration','Autre'];
   var DEFAULT_PARAMS={urssaf:21.2,plafond:40000};
@@ -1180,7 +1198,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var pd=S.contacts.filter(function(c){return c.type==='prospect'&&c.etape&&c.etape!=='a_contacter'&&fini.indexOf(c.etape)<0;}).length;
     var pr=S.contacts.filter(function(c){return c.type==='prescripteur'&&(!c.etape||c.etape==='a_contacter');}).length;
     var bi=S.biens.filter(function(b){return b.actif!==false;}).length;
-    $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'prescripteurs à démarcher','partenaires','prospection'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
+    $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'partenaires à démarcher','partenaires','partenaires'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
     renderAgenda();
   }
   var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},demandes:{nom:'Demandes reçues',coul:'#C8553D',fond:'#F8E4DC',texte:'#8E3824'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
@@ -1336,6 +1354,59 @@ h2,h3{font-weight:500;letter-spacing:0}
   var voirCanaux=false;
   var CANAL_COUL={'Leboncoin':['#EC5A13','#FFEBDF','#B4430B'],'AlloVoisins':['#2FA36B','#E3F4EA','#1F7049'],'PAP':['#3FA2D9','#E3F3FB','#1E6F9A'],'Réseau co-hôtes Airbnb':['#FF385C','#FFE6EB','#C21D3F'],'LinkedIn':['#0A66C2','#E1EDFA','#0A4C8F'],'Flyers et cartes commerçants':['#C8553D','#F8E4DC','#8E3824'],'Envoi courrier':['#F2B705','#FFF5D1','#7D5F00'],'Site internet':['#935E36','#F3E7DC','#6B4022'],'Formulaire estimation':['#D08C4A','#FAEBDB','#8A5420'],'Fiche Google':['#4285F4','#E5EEFD','#1F5BC4'],'Recommandation':['#8E6BB0','#EEE5F6','#5E3F82'],'Rencontre':['#4E9A96','#E1F0EE','#2F6764'],'Instagram':['#C13584','#F8E1EE','#8A1F5C'],'Publicité':['#7A7A7A','#EFEFEF','#4A4A4A']};
   function coulCanal(k){return CANAL_COUL[k]||null;}
+  var partFiltre='';
+  var PART_CAT=[['Agence immobilière','Agences immobilières',['#D4A72C','#FAF0D0','#7E5E0C']],['Notaire','Notaires',['#5B83B0','#E2EBF5','#365C88']],['Expert comptable','Experts comptables',['#6E9B6A','#E5EFE2','#41693C']],['Architecte et décoration','Architectes et déco',['#C8553D','#F8E4DC','#8E3824']],['Syndic','Syndics',['#8E6BB0','#EEE5F6','#5E3F82']],['Autre','Autres partenaires',['#BB9F89','#F3E6DD','#6E584B']]];
+  function estPartenaire(c){return !!c&&['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0&&c.etape!=='ecarte';}
+  function catPart(c){var t=((c.categorie||'')+' '+(c.canal||'')).toLowerCase();if(/agence|immobili/.test(t))return 'Agence immobilière';if(/notair/.test(t))return 'Notaire';if(/comptab/.test(t))return 'Expert comptable';if(/archi|décor|decor|home staging|staging/.test(t))return 'Architecte et décoration';if(/syndic/.test(t))return 'Syndic';return 'Autre';}
+  function etapePart(c){var e=c.etape||'';e=ETAPE_PART_ANCIENNE[e]||e;if(!e)return c.type==='prescripteur'?'a_contacter':'signe';return e;}
+  var MODELES_PART={
+    'Agence immobilière':['Un partenaire de confiance pour vos clients propriétaires',"Bonjour,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J'accompagne les propriétaires qui louent leur bien en courte durée, de l'annonce à l'accueil des voyageurs, avec un vrai soin du détail.\n\nVous croisez sûrement des acheteurs de résidences secondaires, ou des propriétaires qui hésitent entre vendre et louer. Je serais ravie d'être pour eux une adresse de confiance, et de vous renvoyer l'ascenseur : je rencontre souvent des propriétaires qui pensent à vendre ou à acheter. Nous pouvons aussi convenir d'une commission d'apport.\n\nSi l'idée vous parle, je passerais volontiers quelques minutes à l'agence pour me présenter. Et si ce n'est pas le moment, un simple mot suffit, je ne vous relancerai pas.\n\nBien à vous, bonne journée,"],
+    'Notaire':['Maison Solina, conciergerie premium à Antibes et Cannes',"Maître,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J'accompagne les propriétaires de résidences secondaires qui souhaitent louer leur bien en courte durée, en toute sérénité et en toute transparence.\n\nVos clients qui héritent d'un bien sur la Côte d'Azur, ou qui viennent d'acquérir une résidence secondaire, se demandent souvent comment l'entretenir et le faire vivre. Je serais heureuse d'être une adresse de confiance à leur recommander, et de vous adresser à mon tour les propriétaires qui ont besoin d'un notaire.\n\nJe serais ravie de vous rencontrer quelques minutes à l'étude. Et si ce n'est pas le moment, un simple mot suffit.\n\nBien à vous, bonne journée,"],
+    'Expert comptable':['Vos clients en location meublée',"Bonjour,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J'accompagne les propriétaires qui louent en courte durée, avec des comptes rendus mensuels clairs, dépense par dépense, ce qui facilite beaucoup le suivi de leur LMNP.\n\nVous suivez sûrement des clients en location meublée qui cherchent à gagner du temps ou à mieux louer. Je serais ravie de leur être recommandée, et de vous adresser de mon côté les propriétaires qui ont besoin d'un expert comptable pour leur LMNP.\n\nPourrions nous en parler quelques minutes, au téléphone ou à votre cabinet ? Et si ce n'est pas le moment, un simple mot suffit.\n\nBien à vous, bonne journée,"],
+    'Architecte et décoration':['Une collaboration autour des biens mis en location',"Bonjour,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J'accompagne les propriétaires qui louent en courte durée, et je vois chaque semaine combien un intérieur bien pensé change tout, pour les voyageurs comme pour les revenus.\n\nVos clients qui rénovent ou aménagent un bien avant de le louer ont souvent besoin de quelqu'un pour la suite. De mon côté, je rencontre régulièrement des propriétaires qui ont besoin d'un regard comme le vôtre. Nous pourrions nous recommander mutuellement.\n\nJe serais ravie d'en parler autour d'un café. Et si ce n'est pas le moment, un simple mot suffit.\n\nBien à vous, bonne journée,"],
+    'Syndic':['Maison Solina, conciergerie premium dans vos résidences',"Bonjour,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. J'accompagne les propriétaires qui louent en courte durée, avec un vrai respect des résidences : voyageurs accueillis en personne, règlement intérieur expliqué, ménage soigné et un interlocuteur joignable.\n\nCertains copropriétaires de vos résidences louent ou souhaitent louer leur appartement. Je serais ravie de me présenter et de vous laisser mes coordonnées, pour que vous puissiez les orienter vers une conciergerie sérieuse.\n\nJe passerai volontiers à votre agence. Et si ce n'est pas le moment, un simple mot suffit.\n\nBien à vous, bonne journée,"],
+    'Autre':['Maison Solina, conciergerie premium à Antibes et Cannes',"Bonjour,\n\nJe me permets de vous écrire : je suis Fanny Concina, fondatrice de Maison Solina, une conciergerie premium installée entre Antibes et Cannes. Je serais ravie d'échanger avec vous pour voir comment nous pourrions travailler ensemble et nous recommander mutuellement.\n\nEt si ce n'est pas le moment, un simple mot suffit.\n\nBien à vous, bonne journée,"]
+  };
+  function mailsAujourdhui(){var a=todayISO();return S.contacts.filter(function(c){return c.mailLe===a;}).length;}
+  function mailsSemaine(){var l=lundiISO();return S.contacts.filter(function(c){return c.mailLe&&c.mailLe>=l;}).length;}
+  function cartePartenaire(c){
+    var k=catPart(c),C=(PART_CAT.find(function(x){return x[0]===k;})||PART_CAT[5])[2];
+    var site=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
+    var titre=c.nom||fullName(c);var sous=[c.ville,k==='Autre'?(c.categorie||''):''].filter(Boolean).join(' · ');
+    var st=relanceStatus(c);
+    var coord=(c.email?'<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>':'')+(c.tel?(c.email?' · ':'')+'<a href="tel:'+esc(c.tel.replace(/\s/g,''))+'">'+esc(c.tel)+'</a>':'');
+    var act='';if(etapePart(c)!=='signe')act='<span class="kp-act">'+(c.email?'<button type="button" class="btn xs" data-pmail="'+esc(c.id)+'">Écrire</button>':'')+'<button type="button" class="btn xs" data-pfait="'+esc(c.id)+'" data-quoi="mail">Mail envoyé</button><button type="button" class="btn xs" data-pfait="'+esc(c.id)+'" data-quoi="appel">Appelé</button><button type="button" class="btn xs" data-pfait="'+esc(c.id)+'" data-quoi="visite">Vu sur place</button></span>';
+    return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+C[0]+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(coord?'<span class="kp-coord">'+coord+'</span>':'')+((site||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(site?'<a class="lienx kp-lien" href="'+esc(site)+'" target="_blank" rel="noopener">Voir le site</a>':'')+'</span></span>':'')+act+'</span></div>';
+  }
+  function renderPartenaires(){
+    var el=$('kanban-part');if(!el)return;
+    var all=S.contacts.filter(estPartenaire);
+    var enc=function(l){return l.filter(function(c){return ['signe','perdu'].indexOf(etapePart(c))<0;}).length;};
+    var h='<div class="canaux"><button type="button" class="canal pros tout'+(!partFiltre?' active':'')+'" data-partcat="" style="'+(!partFiltre?'border-color:#D4A72C;box-shadow:0 0 0 1.5px #D4A72C inset;background:#FAF0D0':'')+'"><b>Tout</b><span>'+enc(all)+' à suivre</span></button>';
+    PART_CAT.forEach(function(x){var l=all.filter(function(c){return catPart(c)===x[0];});var on=partFiltre===x[0],C=x[2];h+='<button type="button" class="canal pros'+(on?' active':'')+'" data-partcat="'+(on?'':esc(x[0]))+'" style="background:'+C[1]+';border-color:'+(on?C[0]:C[0]+'55')+';border-left:4px solid '+C[0]+(on?';box-shadow:0 0 0 1.5px '+C[0]+' inset':'')+'"><b style="color:'+C[2]+'">'+esc(x[1])+'</b><span>'+(l.length?l.length+' au total':'Aucun')+'</span></button>';});
+    $('part-canaux').innerHTML=h+'</div>';
+    var mj=mailsAujourdhui();$('part-jour').textContent='Aujourd’hui : '+mj+' mail'+(mj>1?'s':'')+' envoyé'+(mj>1?'s':'')+' sur 5 · cette semaine : '+mailsSemaine();
+    var l=all.filter(function(c){return !partFiltre||catPart(c)===partFiltre;});
+    el.innerHTML='';
+    ETAPES_PRESC.forEach(function(e){
+      var items=l.filter(function(c){return etapePart(c)===e[0];}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:((a.ville||'')+(a.nom||'')).localeCompare((b.ville||'')+(b.nom||''),'fr');});
+      var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];col.dataset.part='1';
+      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){return '<div class="kcarte">'+cartePartenaire(c)+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+ETAPES_PRESC.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===etapePart(c)?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      el.appendChild(col);
+    });
+  }
+  function jPlus(n){var d=new Date();d.setDate(d.getDate()+n);return isoD(d);}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-partcat]');if(b){partFiltre=b.dataset.partcat;renderPartenaires();return;}
+    var m=e.target.closest('[data-pmail]');if(m){e.stopPropagation();var c=byId(S.contacts,m.dataset.pmail);if(!c||!c.email)return;var t=MODELES_PART[catPart(c)]||MODELES_PART.Autre;window.location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent(t[0])+'&body='+encodeURIComponent(t[1]);return;}
+    var f=e.target.closest('[data-pfait]');if(f){e.stopPropagation();var c2=byId(S.contacts,f.dataset.pfait);if(!c2)return;var q=f.dataset.quoi,auj=todayISO(),et=etapePart(c2),ch={dernierContact:auj};
+      var lib={mail:'mail envoyé',appel:'appel',visite:'vu sur place'}[q];
+      if(q==='mail'){ch.mailLe=auj;ch.etape=(et==='mail'||et==='relance')?'relance':(et==='a_contacter'?'mail':et);ch.relance=jPlus(7);}
+      else{ch.etape=(['a_contacter','mail','relance'].indexOf(et)>=0)?'rencontre':et;ch.relance=jPlus(14);}
+      ch.notes=((c2.notes||'').replace(/\s+$/,'')+'\n'+fmtDate(auj)+' : '+lib).replace(/^\n/,'');
+      var avant=cloner(c2);saveContact(Object.assign({},c2,ch),c2.id).catch(function(){});
+      toastAnnuler((c2.nom||fullName(c2))+' : '+lib,function(){saveContact(avant,avant.id).catch(function(){});});return;}
+  },true);
   var demFiltre='';
   var DEM_CANAUX=['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre'];
   function renderDemCanaux(){
@@ -1430,9 +1501,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
     renderCanaux();kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c);});renderDemCanaux();kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte'&&(!demFiltre||(demFiltre==='__sans'?!c.canal:c.canal===demFiltre));});
-    if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}kanbanFor('kanban-presc','prescripteur',ETAPES_PRESC);if($('presc-titre'))$('presc-titre').textContent='Agences et notaires à démarcher · '+S.contacts.filter(function(c){return c.type==='prescripteur'&&['signe','perdu','ecarte'].indexOf(c.etape)<0;}).length;
+    if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}renderPartenaires();
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
-    if($('sec-presc'))$('sec-presc').hidden=!!canalFiltre&&!np;
     if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(!canalFiltre?'':canalFiltre==='__sans'?' · canal non précisé':canalFiltre.indexOf('b:')===0?' · '+BRANCHES[Number(canalFiltre.slice(2))][0]:' · '+canalFiltre);
   }
   var CANAUX_ANNONCE=['Leboncoin','AlloVoisins','PAP','Groupes Facebook'];
@@ -1536,7 +1606,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     editingId=id||null;var c=id?byId(S.contacts,id):null;if(id&&!c)return;c=c||{type:'prospect',etape:'a_contacter'};
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
     $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
-    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-etape').value=c.etape||'a_contacter';$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';$('f-pseudo').value=c.pseudo||'';if(!$('f-raison').options.length||$('f-raison').options.length<2)$('f-raison').innerHTML='<option value="">À préciser</option>'+RAISONS.map(function(r){return '<option>'+esc(r)+'</option>';}).join('');$('f-raison').value=c.raisonPerte||'';
+    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-type').value=c.type||'prospect';toggleEtape();$('f-etape').value=(c.type&&c.type!=='prospect')?(ETAPE_PART_ANCIENNE[c.etape]||c.etape||(c.type==='prescripteur'?'a_contacter':'signe')):(c.etape||'a_contacter');$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';$('f-pseudo').value=c.pseudo||'';if(!$('f-raison').options.length||$('f-raison').options.length<2)$('f-raison').innerHTML='<option value="">À préciser</option>'+RAISONS.map(function(r){return '<option>'+esc(r)+'</option>';}).join('');$('f-raison').value=c.raisonPerte||'';
     $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();majJoindre();
     $('agenda-note').textContent='';$('agenda-note').className='note';
     toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';if(!id||window.innerWidth>=700)setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
@@ -1546,8 +1616,8 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majJoindre(){var h=boutonsJoindre({tel:$('f-tel').value,email:$('f-email').value,adresse:$('f-adresse').value,ville:$('f-ville').value});$('f-joindre').innerHTML=h;$('f-joindre').hidden=!h;}
   function majLiensContact(){var n=$('f-notes').value,h='';(n.match(/https?:\/\/[^\s]+/g)||[]).forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});$('f-liens').innerHTML=h;$('f-liens').hidden=!h;}
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
-  function toggleEtape(){var t=$('f-type').value,pr=(t==='prospect'||t==='prescripteur');$('field-etape').hidden=!pr;$('field-raison').hidden=!(pr&&$('f-etape').value==='perdu');$('field-pseudo').hidden=(t!=='prospect');}
-  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:($('f-type').value==='prospect'||$('f-type').value==='prescripteur')?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,pseudo:$('f-pseudo').value.trim(),raisonPerte:$('f-etape').value==='perdu'?$('f-raison').value:'',notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
+  function toggleEtape(){var t=$('f-type').value,pr=(t==='prospect'||t==='prescripteur'||t==='partenaire'||t==='apporteur');var L=t==='prospect'?ETAPES:ETAPES_PRESC,fe=$('f-etape'),v=fe.value;if(fe.dataset.liste!==(t==='prospect'?'p':'r')){fe.innerHTML=L.map(function(x){return '<option value="'+x[0]+'">'+esc(x[1])+'</option>';}).join('');fe.dataset.liste=(t==='prospect'?'p':'r');}fe.value=(t!=='prospect'&&ETAPE_PART_ANCIENNE[v])?ETAPE_PART_ANCIENNE[v]:v;if(!fe.value)fe.value=L[0][0];$('field-etape').hidden=!pr;$('field-raison').hidden=!(pr&&$('f-etape').value==='perdu');$('field-pseudo').hidden=(t!=='prospect');}
+  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:(['prospect','prescripteur','partenaire','apporteur'].indexOf($('f-type').value)>=0)?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,pseudo:$('f-pseudo').value.trim(),raisonPerte:$('f-etape').value==='perdu'?$('f-raison').value:'',notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
   function saveContact(data,id){var ex=id?byId(S.contacts,id):null;var doc=Object.assign({},ex||{createdAt:new Date().toISOString()},data);doc.id=id||uid('c');return save('contacts',doc);}
 
   function planRelance(){
@@ -2010,7 +2080,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=fichier;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
   }
   function exporterContacts(){
-    var etape=function(c){var l=c.type==='prescripteur'?ETAPES_PRESC:ETAPES;var e=l.find(function(x){return x[0]===c.etape;});return e?e[1]:'';};
+    var etape=function(c){var l=c.type!=='prospect'?ETAPES_PRESC:ETAPES;var e=l.find(function(x){return x[0]===c.etape;});return e?e[1]:'';};
     exporterCSV('contacts-maison-solina',[['Prénom','prenom'],['Nom','nom'],['Type',function(c){return TYPES[c.type]||c.type||'';}],['Catégorie','categorie'],['Téléphone','tel'],['Email','email'],['Ville','ville'],['Logement','bien'],['Étape',etape],['Source','source'],['Dernier contact','dernierContact'],['Relance','relance'],['Notes','notes']],S.contacts.slice().sort(function(a,b){return fullName(a).localeCompare(fullName(b),'fr');}));
     toast('Export CSV prêt');
   }
@@ -2166,6 +2236,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
   $('btn-csv').addEventListener('click',exporterContacts);
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
+  $('btn-new-part').addEventListener('click',function(){openSheet(null);$('f-type').value='prescripteur';$('f-categorie').value=(partFiltre&&partFiltre!=='Autre')?partFiltre:'';toggleEtape();$('f-etape').value='a_contacter';});
   $('btn-new-demande').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();$('f-canal').value=(demFiltre&&demFiltre!=='__sans')?demFiltre:'';toggleEtape();});
   $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans'&&canalFiltre.indexOf('b:')<0)$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
