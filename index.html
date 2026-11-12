@@ -1708,7 +1708,7 @@ h2,h3{font-weight:500;letter-spacing:0}
 
   function renderBiens(){
     var tb=$('biens-table').querySelector('tbody'),tf=$('biens-table').querySelector('tfoot');
-    var list=S.biens.slice().sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});
+    var list=S.biens.filter(function(b){return b.actif!==false;}).sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});
     tb.innerHTML=list.map(function(b){return '<tr data-bien="'+esc(b.id)+'">'+
       '<td><input data-f="nom" value="'+esc(b.nom)+'" placeholder="Nom"></td>'+
       '<td><input class="r" type="number" step="0.5" min="0" max="100" data-f="commission" value="'+esc(b.commission)+'"></td>'+
