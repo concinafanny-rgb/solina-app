@@ -623,6 +623,10 @@ h2,h3{font-weight:500;letter-spacing:0}
         <div class="section-head"><h2>Mon développement</h2></div>
         <div class="resume" id="home-dev"></div>
       </div>
+      <div class="section" id="sec-anniv" hidden>
+        <div class="section-head"><h2>Anniversaires</h2></div>
+        <div class="list" id="home-anniv"></div>
+      </div>
     </section>
 
     <!-- MON ENTREPRISE -->
@@ -988,6 +992,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     <div class="two">
       <div class="field"><label for="f-dernier">Dernier contact</label><input id="f-dernier" type="date"></div>
       <div class="field"><label for="f-relance">Relance prévue</label><input id="f-relance" type="date"></div>
+      <div class="field"><label for="f-anniv">Anniversaire (jour et mois)</label><input id="f-anniv" placeholder="ex. 14/03" inputmode="numeric" autocomplete="off"></div>
     </div>
     <div class="actions">
       <button type="button" class="btn sm" id="btn-today">Contacté aujourd'hui</button>
@@ -1058,7 +1063,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     <div class="field"><label for="l-adresse">Adresse</label><input id="l-adresse" autocomplete="off"></div>
     <div class="two">
       <div class="field"><label for="l-ville">Ville</label><input id="l-ville" autocomplete="off"></div>
-      <div class="field"><label for="l-prop">Propriétaire</label><select id="l-prop"></select></div>
+      <div class="field"><label for="l-prop">Propriétaire</label><select id="l-prop"></select><span class="note" id="l-anniv"></span></div>
     </div>
     <div class="three">
       <div class="field"><label for="l-type">Type</label><input id="l-type" list="dl-type" autocomplete="off"><datalist id="dl-type"><option value="Studio"><option value="Appartement"><option value="Maison"><option value="Villa"></datalist></div>
@@ -1202,6 +1207,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var pr=S.contacts.filter(duJour).length;
     var bi=S.biens.filter(function(b){return b.actif!==false;}).length;
     $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'partenaires à contacter aujourd\u2019hui','partenaires','partenaires'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
+    var an=anniversairesProches(30);if($('sec-anniv')){$('sec-anniv').hidden=!an.length;$('home-anniv').innerHTML=an.map(function(x){var c=x.c;return '<div class="row" role="button" tabindex="0" data-open="'+esc(c.id)+'" style="'+(x.j===0?'background:#FBE6EE;border-color:#D9799F':'')+'"><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(txtAnniv(c.anniversaire))+(c.bien?' · '+esc(c.bien):'')+'</span></span><span class="r"><span class="pill '+(x.j===0?'prospect':x.j<=7?'today':'')+'">'+(x.j===0?'Aujourd\u2019hui':x.j===1?'Demain':'Dans '+x.j+' jours')+'</span></span></div>';}).join('');}
     renderAgenda();
   }
   var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},demandes:{nom:'Demandes reçues',coul:'#C8553D',fond:'#F8E4DC',texte:'#8E3824'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
@@ -1432,6 +1438,11 @@ h2,h3{font-weight:500;letter-spacing:0}
       var avant=cloner(c2);saveContact(Object.assign({},c2,ch),c2.id).catch(function(){});
       toastAnnuler((c2.nom||fullName(c2))+' : '+lib,function(){saveContact(avant,avant.id).catch(function(){});});return;}
   },true);
+  function lireAnniv(v){var m=(v||'').match(/(\d{1,2})\s*[\/. ]\s*(\d{1,2})/);if(!m)return '';var j=Number(m[1]),mo=Number(m[2]);if(!(j>=1&&j<=31&&mo>=1&&mo<=12))return '';return String(mo).padStart(2,'0')+'-'+String(j).padStart(2,'0');}
+  var MOIS_L=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  function txtAnniv(a){if(!a)return '';var j=Number(a.slice(3,5)),m=Number(a.slice(0,2));return (j===1?'1er':j)+' '+MOIS_L[m-1];}
+  function joursAvantAnniv(a){var t=new Date();t.setHours(0,0,0,0);var d=new Date(t.getFullYear(),Number(a.slice(0,2))-1,Number(a.slice(3,5)));if(d<t)d.setFullYear(t.getFullYear()+1);return Math.round((d-t)/864e5);}
+  function anniversairesProches(n){return S.contacts.filter(function(c){return c.anniversaire&&c.etape!=='ecarte';}).map(function(c){return {c:c,j:joursAvantAnniv(c.anniversaire)};}).filter(function(x){return x.j<=n;}).sort(function(a,b){return a.j-b.j;});}
   var demFiltre='';
   var DEM_CANAUX=['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre'];
   function renderDemCanaux(){
@@ -1634,7 +1645,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     editingId=id||null;var c=id?byId(S.contacts,id):null;if(id&&!c)return;c=c||{type:'prospect',etape:'a_contacter'};
     $('sheet-title').textContent=id?fullName(c):'Nouveau contact';$('sheet-kind').textContent=id?(TYPES[c.type]||''):'';
     $('f-civ').value=c.civilite||'';$('f-adresse').value=c.adresse||'';$('f-prenom').value=c.prenom||'';$('f-nom').value=c.nom||'';$('f-type').value=c.type||'prospect';$('f-categorie').value=c.categorie||'';$('f-tel').value=c.tel||'';$('f-email').value=c.email||'';
-    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-type').value=c.type||'prospect';toggleEtape();$('f-etape').value=(c.type&&c.type!=='prospect')?(ETAPE_PART_ANCIENNE[c.etape]||c.etape||(c.type==='prescripteur'?'a_contacter':'signe')):(c.etape||'a_contacter');$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-relance').value=c.relance||'';$('f-pseudo').value=c.pseudo||'';if(!$('f-raison').options.length||$('f-raison').options.length<2)$('f-raison').innerHTML='<option value="">À préciser</option>'+RAISONS.map(function(r){return '<option>'+esc(r)+'</option>';}).join('');$('f-raison').value=c.raisonPerte||'';
+    $('f-ville').value=c.ville||'';$('f-bien').value=c.bien||'';$('f-type').value=c.type||'prospect';toggleEtape();$('f-etape').value=(c.type&&c.type!=='prospect')?(ETAPE_PART_ANCIENNE[c.etape]||c.etape||(c.type==='prescripteur'?'a_contacter':'signe')):(c.etape||'a_contacter');$('f-source').value=c.source||'';remplirCanalFiche();$('f-canal').value=c.canal||'';$('f-notes').value=c.notes||'';$('f-dernier').value=c.dernierContact||'';$('f-anniv').value=c.anniversaire?c.anniversaire.slice(3,5)+'/'+c.anniversaire.slice(0,2):'';$('f-relance').value=c.relance||'';$('f-pseudo').value=c.pseudo||'';if(!$('f-raison').options.length||$('f-raison').options.length<2)$('f-raison').innerHTML='<option value="">À préciser</option>'+RAISONS.map(function(r){return '<option>'+esc(r)+'</option>';}).join('');$('f-raison').value=c.raisonPerte||'';
     $('btn-delete').hidden=!id;$('confirm-delete').hidden=true;majLiensContact();majJoindre();
     $('agenda-note').textContent='';$('agenda-note').className='note';
     toggleEtape();$('sheet').classList.add('open');document.body.style.overflow='hidden';if(!id||window.innerWidth>=700)setTimeout(function(){$(id?'f-notes':'f-prenom').focus();},50);
@@ -1645,7 +1656,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   function majLiensContact(){var n=$('f-notes').value,h='';(n.match(/https?:\/\/[^\s]+/g)||[]).forEach(function(u){h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>';});$('f-liens').innerHTML=h;$('f-liens').hidden=!h;}
   function closeSheet(){$('sheet').classList.remove('open');document.body.style.overflow='';editingId=null;}
   function toggleEtape(){var t=$('f-type').value,pr=(t==='prospect'||t==='prescripteur'||t==='partenaire'||t==='apporteur');var L=t==='prospect'?ETAPES:ETAPES_PRESC,fe=$('f-etape'),v=fe.value;if(fe.dataset.liste!==(t==='prospect'?'p':'r')){fe.innerHTML=L.map(function(x){return '<option value="'+x[0]+'">'+esc(x[1])+'</option>';}).join('');fe.dataset.liste=(t==='prospect'?'p':'r');}fe.value=(t!=='prospect'&&ETAPE_PART_ANCIENNE[v])?ETAPE_PART_ANCIENNE[v]:v;if(!fe.value)fe.value=L[0][0];$('field-etape').hidden=!pr;$('field-raison').hidden=!(pr&&$('f-etape').value==='perdu');$('field-pseudo').hidden=(t!=='prospect');}
-  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:(['prospect','prescripteur','partenaire','apporteur'].indexOf($('f-type').value)>=0)?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,pseudo:$('f-pseudo').value.trim(),raisonPerte:$('f-etape').value==='perdu'?$('f-raison').value:'',notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value};}
+  function readForm(){return {civilite:$('f-civ').value,adresse:$('f-adresse').value.trim(),prenom:$('f-prenom').value.trim(),nom:$('f-nom').value.trim(),type:$('f-type').value,categorie:$('f-categorie').value.trim(),tel:$('f-tel').value.trim(),email:$('f-email').value.trim(),ville:$('f-ville').value.trim(),bien:$('f-bien').value.trim(),etape:(['prospect','prescripteur','partenaire','apporteur'].indexOf($('f-type').value)>=0)?$('f-etape').value:'',source:$('f-source').value.trim(),canal:$('f-canal').value,pseudo:$('f-pseudo').value.trim(),raisonPerte:$('f-etape').value==='perdu'?$('f-raison').value:'',notes:$('f-notes').value.trim(),dernierContact:$('f-dernier').value,relance:$('f-relance').value,anniversaire:lireAnniv($('f-anniv').value)};}
   function saveContact(data,id){var ex=id?byId(S.contacts,id):null;var doc=Object.assign({},ex||{createdAt:new Date().toISOString()},data);doc.id=id||uid('c');return save('contacts',doc);}
 
   function planRelance(){
@@ -1810,6 +1821,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
     $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
+    var pa0=byId(S.contacts,b.proprietaire);$('l-anniv').textContent=(pa0&&pa0.anniversaire)?'Anniversaire : '+txtAnniv(pa0.anniversaire):'';
     COFFRE.entrees=null;COFFRE.bien=null;renderCoffre();majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
   function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;COFFRE.entrees=null;COFFRE.bien=null;COFFRE.montrer={};}
