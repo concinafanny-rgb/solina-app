@@ -430,7 +430,9 @@ details.anciens{margin-top:16px}
 #part-canaux .canaux{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:7px}
 #part-canaux .canal{padding:9px 10px}
 #part-canaux .canal b{font-size:13px}
-.part-jour{margin-top:12px;font-size:13.5px;color:var(--brun);background:#FAF0D0;border-radius:12px;padding:9px 14px;display:inline-block}
+.part-bandeau{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.part-vivier{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--muted)}
+.part-jour{font-size:13.5px;color:var(--brun);background:#FAF0D0;border-radius:12px;padding:9px 14px;display:inline-block}
 .kp-act{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
 .kp-act .btn{font-size:11.5px;padding:3px 8px;min-height:26px}
 .kp-coord{font-size:12px;color:var(--muted);margin-top:2px;word-break:break-word}
@@ -664,7 +666,8 @@ h2,h3{font-weight:500;letter-spacing:0}
     <section class="panel" data-panel="partenaires">
       <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection partenaires</h1></div><button class="btn orbtn" id="btn-new-part">+ Nouveau partenaire</button></div>
       <div id="part-canaux" style="margin-top:20px"></div>
-      <div class="part-jour" id="part-jour"></div>
+      <div class="chips" id="part-villes" style="flex-wrap:wrap;margin-top:10px"></div>
+      <div class="part-bandeau"><div class="part-jour" id="part-jour"></div><div class="part-vivier" id="part-vivier"></div></div>
       <div class="section" style="margin-top:14px"><div class="kanban" id="kanban-part"></div></div>
     </section>
 
@@ -678,7 +681,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div class="phrow"><div class="ph"><div class="pl">Développement</div><h1>Prospection propriétaires</h1></div><button class="btn rosebtn" id="btn-new-prospect">+ Nouveau prospect</button></div>
       <div id="canaux" style="margin-top:20px"></div>
       <div class="section" id="sec-courrier" hidden><div class="section-head"><h2>Envoi courrier</h2><span class="note" id="cr-semaine"></span></div><div class="chips" id="cr-villes" style="flex-wrap:wrap"></div><div class="chips" id="cr-statuts" style="flex-wrap:wrap;margin-top:6px"></div><div id="cr-liste" style="margin-top:10px"></div></div>
-      <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2></div><div class="kanban" id="kanban"></div></div>
+      <div class="section"><div class="section-head"><h2 id="pipe-titre">Pipeline propriétaires</h2><span class="note" id="pipe-attente"></span></div><div class="kanban" id="kanban"></div></div>
       <div class="section" style="margin-top:40px"><h1 style="margin:0 0 16px">Plan d'action</h1><div id="plan"></div></div>
     </section>
 
@@ -1196,9 +1199,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     var fini=['perdu','signe','pas_interesse','ecarte'];
     var pa=S.contacts.filter(function(c){return c.type==='prospect'&&(!c.etape||c.etape==='a_contacter');}).length;
     var pd=S.contacts.filter(function(c){return c.type==='prospect'&&c.etape&&c.etape!=='a_contacter'&&fini.indexOf(c.etape)<0;}).length;
-    var pr=S.contacts.filter(function(c){return c.type==='prescripteur'&&(!c.etape||c.etape==='a_contacter');}).length;
+    var pr=S.contacts.filter(duJour).length;
     var bi=S.biens.filter(function(b){return b.actif!==false;}).length;
-    $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'partenaires à démarcher','partenaires','partenaires'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
+    $('home-dev').innerHTML=[[pa,'propriétaires à contacter','prospection','prospection'],[pd,'propriétaires en discussion','prospection','prospection'],[pr,'partenaires à contacter aujourd\u2019hui','partenaires','partenaires'],[bi,'logements actifs','logements','logements']].map(function(d){var C=CAT[d[2]];return '<button type="button" class="tuile petite" data-go="'+d[3]+'" style="background:var(--card);color:'+C.texte+';border-color:'+C.coul+'55;box-shadow:inset 4px 0 0 '+C.coul+'"><span class="n">'+d[0]+'</span><span class="l">'+esc(d[1])+'</span></button>';}).join('');
     renderAgenda();
   }
   var CAT={prospection:{nom:'Prospection',coul:'#D9799F',fond:'#FBE6EE',texte:'#A2416C'},demandes:{nom:'Demandes reçues',coul:'#C8553D',fond:'#F8E4DC',texte:'#8E3824'},partenaires:{nom:'Partenaires',coul:'#D4A72C',fond:'#FAF0D0',texte:'#7E5E0C'},logements:{nom:'Logements et propriétaires',coul:'#6E9B6A',fond:'#E5EFE2',texte:'#41693C'},admin:{nom:'Administratif',coul:'#5B83B0',fond:'#E2EBF5',texte:'#365C88'},reseaux:{nom:'Communication',coul:'#8E6BB0',fond:'#EEE5F6',texte:'#634388'},perso:{nom:'Perso',coul:'#4E9A96',fond:'#E1F0EE',texte:'#2F6764'},divers:{nom:'Divers',coul:'#BB9F89',fond:'#F3E6DD',texte:'#6E584B'}};
@@ -1354,7 +1357,23 @@ h2,h3{font-weight:500;letter-spacing:0}
   var voirCanaux=false;
   var CANAL_COUL={'Leboncoin':['#EC5A13','#FFEBDF','#B4430B'],'AlloVoisins':['#2FA36B','#E3F4EA','#1F7049'],'PAP':['#3FA2D9','#E3F3FB','#1E6F9A'],'Réseau co-hôtes Airbnb':['#FF385C','#FFE6EB','#C21D3F'],'LinkedIn':['#0A66C2','#E1EDFA','#0A4C8F'],'Flyers et cartes commerçants':['#C8553D','#F8E4DC','#8E3824'],'Envoi courrier':['#F2B705','#FFF5D1','#7D5F00'],'Site internet':['#935E36','#F3E7DC','#6B4022'],'Formulaire estimation':['#D08C4A','#FAEBDB','#8A5420'],'Fiche Google':['#4285F4','#E5EEFD','#1F5BC4'],'Recommandation':['#8E6BB0','#EEE5F6','#5E3F82'],'Rencontre':['#4E9A96','#E1F0EE','#2F6764'],'Instagram':['#C13584','#F8E1EE','#8A1F5C'],'Publicité':['#7A7A7A','#EFEFEF','#4A4A4A']};
   function coulCanal(k){return CANAL_COUL[k]||null;}
-  var partFiltre='';
+  var partFiltre='',partVille='',NOUVEAU_DU_JOUR=false;
+  var VILLES_ORDRE=['Antibes','Juan les Pins','Golfe Juan','Vallauris','Biot','Villeneuve Loubet','Valbonne','Cannes','Le Cannet','Mougins','Mandelieu la Napoule'];
+  function villePart(c){var v=(c.ville||'').replace(/-/g,' ').trim();var t=v.toLowerCase();for(var i=0;i<VILLES_ORDRE.length;i++){if(t.indexOf(VILLES_ORDRE[i].toLowerCase())>=0)return VILLES_ORDRE[i];}if(/vallauris/.test(t))return 'Vallauris';if(/mandelieu/.test(t))return 'Mandelieu la Napoule';return v||'Autre';}
+  function dosePart(){return Number(S.params.dosePart)||5;}
+  function auVivier(c){return estPartenaire(c)&&etapePart(c)==='a_contacter'&&!c.selection;}
+  function duJour(c){return estPartenaire(c)&&etapePart(c)==='a_contacter'&&!!c.selection&&c.selection<=todayISO();}
+  function choisirPartenaires(n){
+    var rang=function(c){var i=VILLES_ORDRE.indexOf(villePart(c));return i<0?99:i;};
+    var v=S.contacts.filter(auVivier).filter(function(c){return (!partFiltre||catPart(c)===partFiltre)&&(!partVille||villePart(c)===partVille);}).sort(function(a,b){return (rang(a)-rang(b))||(b.email?1:0)-(a.email?1:0)||(a.nom||'').localeCompare(b.nom||'','fr');});
+    var pris=[],cats={};
+    v.forEach(function(c){if(pris.length>=n)return;var k=catPart(c);if((cats[k]||0)<2){pris.push(c);cats[k]=(cats[k]||0)+1;}});
+    v.forEach(function(c){if(pris.length<n&&pris.indexOf(c)<0)pris.push(c);});
+    var auj=todayISO();pris.forEach(function(c){saveContact(Object.assign({},c,{selection:auj}),c.id).catch(function(){});});
+    return pris.length;
+  }
+  var doseFaite='';
+  function doseDuJour(){var auj=todayISO();if(doseFaite===auj||!G.connecte)return;doseFaite=auj;if(S.contacts.some(function(c){return c.selection===auj;}))return;choisirPartenaires(dosePart());}
   var PART_CAT=[['Agence immobilière','Agences immobilières',['#D4A72C','#FAF0D0','#7E5E0C']],['Notaire','Notaires',['#5B83B0','#E2EBF5','#365C88']],['Expert comptable','Experts comptables',['#6E9B6A','#E5EFE2','#41693C']],['Architecte et décoration','Architectes et déco',['#C8553D','#F8E4DC','#8E3824']],['Syndic','Syndics',['#8E6BB0','#EEE5F6','#5E3F82']],['Autre','Autres partenaires',['#BB9F89','#F3E6DD','#6E584B']]];
   function estPartenaire(c){return !!c&&['prescripteur','apporteur','partenaire'].indexOf(c.type)>=0&&c.etape!=='ecarte';}
   function catPart(c){var t=((c.categorie||'')+' '+(c.canal||'')).toLowerCase();if(/agence|immobili/.test(t))return 'Agence immobilière';if(/notair/.test(t))return 'Notaire';if(/comptab/.test(t))return 'Expert comptable';if(/archi|décor|decor|home staging|staging/.test(t))return 'Architecte et décoration';if(/syndic/.test(t))return 'Syndic';return 'Autre';}
@@ -1385,23 +1404,29 @@ h2,h3{font-weight:500;letter-spacing:0}
     var h='<div class="canaux"><button type="button" class="canal pros tout'+(!partFiltre?' active':'')+'" data-partcat="" style="'+(!partFiltre?'border-color:#D4A72C;box-shadow:0 0 0 1.5px #D4A72C inset;background:#FAF0D0':'')+'"><b>Tout</b><span>'+enc(all)+' à suivre</span></button>';
     PART_CAT.forEach(function(x){var l=all.filter(function(c){return catPart(c)===x[0];});var on=partFiltre===x[0],C=x[2];h+='<button type="button" class="canal pros'+(on?' active':'')+'" data-partcat="'+(on?'':esc(x[0]))+'" style="background:'+C[1]+';border-color:'+(on?C[0]:C[0]+'55')+';border-left:4px solid '+C[0]+(on?';box-shadow:0 0 0 1.5px '+C[0]+' inset':'')+'"><b style="color:'+C[2]+'">'+esc(x[1])+'</b><span>'+(l.length?l.length+' au total':'Aucun')+'</span></button>';});
     $('part-canaux').innerHTML=h+'</div>';
+    var villes=[];all.forEach(function(c){var v=villePart(c);if(villes.indexOf(v)<0)villes.push(v);});villes.sort(function(a,b){var i=VILLES_ORDRE.indexOf(a),j=VILLES_ORDRE.indexOf(b);return (i<0?99:i)-(j<0?99:j)||a.localeCompare(b,'fr');});
+    $('part-villes').innerHTML=[''].concat(villes).map(function(v){var n=all.filter(function(c){return (!v||villePart(c)===v)&&(!partFiltre||catPart(c)===partFiltre);}).length;return '<button type="button" class="chip'+(partVille===v?' active':'')+'" data-partville="'+esc(v)+'">'+esc(v||'Toutes les villes')+' · '+n+'</button>';}).join('');
+    var nv=S.contacts.filter(auVivier).filter(function(c){return (!partFiltre||catPart(c)===partFiltre)&&(!partVille||villePart(c)===partVille);}).length;
+    $('part-vivier').innerHTML='<span>Vivier : <b>'+nv+'</b> à contacter plus tard</span>'+(nv?'<button type="button" class="btn sm" data-partplus>Ajouter '+Math.min(5,nv)+' de plus aujourd\u2019hui</button>':'');
     var mj=mailsAujourdhui();$('part-jour').textContent='Aujourd’hui : '+mj+' mail'+(mj>1?'s':'')+' envoyé'+(mj>1?'s':'')+' sur 5 · cette semaine : '+mailsSemaine();
-    var l=all.filter(function(c){return !partFiltre||catPart(c)===partFiltre;});
+    var l=all.filter(function(c){return (!partFiltre||catPart(c)===partFiltre)&&(!partVille||villePart(c)===partVille);});
     el.innerHTML='';
     ETAPES_PRESC.forEach(function(e){
-      var items=l.filter(function(c){return etapePart(c)===e[0];}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:((a.ville||'')+(a.nom||'')).localeCompare((b.ville||'')+(b.nom||''),'fr');});
+      var items=l.filter(function(c){return e[0]==='a_contacter'?duJour(c):etapePart(c)===e[0];}).sort(function(a,b){return (a.relance||'9')<(b.relance||'9')?-1:((a.ville||'')+(a.nom||'')).localeCompare((b.ville||'')+(b.nom||''),'fr');});
       var col=document.createElement('div');col.className='col';col.dataset.etape=e[0];col.dataset.part='1';
-      col.innerHTML='<h3>'+esc(e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){return '<div class="kcarte">'+cartePartenaire(c)+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+ETAPES_PRESC.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===etapePart(c)?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
+      col.innerHTML='<h3>'+esc(e[0]==='a_contacter'?'À contacter aujourd\u2019hui':e[1])+'<span>'+items.length+'</span></h3><div class="list">'+(items.length?items.map(function(c){return '<div class="kcarte">'+(e[0]==='a_contacter'&&c.selection<todayISO()?'<span class="pill late" style="font-size:9.5px;margin:0 0 4px">En retard, prévu le '+esc(fmtDate(c.selection))+'</span>':'')+cartePartenaire(c)+'<select class="etape-sel" data-etapesel="'+esc(c.id)+'" aria-label="Changer l\'étape">'+ETAPES_PRESC.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===etapePart(c)?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>';}).join(''):'<div class="empty" style="padding:10px;font-size:13px">Vide</div>')+'</div>';
       el.appendChild(col);
     });
   }
   function jPlus(n){var d=new Date();d.setDate(d.getDate()+n);return isoD(d);}
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-partcat]');if(b){partFiltre=b.dataset.partcat;renderPartenaires();return;}
+    var pv=e.target.closest('[data-partville]');if(pv){partVille=pv.dataset.partville;renderPartenaires();return;}
+    if(e.target.closest('[data-partplus]')){var n=choisirPartenaires(5);toast(n+' partenaire'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+' à aujourd\u2019hui');return;}
     var m=e.target.closest('[data-pmail]');if(m){e.stopPropagation();var c=byId(S.contacts,m.dataset.pmail);if(!c||!c.email)return;var t=MODELES_PART[catPart(c)]||MODELES_PART.Autre;window.location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent(t[0])+'&body='+encodeURIComponent(t[1]);return;}
     var f=e.target.closest('[data-pfait]');if(f){e.stopPropagation();var c2=byId(S.contacts,f.dataset.pfait);if(!c2)return;var q=f.dataset.quoi,auj=todayISO(),et=etapePart(c2),ch={dernierContact:auj};
       var lib={mail:'mail envoyé',appel:'appel',visite:'vu sur place'}[q];
-      if(q==='mail'){ch.mailLe=auj;ch.etape=(et==='mail'||et==='relance')?'relance':(et==='a_contacter'?'mail':et);ch.relance=jPlus(7);}
+      if(q==='mail'){ch.mailLe=auj;ch.etape=(et==='mail'||et==='relance')?'relance':(et==='a_contacter'?'mail':et);ch.relance=jPlus(10);}
       else{ch.etape=(['a_contacter','mail','relance'].indexOf(et)>=0)?'rencontre':et;ch.relance=jPlus(14);}
       ch.notes=((c2.notes||'').replace(/\s+$/,'')+'\n'+fmtDate(auj)+' : '+lib).replace(/^\n/,'');
       var avant=cloner(c2);saveContact(Object.assign({},c2,ch),c2.id).catch(function(){});
@@ -1500,7 +1525,10 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function majCourrier(id,ch){var x=byId(S.courriers,id);if(!x)return null;var avant=cloner(x);save('courriers',Object.assign({},x,ch)).catch(function(){});return avant;}
   function renderKanban(){
-    renderCanaux();kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c);});renderDemCanaux();kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte'&&(!demFiltre||(demFiltre==='__sans'?!c.canal:c.canal===demFiltre));});
+    renderCanaux();var plusTard={};tachesOuvertes().forEach(function(t){if(t.contact&&t.date&&t.date>todayISO()&&!plusTard[t.contact])plusTard[t.contact]=t.date;});tachesOuvertes().forEach(function(t){if(t.contact&&(!t.date||t.date<=todayISO()))delete plusTard[t.contact];});
+    kanbanFor('kanban','prospect',ETAPES,function(c){return estProspection(c)&&filtreCanal(c)&&!((c.etape||'a_contacter')==='a_contacter'&&plusTard[c.id]);});
+    var nAttente=S.contacts.filter(function(c){return estProspection(c)&&filtreCanal(c)&&(c.etape||'a_contacter')==='a_contacter'&&plusTard[c.id];}).length;
+    if($('pipe-attente'))$('pipe-attente').textContent=nAttente?nAttente+' autre'+(nAttente>1?'s':'')+' prévu'+(nAttente>1?'s':'')+' les prochains jours':'';renderDemCanaux();kanbanFor('kanban-dem','prospect',ETAPES,function(c){return !estProspection(c)&&c.etape!=='ecarte'&&(!demFiltre||(demFiltre==='__sans'?!c.canal:c.canal===demFiltre));});
     if($('sec-courrier')){$('sec-courrier').hidden=canalFiltre!=='Envoi courrier';if(canalFiltre==='Envoi courrier')renderCourriers();}renderPartenaires();
     var np=S.contacts.filter(function(c){return c.type==='prescripteur'&&filtreCanal(c);}).length;
     if($('pipe-titre'))$('pipe-titre').textContent='Pipeline propriétaires'+(!canalFiltre?'':canalFiltre==='__sans'?' · canal non précisé':canalFiltre.indexOf('b:')===0?' · '+BRANCHES[Number(canalFiltre.slice(2))][0]:' · '+canalFiltre);
@@ -2044,6 +2072,7 @@ h2,h3{font-weight:500;letter-spacing:0}
       var depart=Date.now();var f=await lireDepot();if(G.ecrit&&G.ecrit>depart)return true;var change=f.sha!==G.sha;
       G.D=f.data;G.sha=f.sha;G.connecte=true;G.derniere=Date.now();etat(true);masquerConnexion();lireAgenda();if(!CRF.lu)lireCourriers();G.refus=0;try{localStorage.setItem('solina-cle-ok','1');}catch(x){}
       if(change){appliquer(f.data);attente.forEach(function(l){l.modif(S);});garderCopie();rafraichir();}
+      setTimeout(doseDuJour,1500);
       return true;
     }catch(e){
       G.connecte=false;etat(false);
@@ -2236,7 +2265,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-new-contact').addEventListener('click',function(){openSheet(null);});
   $('btn-csv').addEventListener('click',exporterContacts);
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='canal-choix'){canalFiltre=e.target.value;renderKanban();}});
-  $('btn-new-part').addEventListener('click',function(){openSheet(null);$('f-type').value='prescripteur';$('f-categorie').value=(partFiltre&&partFiltre!=='Autre')?partFiltre:'';toggleEtape();$('f-etape').value='a_contacter';});
+  $('btn-new-part').addEventListener('click',function(){openSheet(null);$('f-type').value='prescripteur';$('f-categorie').value=(partFiltre&&partFiltre!=='Autre')?partFiltre:'';toggleEtape();$('f-etape').value='a_contacter';NOUVEAU_DU_JOUR=true;});
   $('btn-new-demande').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();$('f-canal').value=(demFiltre&&demFiltre!=='__sans')?demFiltre:'';toggleEtape();});
   $('btn-new-prospect').addEventListener('click',function(){openSheet(null);$('f-type').value='prospect';remplirCanalFiche();if(canalFiltre&&canalFiltre!=='__sans'&&canalFiltre.indexOf('b:')<0)$('f-canal').value=canalFiltre;toggleEtape();});
   $('sheet-close').addEventListener('click',closeSheet);$('btn-cancel').addEventListener('click',closeSheet);
@@ -2251,7 +2280,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   $('btn-delete').addEventListener('click',function(){$('confirm-delete').hidden=false;});
   $('btn-delete-no').addEventListener('click',function(){$('confirm-delete').hidden=true;});
   $('btn-delete-yes').addEventListener('click',function(){if(editingId){remove('contacts',editingId);toast('Fiche supprimée');}closeSheet();});
-  $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}saveContact(data,editingId).catch(function(){});toast('Enregistré');closeSheet();});
+  $('contact-form').addEventListener('submit',function(e){e.preventDefault();var data=readForm();if(!data.nom){$('f-nom').focus();return;}if(NOUVEAU_DU_JOUR&&!editingId&&data.etape==='a_contacter')data.selection=todayISO();NOUVEAU_DU_JOUR=false;saveContact(data,editingId).catch(function(){});toast('Enregistré');closeSheet();});
   $('search').addEventListener('input',function(){query=this.value;renderContacts();});
   $('type-chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;filterType=c.dataset.type;this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===c);});renderContacts();});
   $('task-form').addEventListener('submit',function(e){e.preventDefault();var v=$('task-input').value.trim();if(!v)return;save('taches',{id:uid('t'),titre:v,date:$('task-date').value||'',categorie:$('task-cat').value,fait:false,statut:'a_faire',createdAt:new Date().toISOString()});$('task-input').value='';$('task-date').value='';});
