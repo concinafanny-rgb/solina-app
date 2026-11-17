@@ -1229,7 +1229,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function contactRow(c,extra,avecNotes){
     var st=relanceStatus(c);var sub=[c.categorie,c.ville,c.bien].filter(Boolean).join(' · ');
-    var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
+    var u=c.lien||((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var lien=u?'<br><a class="lienx" style="font-size:12px" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'';
     var joindre=(c.tel?'<a class="btn xs" href="tel:'+esc(c.tel.replace(/\s/g,''))+'" data-stop>Appeler</a>':'')+(c.email?'<a class="btn xs" href="mailto:'+esc(c.email)+'" data-stop>Mail</a>':'');
     return '<div class="row" role="button" tabindex="0" data-open="'+esc(c.id)+'"><span class="av" style="background:'+couleurType(c.type)+'">'+esc(initials(c))+'</span><span class="body"><span class="t">'+esc(fullName(c))+'</span><span class="s">'+esc(sub||TYPES[c.type]||'')+'</span>'+(joindre?'<span class="kp-act">'+joindre+'</span>':'')+(avecNotes&&c.notes?'<span class="mininote">'+esc(c.notes)+'</span>':'')+(lien?'<span class="s">'+lien.replace('<br>','')+'</span>':'')+'</span><span class="r">'+(extra!==undefined?extra:('<span class="pill '+esc(c.type)+'">'+esc(TYPES[c.type]||c.type)+'</span>'+(st?'<br><span class="pill '+st.cls+'" style="margin-top:4px">'+esc(st.txt)+'</span>':'')))+'</span></div>';
@@ -1598,7 +1598,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     var titre=annonce?'Prospect '+c.canal:fullName(c);
     var sous=annonce?[c.ville,piecesDe(c),c.pseudo]:(c.type==='prescripteur'?[c.categorie,c.ville]:[c.categorie&&c.categorie!=='Propriétaire'?c.categorie:'',c.ville,c.bien&&c.bien!==c.nom?c.bien:'']);
     sous=sous.filter(Boolean).join(' · ');
-    var u=((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
+    var u=c.lien||((c.notes||'').match(/https?:\/\/[^\s<]+/)||[''])[0];
     var st=relanceStatus(c),ecart=c.type==='prospect'&&(c.etape||'a_contacter')==='a_contacter';
     return '<div class="row kp" role="button" tabindex="0" draggable="true" data-open="'+esc(c.id)+'" style="border-left:3px solid '+((c.type==='prospect'&&coulCanal(c.canal))?coulCanal(c.canal)[0]:(c.type==='prospect'?'#C8553D':couleurType(c.type)))+'"><span class="body"><span class="t">'+esc(titre)+'</span>'+(sous?'<span class="s">'+esc(sous)+'</span>':'')+(c.etape==='perdu'&&c.raisonPerte?'<span class="s" style="color:#9A8577;font-style:italic">'+esc(c.raisonPerte)+'</span>':'')+((u||ecart||st)?'<span class="kp-bas"><span class="kp-g">'+(st?'<span class="pill '+st.cls+'">'+esc(st.txt)+'</span>':'')+(u?'<a class="lienx kp-lien" href="'+esc(u)+'" target="_blank" rel="noopener">'+(u.indexOf('leboncoin')>=0||annonce?'Ouvrir l\'annonce':'Ouvrir le lien')+'</a>':'')+'</span>'+(ecart?'<button type="button" class="btn ghost xs ecarter" data-ecarter="'+esc(c.id)+'" title="Ce bien ne m\'intéresse pas">No way</button>':'')+'</span>':'')+'</span></div>';
   }
