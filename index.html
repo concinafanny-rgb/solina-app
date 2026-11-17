@@ -1236,16 +1236,17 @@ h2,h3{font-weight:500;letter-spacing:0}
   }
   function renderHome(){
     $('today-eyebrow').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
-    var it=elementsAFaire().filter(function(x){return x.date?daysDiff(x.date)<=0:x.k==='t';});
+    var finSem=(7-new Date().getDay())%7;var it=elementsAFaire().filter(function(x){return x.date?daysDiff(x.date)<=finSem:x.k==='t';});
     var tot=it.length,ret=it.filter(function(x){return x.date&&daysDiff(x.date)<0;}).length;
     $('home-phrase').textContent='';
     var auto=it.filter(function(x){return x.k==='t'&&titreTache(x.t).canal&&catTache(x.t)==='prospection';});
     var dem=it.filter(function(x){return (x.k==='t'?catTache(x.t):catContact(x.c))==='demandes';});
     var reste=it.filter(function(x){return auto.indexOf(x)<0&&!!x.date;}).sort(function(a,b){return (a.date||'9')<(b.date||'9')?-1:1;});
     var npart=S.contacts.filter(duJour).length;
-    var carte=function(n,lib,go,coul){return '<button type="button" class="jour-c" data-go="'+go+'" style="box-shadow:inset 4px 0 0 '+coul+'"><b style="color:'+coul+'">'+n+'</b><span>'+lib+'</span></button>';};
-    var h='<div class="jour-g">'+carte(auto.length,'messages de prospection à envoyer','prospection','#D9799F')+carte(npart,'partenaires à contacter','partenaires','#D4A72C')+carte(dem.length,'demandes reçues à traiter','demandes','#C8553D')+'</div>';
-    h+=reste.length?'<div class="list">'+reste.map(function(x){return x.k==='t'?carteTache(x.t):carteRelance(x.c,false);}).join('')+'</div>':'<div class="empty" style="padding:14px">Rien d’autre de prévu aujourd’hui.</div>';
+    var nomDe=function(x){if(x.k==='r')return fullName(x.c);var c=x.t.contact?byId(S.contacts,x.t.contact):null;return c?fullName(c):titreTache(x.t).tit;};var noms=function(l){l=l.map(nomDe);return l.length?'<small style="display:block;font-size:11px;opacity:.75;margin-top:2px">'+esc(l.slice(0,3).join(', ')+(l.length>3?' et '+(l.length-3)+' autres':''))+'</small>':'';};
+    var carte=function(n,lib,go,coul,det){return '<button type="button" class="jour-c" data-go="'+go+'" style="box-shadow:inset 4px 0 0 '+coul+'"><b style="color:'+coul+'">'+n+'</b><span>'+lib+(det||'')+'</span></button>';};
+    var h='<div class="jour-g">'+carte(auto.length,'messages de prospection à envoyer','prospection','#D9799F',noms(auto))+carte(npart,'partenaires à contacter','partenaires','#D4A72C','<small style="display:block;font-size:11px;opacity:.75;margin-top:2px">ta sélection, les plus proches d\u2019abord</small>')+carte(dem.length,dem.length&&dem.every(function(x){return x.k==='r';})?'demandes reçues à relancer':'demandes reçues à traiter','demandes','#C8553D',noms(dem))+'</div>';
+    h+=reste.length?'<div class="list">'+reste.map(function(x){return x.k==='t'?carteTache(x.t):carteRelance(x.c,false);}).join('')+'</div>':'<div class="empty" style="padding:14px">Rien d’autre de prévu cette semaine.</div>';
     $('home-resume').innerHTML=h;
     var fini=['perdu','signe','pas_interesse','ecarte'];
     var pa=S.contacts.filter(function(c){return c.type==='prospect'&&(!c.etape||c.etape==='a_contacter');}).length;
