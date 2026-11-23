@@ -563,8 +563,17 @@ h2,h3{font-weight:500;letter-spacing:0}
 .ops-bloc ul{margin:0;padding-left:18px}
 .ops-bloc li{font-size:13.5px;line-height:1.5;margin-bottom:5px;color:var(--brun)}
 @media (max-width:699px){.ops-champs{grid-template-columns:repeat(3,1fr)}.ops-champs .field:first-child{grid-column:1 / -1}.ops-onglets{flex-wrap:nowrap;overflow-x:auto}.ops-onglets .chip{flex:none}.ops-tbl th:nth-child(4),.ops-tbl td:nth-child(4){display:none}.ops-tbl .oprix{width:72px}}
-.coffre{background:var(--creme-2);border:1px solid var(--line);border-radius:14px;padding:14px 14px 6px}
-.coffre,.coffre *{min-width:0;box-sizing:border-box}
+#carnet-corps,#carnet-corps *{min-width:0;box-sizing:border-box}
+.carnet-porte{max-width:440px}
+.carnet-porte .field{margin-bottom:10px}
+input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
+.carnet-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.carnet-s{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.carnet-s.ouvert{background:var(--creme-2)}
+.carnet-h{all:unset;box-sizing:border-box;display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.carnet-h span:first-child{display:flex;flex-direction:column}
+.carnet-h small{color:var(--taupe);font-size:12px;margin-top:2px}
+.carnet-c{padding:0 12px 12px}
 .acces .two{grid-template-columns:1fr;gap:0}
 .acces-c .btn.xs{flex:none}
 #lsheet form{min-width:0;max-width:100%}
@@ -917,6 +926,12 @@ h2,h3{font-weight:500;letter-spacing:0}
       <div id="evt-liste"></div>
     </section>
 
+    <!-- CARNET -->
+    <section class="panel" data-panel="carnet">
+      <div class="ph"><div class="pl">Organisation</div><h1>Carnet</h1></div>
+      <div id="carnet-corps" style="margin-top:18px;max-width:760px"></div>
+    </section>
+
     <section class="panel" data-panel="idees">
       <div class="ph"><div class="pl">Opérationnel</div><h1>Boîte à idées</h1></div>
       <form class="addline" id="idea-form" style="margin-bottom:14px">
@@ -1112,10 +1127,9 @@ h2,h3{font-weight:500;letter-spacing:0}
     </div>
     <div class="actions" id="l-liens" hidden></div>
     <div class="field"><label for="l-notes">Notes</label><textarea id="l-notes" placeholder="Équipements, consignes de ménage, linge, consommables, particularités…"></textarea></div>
-    <p class="note" style="margin:0">Les codes et mots de passe vont dans les accès privés, juste en dessous, jamais dans les notes.</p>
+    <p class="note" style="margin:0">Les codes et mots de passe vont dans le Carnet, jamais dans les notes.</p>
     <div class="hr"></div>
-    <div class="coffre" id="coffre"><div class="section-head" style="margin:0 0 8px"><h3 class="coffre-t"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Accès privés</h3><span class="eyebrow">Chiffré</span></div><div id="coffre-corps"></div></div>
-    <datalist id="dl-acces"><option value="Boîte à clés"><option value="Porte d'entrée"><option value="Portail"><option value="Digicode"><option value="Serrure connectée"><option value="Alarme"><option value="Wifi"><option value="Mail du logement"><option value="Airbnb"><option value="Booking"><option value="Channel manager"><option value="Mairie, taxe de séjour"><option value="Parking"></datalist>
+    <datalist id="dl-acces"><option value="Boîte à clés"><option value="Porte d'entrée"><option value="Portail"><option value="Digicode"><option value="Serrure connectée"><option value="Alarme"><option value="Wifi"><option value="Mail du logement"><option value="Airbnb"><option value="Booking"><option value="Channel manager"><option value="Mairie, taxe de séjour"><option value="Parking"><option value="Chauffage"><option value="Climatisation"><option value="Compteur"><option value="Ascenseur"><option value="Boîte aux lettres"><option value="Local poubelles"><option value="Ring"><option value="Abritel"><option value="Mail"><option value="Instagram"><option value="Site internet"><option value="Banque"></datalist>
     <div class="hr"></div>
     <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
     <div class="list" id="l-taches"></div>
@@ -1148,9 +1162,10 @@ h2,h3{font-weight:500;letter-spacing:0}
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
     logements:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+    carnet:'<svg viewBox="0 0 24 24"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2M9 8h6M9 12h6"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection propriétaires',partenaires:'Prospection partenaires',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection propriétaires',partenaires:'Prospection partenaires',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',carnet:'Carnet',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
     ['Développement',[['prospection','Prospection proprio'],['demandes','Demandes reçues'],['partenaires','Prospection partenaires']]],
@@ -1158,7 +1173,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
     ['Finances',[['ca','Finances']]],
     ['Communication',[['reseaux','Studio réseaux sociaux'],['evenements','Événements'],['idees','Boîte à idées']]],
-    ['Organisation',[['entreprise','Mon entreprise']]]
+    ['Organisation',[['entreprise','Mon entreprise'],['carnet','Carnet']]]
   ];
   var TABS=[['accueil','Accueil'],['relances','Tâches'],['contacts','Contacts'],['prospection','Prospection'],['plus','Plus']];
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
@@ -1214,6 +1229,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     document.querySelectorAll('nav [data-go]').forEach(function(b){b.classList.toggle('active',b.dataset.go===name || (b.dataset.go==='plus' && !TABS.some(function(t){return t[0]===name;})));});
     $('tb-title').textContent=TITLES[name]||'';
     try{localStorage.setItem('ms_tab',name);}catch(e){}
+    if(name==='carnet')renderCarnet();else if(typeof CARNET!=='undefined'&&CARNET.cle)verrouiller();
     window.scrollTo(0,0);
   }
   document.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b){go(b.dataset.go);}});
@@ -1295,7 +1311,7 @@ h2,h3{font-weight:500;letter-spacing:0}
     ['Finances et comptabilité','admin',[['Facturation des commissions','ok','Factures reliées dans Finances, rétrocessions et versements des plateformes à ajouter'],['Suivi du chiffre d\'affaires','ok','Page Finances'],['Suivi des charges','ok','Page Finances'],['Encaissements et paiements','ok','Pointés au point finances du 1er'],['Mise de côté cotisations, impôts, trésorerie','ok','Montant calculé chaque mois dans le budget prévisionnel (Finances)'],['Budget prévisionnel et rentabilité par bien','ok','Budget prévisionnel dans Finances, simulateur propriétaire']]],
     ['Commercial et développement','prospection',[['Prospection des propriétaires','ok','Pipeline, repérage automatique, envoi courrier, « No way »'],['Présentation de l\'offre','ok','Simulateur et proposition propriétaire'],['Partenariats agences et prescripteurs','ok','20 agences dans le pipeline'],['Kit prescripteur et messages types','part','Dans le programme de prospection'],['Fidélisation des propriétaires','part','Relevé mensuel le 5, bientôt via le channel manager']]],
     ['Communication et marketing','reseaux',[['Image de marque','ok','Plaquette du graphiste'],['Site internet et SEO','ok','Demandes du site suivies toutes les heures'],['Fiche Google Business','ok','Point chaque lundi'],['Réseaux sociaux et contenus','ok','Planning le 1er du mois, Studio réseaux sociaux'],['E réputation, réponses aux avis','part','Réponses rédigées avec Claude, à faire régulièrement'],['Publicité','part','Outils gratuits pour l\'instant, budget plus tard']]],
-    ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Accès privés chiffrés'],['Channel manager','part','Bientôt : réservations, opérationnel et relevés propriétaires, relié à Maison Solina']]],
+    ['Outils et organisation','divers',[['CRM, tâches, agenda','ok','Cette application'],['Automatisations','ok','9 tâches Claude qui tournent seules'],['Accès et codes des logements','ok','Carnet chiffré'],['Channel manager','part','Bientôt : réservations, opérationnel et relevés propriétaires, relié à Maison Solina']]],
     ['Stratégie et pilotage','divers',[['Objectifs','ok','1 signature par mois, 12 à 15 logements fin 2027'],['Plan d\'action','ok','Programme de prospection'],['Suivi des indicateurs','part','CA suivi, taux d\'occupation à ajouter'],['Prendre du recul','non','Bilan chaque trimestre']]],
     ['Prestataires','logements',[['Ménage, protocole et photos de fin','ok','Page Opérationnel'],['Réseau de prestataires','part','Une personne ménage suffit cet hiver, à étoffer avant la saison'],['Maintenance et dépannage','part','Artisans de confiance à ajouter dans Contacts']]],
     ['Formation et veille','reseaux',[['Formation School','ok','Chaque mercredi à 8h, lien ci dessus'],['Veille réglementaire','ok','Un lundi sur deux'],['Veille marché et événements','ok','Événements du 06 chaque jour']]],
@@ -1829,56 +1845,102 @@ h2,h3{font-weight:500;letter-spacing:0}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
   var lNouveau=null;
 
-  /* ===== Coffre des accès privés : chiffré sur l'appareil (AES-GCM 256, clé tirée du mot de passe par PBKDF2), seul le texte chiffré part sur GitHub ===== */
-  var COFFRE={cle:null,depuis:0,entrees:null,bien:null,montrer:{}};
+  /* ===== Outils de chiffrement du Carnet ===== */
   function enB64(u){var t='';for(var i=0;i<u.length;i+=0x8000)t+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(t);}
   function deB64(b){var t=atob(b),u=new Uint8Array(t.length);for(var i=0;i<t.length;i++)u[i]=t.charCodeAt(i);return u;}
-  async function coffreCle(mdp,sel){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(mdp),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:deB64(sel),iterations:310000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+  async function coffreCle(mdp,sel){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(mdp),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:deB64(sel),iterations:310000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},true,['encrypt','decrypt']);}
   async function chiffrer(cle,obj){var iv=crypto.getRandomValues(new Uint8Array(12));var c=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},cle,new TextEncoder().encode(JSON.stringify(obj)));return {v:1,iv:enB64(iv),d:enB64(new Uint8Array(c))};}
   async function dechiffrer(cle,x){var p=await crypto.subtle.decrypt({name:'AES-GCM',iv:deB64(x.iv)},cle,deB64(x.d));return JSON.parse(new TextDecoder().decode(p));}
   function coffreDispo(){return !!(window.crypto&&crypto.subtle&&window.TextEncoder);}
-  function verrouiller(){COFFRE.cle=null;COFFRE.entrees=null;COFFRE.montrer={};if($('lsheet').classList.contains('open'))renderCoffre();}
-  function coffreActif(){if(COFFRE.cle&&Date.now()-COFFRE.depuis>10*60*1000)verrouiller();return !!COFFRE.cle;}
+  /* ===== Carnet : codes et accès chiffrés sur l'appareil (AES-GCM 256). La clé vient de la phrase secrète (PBKDF2, champs coffreSel et coffreTest).
+     Sur un appareil déjà validé par la phrase, un code à 4 chiffres rouvre la clé, gardée chiffrée sur cet appareil seulement. 5 codes faux : la phrase est redemandée.
+     Seul le texte chiffré (params.carnet) part sur GitHub. ===== */
+  var CARNET={cle:null,depuis:0,data:null,src:null,montrer:{},ouverts:{moi:true},etape:''};
+  var CLE_PIN='solina-carnet-pin';
+  var EYE='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  function lirePin(){try{var p=JSON.parse(localStorage.getItem(CLE_PIN)||'null');if(p&&p.coffreSel!==S.params.coffreSel){localStorage.removeItem(CLE_PIN);return null;}return p;}catch(e){return null;}}
+  function ecrirePin(x){try{if(x)localStorage.setItem(CLE_PIN,JSON.stringify(x));else localStorage.removeItem(CLE_PIN);}catch(e){}}
+  async function clePin(pin,sel){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode('solina-pin:'+pin),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:deB64(sel),iterations:600000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+  async function poserPin(pin,cle){var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var raw=new Uint8Array(await crypto.subtle.exportKey('raw',cle));var k=await clePin(pin,sel);var iv=crypto.getRandomValues(new Uint8Array(12));var c=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,raw);ecrirePin({sel:sel,iv:enB64(iv),d:enB64(new Uint8Array(c)),essais:0,coffreSel:S.params.coffreSel});}
+  async function ouvrirPin(pin){var p=lirePin();var k=await clePin(pin,p.sel);var raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:deB64(p.iv)},k,deB64(p.d));var cle=await crypto.subtle.importKey('raw',raw,{name:'AES-GCM'},true,['encrypt','decrypt']);await dechiffrer(cle,S.params.coffreTest);return cle;}
+  function verrouiller(){CARNET.cle=null;CARNET.data=null;CARNET.src=null;CARNET.montrer={};CARNET.etape='';if(COURANT==='carnet')renderCarnet();}
+  function carnetActif(){if(CARNET.cle&&Date.now()-CARNET.depuis>5*60*1000)verrouiller();return !!CARNET.cle;}
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')verrouiller();});
-  async function chargerEntrees(){var b=byId(S.biens,lEdit);COFFRE.bien=lEdit;COFFRE.montrer={};if(!b||!b.coffre){COFFRE.entrees=[];return;}try{COFFRE.entrees=(await dechiffrer(COFFRE.cle,b.coffre)).entrees||[];}catch(e){COFFRE.entrees=null;toast('Ce coffre ne s’ouvre pas avec ce mot de passe');}}
-  function renderCoffre(){
-    var el=$('coffre-corps');if(!el)return;
-    if(!coffreDispo()){el.innerHTML='<p class="note">Le coffre n’est pas disponible sur cet appareil.</p>';return;}
-    if(!byId(S.biens,lEdit)){el.innerHTML='<p class="note">Enregistre d’abord le logement, puis rouvre sa fiche pour ajouter ses accès.</p>';return;}
-    if(!S.params.coffreSel){el.innerHTML='<p class="note" style="margin:0 0 10px">Crée le mot de passe de ton coffre. Il protège les accès de tous tes logements. Choisis une phrase que tu n’oublieras pas : <b>sans elle, personne ne pourra rouvrir le coffre, pas même Claude</b>.</p><div class="two"><div class="field"><label for="cf-m1">Mot de passe du coffre</label><input id="cf-m1" type="password" autocomplete="new-password"></div><div class="field"><label for="cf-m2">Le même, encore une fois</label><input id="cf-m2" type="password" autocomplete="new-password"></div></div><div class="actions"><button type="button" class="btn primary sm" data-coffre="creer">Créer le coffre</button></div><p class="note err" id="cf-err" hidden></p>';return;}
-    if(!coffreActif()){el.innerHTML='<div class="coffre-ouvrir"><div class="field" style="flex:1;margin:0"><label for="cf-m">Mot de passe du coffre</label><input id="cf-m" type="password" autocomplete="current-password"></div><button type="button" class="btn primary sm" data-coffre="ouvrir">Ouvrir</button></div><p class="note err" id="cf-err" hidden></p>';return;}
-    if(COFFRE.bien!==lEdit||!COFFRE.entrees){el.innerHTML='<p class="note">Ouverture…</p>';chargerEntrees().then(renderCoffre);return;}
-    var EYE='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
-    el.innerHTML=(COFFRE.entrees.length?COFFRE.entrees.map(function(x,i){var vu=COFFRE.montrer[i];return '<div class="acces" data-acces="'+i+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Boîte à clés, Airbnb, Wifi…" autocomplete="off"><button type="button" class="btn ghost xs" data-coffre="suppr" data-i="'+i+'" aria-label="Supprimer cet accès">×</button></div><div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-coffre="copier" data-i="'+i+'" data-k="identifiant">Copier</button></span></div><div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-coffre="voir" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-coffre="copier" data-i="'+i+'" data-k="secret">Copier</button></span></div></div><div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}).join(''):'<p class="note">Aucun accès pour ce logement.</p>')+
-      '<div class="actions"><button type="button" class="btn sm" data-coffre="ajouter">+ Accès</button><button type="button" class="btn primary sm" data-coffre="enregistrer">Enregistrer les accès</button><span style="flex:1"></span><button type="button" class="btn ghost sm" data-coffre="fermer">Verrouiller</button></div>';
+  async function chargerCarnet(){
+    var d={moi:[],biens:{}},src=S.params.carnet||null;
+    if(src)d=await dechiffrer(CARNET.cle,src);d.moi=d.moi||[];d.biens=d.biens||{};
+    var ajout=false;
+    for(var i=0;i<S.biens.length;i++){var b=S.biens[i];if(b.coffre&&!d.biens[b.id]){try{d.biens[b.id]=(await dechiffrer(CARNET.cle,b.coffre)).entrees||[];ajout=true;}catch(e){}}}
+    CARNET.data=d;CARNET.src=src;
+    if(ajout)await sauverCarnet(true);
   }
-  function lireAcces(){document.querySelectorAll('#coffre-corps [data-acces]').forEach(function(r){var i=Number(r.dataset.acces),x=COFFRE.entrees[i];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
-  function erreurCoffre(t){var e=$('cf-err');if(e){e.textContent=t;e.hidden=false;}}
-  $('coffre').addEventListener('click',async function(e){
-    var b=e.target.closest('[data-coffre]');if(!b)return;e.preventDefault();var a=b.dataset.coffre;
+  async function sauverCarnet(silence){
+    if(!CARNET.cle||!CARNET.data)return;
+    var vide=function(x){return !(x.libelle||x.identifiant||x.secret||x.note);};
+    var c={moi:CARNET.data.moi.filter(function(x){return !vide(x);}),biens:{}};
+    Object.keys(CARNET.data.biens).forEach(function(k){c.biens[k]=CARNET.data.biens[k].filter(function(x){return !vide(x);});});
+    var ch=await chiffrer(CARNET.cle,c);S.params.carnet=ch;CARNET.src=ch;saveParams();if(!silence)toast('Enregistré et chiffré');
+  }
+  var sauverT=null;function sauverBientot(){clearTimeout(sauverT);sauverT=setTimeout(function(){sauverCarnet(true);},700);}
+  function secCarnet(k){if(k==='moi')return CARNET.data.moi;var id=k.slice(2);return CARNET.data.biens[id]||(CARNET.data.biens[id]=[]);}
+  function accesHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i];
+    return '<div class="acces" data-acces="'+i+'" data-sec="'+esc(k)+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Boîte à clés, Airbnb, chauffage…" autocomplete="off"><button type="button" class="btn ghost xs" data-carnet="suppr" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Supprimer">Supprimer</button></div>'+
+      '<div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="identifiant">Copier</button></span></div>'+
+      '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="voir" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
+      '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
+  function sectionHtml(k,titre,sous){var l=secCarnet(k),n=l.filter(function(x){return x.libelle||x.secret||x.identifiant;}).length,o=!!CARNET.ouverts[k];
+    return '<div class="carnet-s'+(o?' ouvert':'')+'"><button type="button" class="carnet-h" data-carnet="plier" data-sec="'+esc(k)+'"><span><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'</span><span class="pill">'+(n?n+' code'+(n>1?'s':''):'vide')+'</span></button>'+
+      (o?'<div class="carnet-c">'+(l.length?l.map(function(x,i){return accesHtml(x,k,i);}).join(''):'<p class="note" style="margin:0 0 10px">Rien pour l’instant.</p>')+'<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>':'')+'</div>';}
+  function renderCarnet(){
+    var el=$('carnet-corps');if(!el)return;
+    if(!coffreDispo()){el.innerHTML='<p class="note">Le Carnet n’est pas disponible sur cet appareil.</p>';return;}
+    var champ=function(id,lab,num){return '<div class="field" style="margin:0"><label for="'+id+'">'+lab+'</label><input id="'+id+'" type="password" '+(num?'inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" class="pin"':'autocomplete="current-password"')+'></div>';};
+    var err='<p class="note err" id="cn-err" hidden></p>';
+    if(!S.params.coffreSel){el.innerHTML='<div class="card carnet-porte"><p class="note" style="margin:0 0 10px">Choisis ta phrase secrète. Elle protège tout le Carnet. Choisis une phrase que tu n’oublieras pas : <b>sans elle, personne ne pourra rouvrir le Carnet, pas même Claude</b>.</p>'+champ('cn-m1','Phrase secrète')+champ('cn-m2','La même, encore une fois')+'<div class="actions"><button type="button" class="btn primary sm" data-carnet="creer">Créer</button></div>'+err+'</div>';return;}
+    if(CARNET.etape==='pin'&&CARNET.cle){el.innerHTML='<div class="card carnet-porte"><p class="note" style="margin:0 0 10px">Choisis ton code à 4 chiffres. Sur cet appareil, il suffira pour ouvrir le Carnet.</p><div class="two">'+champ('cn-p1','Code à 4 chiffres',1)+champ('cn-p2','Le même, encore une fois',1)+'</div><div class="actions"><button type="button" class="btn primary sm" data-carnet="poserpin">Valider</button><button type="button" class="btn ghost sm" data-carnet="sanspin">Plus tard</button></div>'+err+'</div>';var f=$('cn-p1');if(f)f.focus();return;}
+    if(!carnetActif()){
+      var p=lirePin();
+      if(p&&CARNET.etape!=='phrase'){el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-pin','Ton code',1)+'<button type="button" class="btn primary sm" data-carnet="ouvrirpin">Ouvrir</button></div>'+err+'<button type="button" class="btn ghost xs" data-carnet="oubli">Code oublié ? Utiliser ma phrase secrète</button></div>';var f2=$('cn-pin');if(f2)f2.focus();return;}
+      el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-m','Phrase secrète')+'<button type="button" class="btn primary sm" data-carnet="ouvrir">Ouvrir</button></div>'+err+'</div>';var f3=$('cn-m');if(f3)f3.focus();return;}
+    if(!CARNET.data||(S.params.carnet&&S.params.carnet!==CARNET.src)){el.innerHTML='<p class="note">Ouverture…</p>';chargerCarnet().then(renderCarnet).catch(function(e){console.error(e);toast('Le Carnet ne s’ouvre pas');verrouiller();});return;}
+    var biens=S.biens.slice().sort(function(a,b){var ra=a.actif?0:(a.aSigner?1:2),rb=b.actif?0:(b.aSigner?1:2);return ra-rb||(a.nom||'').localeCompare(b.nom||'','fr');});
+    el.innerHTML='<div class="carnet-bar"><span class="note" style="margin:0">Se verrouille seul après 5 minutes.</span><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
+      '<div class="pl" style="margin:6px 0 8px">Mes accès</div>'+sectionHtml('moi','Maison Solina','Mails, sites, banque, logiciels')+
+      '<div class="pl" style="margin:18px 0 8px">Logements</div>'+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return sectionHtml('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('');
+  }
+  function lireCarnet(){document.querySelectorAll('#carnet-corps [data-acces]').forEach(function(r){var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
+  function erreurCarnet(t){var e=$('cn-err');if(e){e.textContent=t;e.hidden=false;}}
+  $('carnet-corps').addEventListener('click',async function(e){
+    var b=e.target.closest('[data-carnet]');if(!b)return;e.preventDefault();var a=b.dataset.carnet;
     try{
-      if(a==='creer'){var m1=$('cf-m1').value,m2=$('cf-m2').value;if(m1.length<8)return erreurCoffre('Au moins 8 caractères.');if(m1!==m2)return erreurCoffre('Les deux mots de passe ne sont pas identiques.');b.disabled=true;b.textContent='Création…';var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var cle=await coffreCle(m1,sel);S.params.coffreSel=sel;S.params.coffreTest=await chiffrer(cle,{ok:'solina'});saveParams();COFFRE.cle=cle;COFFRE.depuis=Date.now();COFFRE.entrees=null;renderCoffre();toast('Coffre créé');return;}
-      if(a==='ouvrir'){var m=$('cf-m').value;if(!m)return;b.disabled=true;b.textContent='Ouverture…';var k=await coffreCle(m,S.params.coffreSel);try{await dechiffrer(k,S.params.coffreTest);}catch(x){b.disabled=false;b.textContent='Ouvrir';return erreurCoffre('Mot de passe incorrect.');}COFFRE.cle=k;COFFRE.depuis=Date.now();COFFRE.entrees=null;renderCoffre();return;}
-      if(!coffreActif()){renderCoffre();return;}
-      COFFRE.depuis=Date.now();lireAcces();
-      if(a==='ajouter'){COFFRE.entrees.push({libelle:'',identifiant:'',secret:'',note:''});renderCoffre();var l=document.querySelectorAll('#coffre-corps [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
-      if(a==='suppr'){if(!confirmer(b))return;COFFRE.entrees.splice(Number(b.dataset.i),1);renderCoffre();return;}
-      if(a==='voir'){var i=Number(b.dataset.i);COFFRE.montrer[i]=!COFFRE.montrer[i];renderCoffre();return;}
-      if(a==='copier'){var v=(COFFRE.entrees[Number(b.dataset.i)]||{})[b.dataset.k]||'';if(!v)return;try{await navigator.clipboard.writeText(v);toast('Copié');}catch(x){toast('Copie impossible sur cet appareil');}return;}
-      if(a==='fermer'){verrouiller();return;}
-      if(a==='enregistrer'){var bien=byId(S.biens,lEdit);if(!bien)return;var garde=COFFRE.entrees.filter(function(x){return (x.libelle||x.identifiant||x.secret||x.note);});var c=garde.length?await chiffrer(COFFRE.cle,{entrees:garde}):null;var nv=Object.assign({},bien);if(c)nv.coffre=c;else delete nv.coffre;COFFRE.entrees=garde;save('biens',nv).then(function(){toast('Accès enregistrés et chiffrés');}).catch(function(){});renderCoffre();return;}
-    }catch(x){console.error(x);toast('Le coffre a rencontré un problème');renderCoffre();}
+      if(a==='creer'){var m1=$('cn-m1').value,m2=$('cn-m2').value;if(m1.length<8)return erreurCarnet('Au moins 8 caractères.');if(m1!==m2)return erreurCarnet('Les deux phrases ne sont pas identiques.');b.disabled=true;var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var cle=await coffreCle(m1,sel);S.params.coffreSel=sel;S.params.coffreTest=await chiffrer(cle,{ok:'solina'});saveParams();CARNET.cle=cle;CARNET.depuis=Date.now();CARNET.etape='pin';renderCarnet();return;}
+      if(a==='ouvrir'){var m=$('cn-m').value;if(!m)return;b.disabled=true;b.textContent='Ouverture…';var k=await coffreCle(m,S.params.coffreSel);try{await dechiffrer(k,S.params.coffreTest);}catch(x){b.disabled=false;b.textContent='Ouvrir';return erreurCarnet('Phrase incorrecte.');}CARNET.cle=k;CARNET.depuis=Date.now();CARNET.etape=lirePin()?'':'pin';renderCarnet();return;}
+      if(a==='ouvrirpin'){var v=$('cn-pin').value;if(!/^\d{4}$/.test(v))return erreurCarnet('4 chiffres.');b.disabled=true;b.textContent='Ouverture…';try{CARNET.cle=await ouvrirPin(v);var p=lirePin();p.essais=0;ecrirePin(p);CARNET.depuis=Date.now();CARNET.etape='';renderCarnet();}catch(x){var q=lirePin();if(q){q.essais=(q.essais||0)+1;if(q.essais>=5){ecrirePin(null);CARNET.etape='phrase';renderCarnet();return erreurCarnet('5 codes faux : entre ta phrase secrète.');}ecrirePin(q);}renderCarnet();erreurCarnet('Code faux.'+(q?' Encore '+(5-q.essais)+' essai'+(5-q.essais>1?'s':'')+'.':''));}return;}
+      if(a==='oubli'){CARNET.etape='phrase';renderCarnet();return;}
+      if(a==='poserpin'){var p1=$('cn-p1').value,p2=$('cn-p2').value;if(!/^\d{4}$/.test(p1))return erreurCarnet('4 chiffres.');if(p1!==p2)return erreurCarnet('Les deux codes ne sont pas identiques.');b.disabled=true;await poserPin(p1,CARNET.cle);CARNET.etape='';toast('Code enregistré sur cet appareil');renderCarnet();return;}
+      if(a==='sanspin'){CARNET.etape='';renderCarnet();return;}
+      if(!carnetActif()){renderCarnet();return;}
+      CARNET.depuis=Date.now();lireCarnet();var k2=b.dataset.sec,i=Number(b.dataset.i);
+      if(a==='plier'){CARNET.ouverts[k2]=!CARNET.ouverts[k2];renderCarnet();return;}
+      if(a==='ajouter'){secCarnet(k2).push({libelle:'',identifiant:'',secret:'',note:''});renderCarnet();var l=document.querySelectorAll('#carnet-corps [data-sec="'+k2+'"][data-acces] [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
+      if(a==='suppr'){if(!confirmer(b))return;secCarnet(k2).splice(i,1);await sauverCarnet();renderCarnet();return;}
+      if(a==='voir'){CARNET.montrer[k2+'|'+i]=!CARNET.montrer[k2+'|'+i];renderCarnet();return;}
+      if(a==='copier'){var val=(secCarnet(k2)[i]||{})[b.dataset.k]||'';if(!val)return;try{await navigator.clipboard.writeText(val);toast('Copié');}catch(x){toast('Copie impossible sur cet appareil');}return;}
+      if(a==='fermer'){await sauverCarnet(true);verrouiller();return;}
+    }catch(x){console.error(x);toast('Le Carnet a rencontré un problème');renderCarnet();}
   });
-  $('coffre').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target;if(t.id==='cf-m'){e.preventDefault();$('coffre').querySelector('[data-coffre="ouvrir"]').click();}else if(t.id==='cf-m1'||t.id==='cf-m2'){e.preventDefault();}else if(t.closest('#coffre-corps'))e.preventDefault();});
+  $('carnet-corps').addEventListener('change',function(e){if(!e.target.closest('[data-acces]')||!carnetActif())return;CARNET.depuis=Date.now();lireCarnet();sauverBientot();});
+  $('carnet-corps').addEventListener('input',function(){if(CARNET.cle)CARNET.depuis=Date.now();});
+  $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-m':'ouvrir','cn-pin':'ouvrirpin','cn-p2':'poserpin','cn-m2':'creer'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}else if(t.id==='cn-p1'&&$('cn-p2'))$('cn-p2').focus();else if(t.id==='cn-m1')$('cn-m2').focus();});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
     $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';$('l-photos').value=b.lienPhotos||'';$('l-prix').value=b.prixNuit||'';$('l-occ').value=b.occupation||'';$('l-signer').hidden=!b.aSigner;majEstim();
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
     var pa0=byId(S.contacts,b.proprietaire);$('l-anniv').textContent=(pa0&&pa0.anniversaire)?'Anniversaire : '+txtAnniv(pa0.anniversaire):'';
-    COFFRE.entrees=null;COFFRE.bien=null;renderCoffre();majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
+    majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
-  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;COFFRE.entrees=null;COFFRE.bien=null;COFFRE.montrer={};}
+  function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;}
   var evtFiltre='';
   var MOIS_C=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
   function evtDates(e){var d=e.debut||'',f=e.fin||d;if(!d)return {g:'?',p:''};var a=d.split('-'),b=f.split('-');var j=String(Number(a[2])),mo=MOIS_C[Number(a[1])-1];if(f===d)return {g:j,p:mo+' '+a[0]};if(a[1]===b[1]&&a[0]===b[0])return {g:j+' au '+Number(b[2]),p:mo+' '+a[0]};return {g:j+' '+mo,p:'au '+Number(b[2])+' '+MOIS_C[Number(b[1])-1]};}
@@ -2161,7 +2223,7 @@ h2,h3{font-weight:500;letter-spacing:0}
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-deconnecter]');if(!b)return;
     if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Confirmer la déconnexion';setTimeout(function(){b.dataset.armed='';b.textContent='Déconnecter cet appareil';},4000);return;}
-    try{localStorage.removeItem(CLE_JETON);localStorage.removeItem(CLE_COPIE);localStorage.removeItem('solina-cle-ok');}catch(x){}
+    try{localStorage.removeItem(CLE_JETON);localStorage.removeItem(CLE_COPIE);localStorage.removeItem('solina-cle-ok');localStorage.removeItem('solina-carnet-pin');}catch(x){}
     G={sha:null,connecte:false,D:null,derniere:0};appliquer(normaliserD({}));renderAll();etat(false);montrerConnexion('');
   });
 
