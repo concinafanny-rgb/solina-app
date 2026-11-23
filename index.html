@@ -564,6 +564,26 @@ h2,h3{font-weight:500;letter-spacing:0}
 .ops-bloc li{font-size:13.5px;line-height:1.5;margin-bottom:5px;color:var(--brun)}
 @media (max-width:699px){.ops-champs{grid-template-columns:repeat(3,1fr)}.ops-champs .field:first-child{grid-column:1 / -1}.ops-onglets{flex-wrap:nowrap;overflow-x:auto}.ops-onglets .chip{flex:none}.ops-tbl th:nth-child(4),.ops-tbl td:nth-child(4){display:none}.ops-tbl .oprix{width:72px}}
 #carnet-corps,#carnet-corps *{min-width:0;box-sizing:border-box}
+.cn-grille{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cn-carte{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.cn-carte[hidden]{display:none}
+.cn-carte:hover{border-color:var(--taupe)}
+.cn-carte b{color:var(--brun)}
+.cn-carte small{color:var(--taupe);font-size:12px}
+.cn-apercu{font-size:12px;color:var(--brun);opacity:.75;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
+.cn-titre{font-size:17px;color:var(--brun)}
+.cn-g{margin-bottom:14px}
+.cn-g .pl{margin-bottom:6px}
+.cn-l{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.cn-n{font-weight:600;color:var(--brun);flex:0 0 150px}
+.cn-v{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1}
+.cn-chip{all:unset;box-sizing:border-box;cursor:pointer;background:var(--creme-2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;display:inline-flex;gap:8px;align-items:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cn-chip small{font-size:11px;color:var(--terre);font-weight:600}
+.cn-chip:active{background:var(--line)}
+.cn-sec{font-family:ui-monospace,Menlo,monospace}
+.cn-note{flex:1 0 100%;font-size:12px;color:var(--taupe)}
+@media (max-width:560px){.cn-n{flex-basis:100%}}
 .carnet-porte{max-width:440px}
 .carnet-porte .field{margin-bottom:10px}
 input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
@@ -1855,7 +1875,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   /* ===== Carnet : codes et accès chiffrés sur l'appareil (AES-GCM 256). La clé vient de la phrase secrète (PBKDF2, champs coffreSel et coffreTest).
      Sur un appareil déjà validé par la phrase, un code à 4 chiffres rouvre la clé, gardée chiffrée sur cet appareil seulement. 5 codes faux : la phrase est redemandée.
      Seul le texte chiffré (params.carnet) part sur GitHub. ===== */
-  var CARNET={cle:null,depuis:0,data:null,src:null,montrer:{},ouverts:{moi:true},etape:''};
+  var CARNET={cle:null,depuis:0,data:null,src:null,montrer:{},vue:null,edit:false,etape:''};
   var CLE_PIN='solina-carnet-pin';
   var EYE='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   function lirePin(){try{var p=JSON.parse(localStorage.getItem(CLE_PIN)||'null');if(p&&p.coffreSel!==S.params.coffreSel){localStorage.removeItem(CLE_PIN);return null;}return p;}catch(e){return null;}}
@@ -1863,7 +1883,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   async function clePin(pin,sel){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode('solina-pin:'+pin),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:deB64(sel),iterations:600000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
   async function poserPin(pin,cle){var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var raw=new Uint8Array(await crypto.subtle.exportKey('raw',cle));var k=await clePin(pin,sel);var iv=crypto.getRandomValues(new Uint8Array(12));var c=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,raw);ecrirePin({sel:sel,iv:enB64(iv),d:enB64(new Uint8Array(c)),essais:0,coffreSel:S.params.coffreSel});}
   async function ouvrirPin(pin){var p=lirePin();var k=await clePin(pin,p.sel);var raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:deB64(p.iv)},k,deB64(p.d));var cle=await crypto.subtle.importKey('raw',raw,{name:'AES-GCM'},true,['encrypt','decrypt']);await dechiffrer(cle,S.params.coffreTest);return cle;}
-  function verrouiller(){CARNET.cle=null;CARNET.data=null;CARNET.src=null;CARNET.montrer={};CARNET.etape='';if(COURANT==='carnet')renderCarnet();}
+  function verrouiller(){CARNET.cle=null;CARNET.data=null;CARNET.src=null;CARNET.montrer={};CARNET.vue=null;CARNET.edit=false;CARNET.etape='';if(COURANT==='carnet')renderCarnet();}
   function carnetActif(){if(CARNET.cle&&Date.now()-CARNET.depuis>5*60*1000)verrouiller();return !!CARNET.cle;}
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')verrouiller();});
   async function chargerCarnet(){
@@ -1888,9 +1908,23 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="identifiant">Copier</button></span></div>'+
       '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="voir" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
       '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
-  function sectionHtml(k,titre,sous){var l=secCarnet(k),n=l.filter(function(x){return x.libelle||x.secret||x.identifiant;}).length,o=!!CARNET.ouverts[k];
-    return '<div class="carnet-s'+(o?' ouvert':'')+'"><button type="button" class="carnet-h" data-carnet="plier" data-sec="'+esc(k)+'"><span><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'</span><span class="pill">'+(n?n+' code'+(n>1?'s':''):'vide')+'</span></button>'+
-      (o?'<div class="carnet-c">'+(l.length?l.map(function(x,i){return accesHtml(x,k,i);}).join(''):'<p class="note" style="margin:0 0 10px">Rien pour l’instant.</p>')+'<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>':'')+'</div>';}
+  var GROUPES=[['Entrer dans le logement',/bo[iî]te|porte|digicode|serrure|alarme|portail|parking|garage|cl[ée]s?\b|badge|ascenseur|poubelle|ring|interphone|cave/i],['Comptes et plateformes',/airbnb|booking|abritel|vrbo|channel|mail|site|instagram|facebook|banque|mairie|taxe|compte|login|identifiant|beds24|lodgify|smoobu|google|canva|urssaf|impots/i],['Équipements',/wifi|wi-fi|internet|box|chauffage|clim|compteur|eau|[ée]lectri|gaz|tv|t[ée]l[ée]|piscine|spa|volet|coffre/i]];
+  function groupeDe(x){var t=(x.libelle||'')+' '+(x.note||'');for(var g=0;g<GROUPES.length;g++)if(GROUPES[g][1].test(t))return GROUPES[g][0];return 'Autres';}
+  function nomSec(k){if(k==='moi')return 'Maison Solina';var b=byId(S.biens,k.slice(2));return b?(b.nom||'Logement'):'Logement';}
+  function ligneHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i],d=' data-sec="'+esc(k)+'" data-i="'+i+'"';
+    return '<div class="cn-l"><div class="cn-n">'+esc(x.libelle||'Sans nom')+'</div><div class="cn-v">'+
+      (x.identifiant?'<button type="button" class="cn-chip" data-carnet="copier" data-k="identifiant"'+d+' title="Copier">'+esc(x.identifiant)+'<small>Copier</small></button>':'')+
+      (x.secret?'<button type="button" class="cn-chip cn-sec" data-carnet="copier" data-k="secret"'+d+' title="Copier">'+(vu?esc(x.secret):'••••••')+'<small>Copier</small></button><button type="button" class="btn ghost xs" data-carnet="voir"'+d+' aria-label="Afficher">'+EYE+'</button>':'')+
+      '</div>'+(x.note?'<div class="cn-note">'+esc(x.note)+'</div>':'')+'</div>';}
+  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><b class="cn-titre">'+esc(nomSec(k))+'</b><span style="flex:1"></span>'+(CARNET.edit?'<button type="button" class="btn primary sm" data-carnet="finedit">Terminé</button>':'<button type="button" class="btn sm" data-carnet="edit">Modifier</button>')+'</div>';
+    if(CARNET.edit)return h+(l.length?l.map(function(x,i){return accesHtml(x,k,i);}).join(''):'')+'<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button>';
+    var pleins=l.map(function(x,i){return [x,i];}).filter(function(p){return p[0].libelle||p[0].identifiant||p[0].secret||p[0].note;});
+    if(!pleins.length)return h+'<p class="note">Aucun code pour l’instant.</p><button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button>';
+    var ordre=GROUPES.map(function(g){return g[0];}).concat(['Autres']);
+    return h+ordre.map(function(g){var it=pleins.filter(function(p){return groupeDe(p[0])===g;});if(!it.length)return '';return '<div class="cn-g"><div class="pl">'+g+'</div>'+it.map(function(p){return ligneHtml(p[0],k,p[1]);}).join('')+'</div>';}).join('')+
+      '<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'" style="margin-top:8px">+ Ajouter un code</button>';}
+  function carteSec(k,titre,sous){var l=secCarnet(k).filter(function(x){return x.libelle||x.secret||x.identifiant;});
+    return '<button type="button" class="cn-carte" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'<span class="cn-apercu">'+(l.length?esc(l.slice(0,4).map(function(x){return x.libelle||'Code';}).join(', '))+(l.length>4?'…':''):'Vide')+'</span></button>';}
   function renderCarnet(){
     var el=$('carnet-corps');if(!el)return;
     if(!coffreDispo()){el.innerHTML='<p class="note">Le Carnet n’est pas disponible sur cet appareil.</p>';return;}
@@ -1903,10 +1937,11 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       if(p&&CARNET.etape!=='phrase'){el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-pin','Ton code',1)+'<button type="button" class="btn primary sm" data-carnet="ouvrirpin">Ouvrir</button></div>'+err+'<button type="button" class="btn ghost xs" data-carnet="oubli">Code oublié ? Utiliser ma phrase secrète</button></div>';var f2=$('cn-pin');if(f2)f2.focus();return;}
       el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-m','Phrase secrète')+'<button type="button" class="btn primary sm" data-carnet="ouvrir">Ouvrir</button></div>'+err+'<button type="button" class="btn ghost xs" data-carnet="zero">Je n\u2019ai pas cette phrase : recommencer à zéro</button></div>';var f3=$('cn-m');if(f3)f3.focus();return;}
     if(!CARNET.data||(S.params.carnet&&S.params.carnet!==CARNET.src)){el.innerHTML='<p class="note">Ouverture…</p>';chargerCarnet().then(renderCarnet).catch(function(e){console.error(e);toast('Le Carnet ne s’ouvre pas');verrouiller();});return;}
+    if(CARNET.vue){el.innerHTML=vueSection(CARNET.vue);return;}
     var biens=S.biens.slice().sort(function(a,b){var ra=a.actif?0:(a.aSigner?1:2),rb=b.actif?0:(b.aSigner?1:2);return ra-rb||(a.nom||'').localeCompare(b.nom||'','fr');});
-    el.innerHTML='<div class="carnet-bar"><span class="note" style="margin:0">Se verrouille seul après 5 minutes.</span><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
-      '<div class="pl" style="margin:6px 0 8px">Mes accès</div>'+sectionHtml('moi','Maison Solina','Mails, sites, banque, logiciels')+
-      '<div class="pl" style="margin:18px 0 8px">Logements</div>'+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return sectionHtml('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('');
+    el.innerHTML='<div class="carnet-bar"><input type="search" id="cn-cherche" placeholder="Chercher un logement…" autocomplete="off"><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
+      '<div class="cn-grille">'+carteSec('moi','Maison Solina','Mes mails, sites, banque, logiciels')+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return carteSec('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('')+'</div>'+
+      '<p class="note" style="margin-top:10px">Se verrouille seul après 5 minutes.</p>';
   }
   function lireCarnet(){document.querySelectorAll('#carnet-corps [data-acces]').forEach(function(r){var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
   function erreurCarnet(t){var e=$('cn-err');if(e){e.textContent=t;e.hidden=false;}}
@@ -1922,8 +1957,11 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       if(a==='sanspin'){CARNET.etape='';renderCarnet();return;}
       if(!carnetActif()){renderCarnet();return;}
       CARNET.depuis=Date.now();lireCarnet();var k2=b.dataset.sec,i=Number(b.dataset.i);
-      if(a==='plier'){CARNET.ouverts[k2]=!CARNET.ouverts[k2];renderCarnet();return;}
-      if(a==='ajouter'){secCarnet(k2).push({libelle:'',identifiant:'',secret:'',note:''});renderCarnet();var l=document.querySelectorAll('#carnet-corps [data-sec="'+k2+'"][data-acces] [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
+      if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
+      if(a==='retour'){if(CARNET.edit)await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
+      if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
+      if(a==='finedit'){await sauverCarnet();CARNET.edit=false;renderCarnet();return;}
+      if(a==='ajouter'){CARNET.edit=true;secCarnet(k2).push({libelle:'',identifiant:'',secret:'',note:''});renderCarnet();var l=document.querySelectorAll('#carnet-corps [data-sec="'+k2+'"][data-acces] [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
       if(a==='suppr'){if(!confirmer(b))return;secCarnet(k2).splice(i,1);await sauverCarnet();renderCarnet();return;}
       if(a==='voir'){CARNET.montrer[k2+'|'+i]=!CARNET.montrer[k2+'|'+i];renderCarnet();return;}
       if(a==='copier'){var val=(secCarnet(k2)[i]||{})[b.dataset.k]||'';if(!val)return;try{await navigator.clipboard.writeText(val);toast('Copié');}catch(x){toast('Copie impossible sur cet appareil');}return;}
@@ -1931,7 +1969,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     }catch(x){console.error(x);toast('Le Carnet a rencontré un problème');renderCarnet();}
   });
   $('carnet-corps').addEventListener('change',function(e){if(!e.target.closest('[data-acces]')||!carnetActif())return;CARNET.depuis=Date.now();lireCarnet();sauverBientot();});
-  $('carnet-corps').addEventListener('input',function(){if(CARNET.cle)CARNET.depuis=Date.now();});
+  $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
   $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-m':'ouvrir','cn-pin':'ouvrirpin','cn-p2':'poserpin','cn-m2':'creer'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}else if(t.id==='cn-p1'&&$('cn-p2'))$('cn-p2').focus();else if(t.id==='cn-m1')$('cn-m2').focus();});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
