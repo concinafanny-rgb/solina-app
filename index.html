@@ -1963,8 +1963,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     if(!coffreDispo()){el.innerHTML='<p class="note">Le Carnet n’est pas disponible sur cet appareil.</p>';return;}
     var champ=function(id,lab,num){return '<div class="field" style="margin:0"><label for="'+id+'">'+lab+'</label><input id="'+id+'" type="password" '+(num?'inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" class="pin"':'autocomplete="current-password"')+'></div>';};
     var err='<p class="note err" id="cn-err" hidden></p>';
+    if(!S.params.carnetSel&&!CARNET.frais){CARNET.frais=true;el.innerHTML='<p class="note">Ouverture…</p>';paramsFrais().then(renderCarnet);return;}
     if(!S.params.carnetSel){var anc=!!S.params.carnet;
-      el.innerHTML='<div class="card carnet-porte"><p class="note" style="margin:0 0 10px">'+(anc?'Tape ton code à 4 chiffres habituel. Ensuite, ce sera le seul code à retenir, sur tous tes appareils.':'Choisis ton code à 4 chiffres. Ce sera le seul code à retenir, sur tous tes appareils.')+'</p><div class="two">'+champ('cn-p1','Code à 4 chiffres',1)+champ('cn-p2','Le même, encore une fois',1)+'</div><div class="actions"><button type="button" class="btn primary sm" data-carnet="nouveaupin">Valider</button></div>'+err+(anc&&CARNET.etape==='vide'?'<button type="button" class="btn ghost xs" data-carnet="vide">Repartir d’un Carnet vide</button>':'')+'</div>';var f=$('cn-p1');if(f)f.focus();return;}
+      el.innerHTML='<div class="card carnet-porte"><p class="note" style="margin:0 0 10px">'+(anc?'Tape ton code à 4 chiffres habituel. Ensuite, ce sera le seul code à retenir, sur tous tes appareils.':'Choisis ton code à 4 chiffres. Ce sera le seul code à retenir, sur tous tes appareils.')+'</p>'+champ('cn-p1','Code à 4 chiffres',1)+'<div class="actions"><button type="button" class="btn primary sm" data-carnet="nouveaupin">Valider</button></div>'+err+(anc&&CARNET.etape==='vide'?'<button type="button" class="btn ghost xs" data-carnet="vide">Repartir d’un Carnet vide</button>':'')+'</div>';var f=$('cn-p1');if(f)f.focus();return;}
     if(!carnetActif()){el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-pin','Ton code',1)+'<button type="button" class="btn primary sm" data-carnet="ouvrir">Ouvrir</button></div>'+err+'</div>';var f2=$('cn-pin');if(f2)f2.focus();return;}
     if(!CARNET.data){el.innerHTML='<p class="note">Ouverture…</p>';chargerCarnet().then(renderCarnet).catch(function(e){console.error(e);toast('Le Carnet ne s’ouvre pas');verrouiller();});return;}
     if(CARNET.vue){el.innerHTML=vueSection(CARNET.vue);return;}
@@ -1979,7 +1980,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('carnet-corps').addEventListener('click',async function(e){
     var b=e.target.closest('[data-carnet]');if(!b)return;e.preventDefault();var a=b.dataset.carnet;
     try{
-      if(a==='nouveaupin'){var p1=$('cn-p1').value,p2=$('cn-p2').value;if(!/^\d{4}$/.test(p1))return erreurCarnet('4 chiffres.');if(p1!==p2)return erreurCarnet('Les deux codes ne sont pas identiques.');
+      if(a==='nouveaupin'){var p1=$('cn-p1').value;if(!/^\d{4}$/.test(p1))return erreurCarnet('4 chiffres.');
         b.disabled=true;await paramsFrais();if(S.params.carnetSel){renderCarnet();$('cn-pin').value=p1;$('carnet-corps').querySelector('[data-carnet="ouvrir"]').click();return;}b.disabled=false;
         var data={moi:[],biens:{}};
         if(S.params.carnet){if(!lirePin()){CARNET.etape='vide';renderCarnet();return erreurCarnet('Sur cet appareil, je ne retrouve pas tes anciens codes. Fais cette étape sur l’appareil où tu as ouvert le Carnet la dernière fois, ou repars d’un Carnet vide.');}
@@ -2016,7 +2017,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   });
   $('carnet-corps').addEventListener('change',function(e){var r=e.target.closest('[data-acces]');if(!r||!carnetActif())return;CARNET.depuis=Date.now();var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)],avant=x?groupeDe(x):'';lireCarnet();sauverBientot();if(x&&(e.target.dataset.af==='groupe'||(e.target.dataset.af==='libelle'&&!x.groupe&&groupeDe(x)!==avant)))renderCarnet();});
   $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
-  $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p2':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}else if(t.id==='cn-p1'&&$('cn-p2'))$('cn-p2').focus();});
+  $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p1':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
