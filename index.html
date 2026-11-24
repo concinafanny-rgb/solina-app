@@ -1249,7 +1249,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     document.querySelectorAll('nav [data-go]').forEach(function(b){b.classList.toggle('active',b.dataset.go===name || (b.dataset.go==='plus' && !TABS.some(function(t){return t[0]===name;})));});
     $('tb-title').textContent=TITLES[name]||'';
     try{localStorage.setItem('ms_tab',name);}catch(e){}
-    if(name==='carnet')renderCarnet();else if(typeof CARNET!=='undefined'&&CARNET.cle)verrouiller();
+    if(name==='carnet')renderCarnet();
     window.scrollTo(0,0);
   }
   document.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b){go(b.dataset.go);}});
@@ -1884,8 +1884,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   async function poserPin(pin,cle){var sel=enB64(crypto.getRandomValues(new Uint8Array(16)));var raw=new Uint8Array(await crypto.subtle.exportKey('raw',cle));var k=await clePin(pin,sel);var iv=crypto.getRandomValues(new Uint8Array(12));var c=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,raw);ecrirePin({sel:sel,iv:enB64(iv),d:enB64(new Uint8Array(c)),essais:0,coffreSel:S.params.coffreSel});}
   async function ouvrirPin(pin){var p=lirePin();var k=await clePin(pin,p.sel);var raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:deB64(p.iv)},k,deB64(p.d));var cle=await crypto.subtle.importKey('raw',raw,{name:'AES-GCM'},true,['encrypt','decrypt']);await dechiffrer(cle,S.params.coffreTest);return cle;}
   function verrouiller(){CARNET.cle=null;CARNET.data=null;CARNET.src=null;CARNET.montrer={};CARNET.vue=null;CARNET.edit=false;CARNET.etape='';if(COURANT==='carnet')renderCarnet();}
-  function carnetActif(){if(CARNET.cle&&Date.now()-CARNET.depuis>5*60*1000)verrouiller();return !!CARNET.cle;}
-  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')verrouiller();});
+  function carnetActif(){if(CARNET.cle&&Date.now()-CARNET.depuis>60*60*1000)verrouiller();return !!CARNET.cle;}
   async function chargerCarnet(){
     var d={moi:[],biens:{}},src=S.params.carnet||null;
     if(src)d=await dechiffrer(CARNET.cle,src);d.moi=d.moi||[];d.biens=d.biens||{};
@@ -1938,7 +1937,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var biens=S.biens.slice().sort(function(a,b){var ra=a.actif?0:(a.aSigner?1:2),rb=b.actif?0:(b.aSigner?1:2);return ra-rb||(a.nom||'').localeCompare(b.nom||'','fr');});
     el.innerHTML='<div class="carnet-bar"><input type="search" id="cn-cherche" placeholder="Chercher un logement…" autocomplete="off"><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
       '<div class="cn-grille">'+carteSec('moi','Maison Solina','Mes mails, sites, banque, logiciels')+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return carteSec('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('')+'</div>'+
-      '<p class="note" style="margin-top:10px">Se verrouille seul après 5 minutes.</p>';
+      '<p class="note" style="margin-top:10px">Se verrouille seul après 1 heure sans l\u2019utiliser.</p>';
   }
   function lireCarnet(){document.querySelectorAll('#carnet-corps [data-acces]').forEach(function(r){var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
   function erreurCarnet(t){var e=$('cn-err');if(e){e.textContent=t;e.hidden=false;}}
