@@ -574,17 +574,15 @@ h2,h3{font-weight:500;letter-spacing:0}
 #cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
 .cn-titre{font-size:17px;color:var(--brun)}
 .cn-g{margin-bottom:14px}
-.cn-r{display:grid;grid-template-columns:170px minmax(0,1fr) minmax(0,1fr) auto;gap:6px 8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.cn-r{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.cn-r .cn-nom{flex:0 0 170px;font-weight:600;background:transparent}
+.cn-c{display:flex;gap:4px;align-items:center;flex:1 1 200px}
+.cn-r .cn-nt{flex:1 0 100%;font-size:12px;padding:4px 9px;background:transparent;color:var(--taupe)}
+@media (max-width:640px){.cn-r .cn-nom{flex:1 1 auto}}
 .cn-r input{width:100%;padding:7px 9px;border:1px solid transparent;border-radius:8px;background:var(--creme-2);font:inherit;font-size:14px;color:var(--brun)}
 .cn-r input:focus{border-color:var(--taupe);background:var(--card);outline:none}
-.cn-r .cn-nom{font-weight:600;background:transparent}
-.cn-r .cn-code{font-family:ui-monospace,Menlo,monospace}
-.cn-r .cn-nt{grid-column:2 / 5;font-size:12px;padding:4px 9px;background:transparent;color:var(--taupe)}
-.cn-c{display:flex;gap:4px;align-items:center}
 .cn-c .btn{flex:none}
 .cn-x{font-size:18px;line-height:1;padding:4px 8px}
-@media (max-width:640px){.cn-r{grid-template-columns:minmax(0,1fr) auto}.cn-r .cn-nom{grid-column:1}.cn-r .cn-x{grid-column:2;grid-row:1}.cn-r .cn-c{grid-column:1 / 3}.cn-r .cn-nt{grid-column:1 / 3}}
-.cn-g .pl{margin-bottom:6px}
 .cn-l{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
 .cn-n{font-weight:600;color:var(--brun);flex:0 0 150px}
 .cn-v{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex:1}
@@ -1885,7 +1883,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   /* ===== Carnet : codes et accès chiffrés sur l'appareil (AES-GCM 256). La clé vient de la phrase secrète (PBKDF2, champs coffreSel et coffreTest).
      Sur un appareil déjà validé par la phrase, un code à 4 chiffres rouvre la clé, gardée chiffrée sur cet appareil seulement. 5 codes faux : la phrase est redemandée.
      Seul le texte chiffré (params.carnet) part sur GitHub. ===== */
-  var CARNET={cle:null,depuis:0,data:null,src:null,montrer:{},vue:null,edit:false,etape:''};
+  var CARNET={avecMail:{},cle:null,depuis:0,data:null,src:null,montrer:{},vue:null,edit:false,etape:''};
   var CLE_PIN='solina-carnet-pin';
   var EYE='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   function lirePin(){try{var p=JSON.parse(localStorage.getItem(CLE_PIN)||'null');if(p&&p.coffreSel!==S.params.coffreSel){localStorage.removeItem(CLE_PIN);return null;}return p;}catch(e){return null;}}
@@ -1925,10 +1923,11 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       (x.identifiant?'<button type="button" class="cn-chip" data-carnet="copier" data-k="identifiant"'+d+' title="Copier">'+esc(x.identifiant)+'<small>Copier</small></button>':'')+
       (x.secret?'<button type="button" class="cn-chip cn-sec" data-carnet="copier" data-k="secret"'+d+' title="Copier">'+(vu?esc(x.secret):'••••••')+'<small>Copier</small></button><button type="button" class="btn ghost xs" data-carnet="voir"'+d+' aria-label="Afficher">'+EYE+'</button>':'')+
       '</div>'+(x.note?'<div class="cn-note">'+esc(x.note)+'</div>':'')+'</div>';}
-  function ligneEdit(x,k,i){var d=' data-sec="'+esc(k)+'" data-i="'+i+'"',ia=' autocomplete="off" autocapitalize="off" spellcheck="false"';
-    return '<div class="cn-r" data-acces="'+i+'" data-sec="'+esc(k)+'"><input class="cn-nom" data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Nom : Wifi, Airbnb…" autocomplete="off">'+
-      '<span class="cn-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" placeholder="Identifiant ou mail"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="identifiant"'+d+'>Copier</button></span>'+
-      '<span class="cn-c"><input class="cn-code" data-af="secret" value="'+esc(x.secret||'')+'" placeholder="Code ou mot de passe"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="secret"'+d+'>Copier</button></span>'+
+  function ligneEdit(x,k,i){var d=' data-sec="'+esc(k)+'" data-i="'+i+'"',ia=' autocomplete="off" autocapitalize="off" spellcheck="false"',avecMail=!!x.identifiant||CARNET.avecMail[k+'|'+i];
+    return '<div class="cn-r" data-acces="'+i+'" data-sec="'+esc(k)+'"><input class="cn-nom" data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Nom" autocomplete="off">'+
+      (avecMail?'<span class="cn-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" placeholder="Mail"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="identifiant"'+d+'>Copier</button></span>':'')+
+      '<span class="cn-c"><input data-af="secret" value="'+esc(x.secret||'')+'" placeholder="'+(avecMail?'Mot de passe':'Code')+'"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="secret"'+d+'>Copier</button></span>'+
+      (avecMail?'':'<button type="button" class="btn ghost xs" data-carnet="ajmail"'+d+'>+ Mail</button>')+
       '<button type="button" class="btn ghost xs cn-x" data-carnet="suppr"'+d+' aria-label="Supprimer">×</button>'+
       '<input class="cn-nt" data-af="note" value="'+esc(x.note||'')+'" placeholder="Note" autocomplete="off"></div>';}
   function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><b class="cn-titre">'+esc(nomSec(k))+'</b><span style="flex:1"></span><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>';
@@ -1987,6 +1986,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
           if(!cur)return;var pt=l.split('|').map(function(x){return x.trim();});secCarnet(cur).push({libelle:pt[0]||'',identifiant:pt[1]||'',secret:pt[2]||'',note:pt.slice(3).join(' | ')});n++;});
         if(!lignes.join('').trim())return erreurCarnet('Le cadre est vide : clique dedans puis colle la liste (Cmd + V).');if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
         if(!(await sauverCarnet(true)))return;CARNET.imp=false;CARNET.ouvertApres=null;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
+      if(a==='ajmail'){CARNET.avecMail[k2+'|'+i]=true;renderCarnet();var fm=document.querySelector('#carnet-corps [data-sec="'+k2+'"][data-acces="'+i+'"] [data-af="identifiant"]');if(fm)fm.focus();return;}
       if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
       if(a==='retour'){await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
       if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
