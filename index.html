@@ -574,6 +574,16 @@ h2,h3{font-weight:500;letter-spacing:0}
 #cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
 .cn-titre{font-size:17px;color:var(--brun)}
 .cn-g{margin-bottom:14px}
+.cn-r{display:grid;grid-template-columns:170px minmax(0,1fr) minmax(0,1fr) auto;gap:6px 8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.cn-r input{width:100%;padding:7px 9px;border:1px solid transparent;border-radius:8px;background:var(--creme-2);font:inherit;font-size:14px;color:var(--brun)}
+.cn-r input:focus{border-color:var(--taupe);background:var(--card);outline:none}
+.cn-r .cn-nom{font-weight:600;background:transparent}
+.cn-r .cn-code{font-family:ui-monospace,Menlo,monospace}
+.cn-r .cn-nt{grid-column:2 / 5;font-size:12px;padding:4px 9px;background:transparent;color:var(--taupe)}
+.cn-c{display:flex;gap:4px;align-items:center}
+.cn-c .btn{flex:none}
+.cn-x{font-size:18px;line-height:1;padding:4px 8px}
+@media (max-width:640px){.cn-r{grid-template-columns:minmax(0,1fr) auto}.cn-r .cn-nom{grid-column:1}.cn-r .cn-x{grid-column:2;grid-row:1}.cn-r .cn-c{grid-column:1 / 3}.cn-r .cn-nt{grid-column:1 / 3}}
 .cn-g .pl{margin-bottom:6px}
 .cn-l{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
 .cn-n{font-weight:600;color:var(--brun);flex:0 0 150px}
@@ -1905,7 +1915,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   function accesHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i];
     return '<div class="acces" data-acces="'+i+'" data-sec="'+esc(k)+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Boîte à clés, Airbnb, chauffage…" autocomplete="off"><button type="button" class="btn ghost xs" data-carnet="suppr" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Supprimer">Supprimer</button></div>'+
       '<div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="identifiant">Copier</button></span></div>'+
-      '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="voir" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
+      '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="text" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
       '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
   var GROUPES=[['Entrer dans le logement',/bo[iî]te|porte|digicode|serrure|alarme|portail|parking|garage|pad|nuki|cl[ée]s?\b|badge|ascenseur|poubelle|ring|interphone|cave/i],['Comptes et plateformes',/airbnb|booking|abritel|vrbo|channel|mail|site|instagram|facebook|banque|mairie|taxe|compte|login|identifiant|beds24|lodgify|smoobu|google|canva|urssaf|impots/i],['Équipements',/wifi|wi-fi|internet|box|chauffage|clim|compteur|eau|[ée]lectri|gaz|tv|t[ée]l[ée]|piscine|spa|volet|coffre/i]];
   function groupeDe(x){var t=(x.libelle||'')+' '+(x.note||'');for(var g=0;g<GROUPES.length;g++)if(GROUPES[g][1].test(t))return GROUPES[g][0];return 'Autres';}
@@ -1915,13 +1925,21 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       (x.identifiant?'<button type="button" class="cn-chip" data-carnet="copier" data-k="identifiant"'+d+' title="Copier">'+esc(x.identifiant)+'<small>Copier</small></button>':'')+
       (x.secret?'<button type="button" class="cn-chip cn-sec" data-carnet="copier" data-k="secret"'+d+' title="Copier">'+(vu?esc(x.secret):'••••••')+'<small>Copier</small></button><button type="button" class="btn ghost xs" data-carnet="voir"'+d+' aria-label="Afficher">'+EYE+'</button>':'')+
       '</div>'+(x.note?'<div class="cn-note">'+esc(x.note)+'</div>':'')+'</div>';}
-  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><b class="cn-titre">'+esc(nomSec(k))+'</b><span style="flex:1"></span>'+(CARNET.edit?'<button type="button" class="btn primary sm" data-carnet="finedit">Terminé</button>':'<button type="button" class="btn sm" data-carnet="edit">Modifier</button>')+'</div>';
-    if(CARNET.edit)return h+(l.length?l.map(function(x,i){return accesHtml(x,k,i);}).join(''):'')+'<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button>';
-    var pleins=l.map(function(x,i){return [x,i];}).filter(function(p){return p[0].libelle||p[0].identifiant||p[0].secret||p[0].note;});
-    if(!pleins.length)return h+'<p class="note">Aucun code pour l’instant.</p><button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button>';
+  function ligneEdit(x,k,i){var d=' data-sec="'+esc(k)+'" data-i="'+i+'"',ia=' autocomplete="off" autocapitalize="off" spellcheck="false"';
+    return '<div class="cn-r" data-acces="'+i+'" data-sec="'+esc(k)+'"><input class="cn-nom" data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Nom : Wifi, Airbnb…" autocomplete="off">'+
+      '<span class="cn-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" placeholder="Identifiant ou mail"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="identifiant"'+d+'>Copier</button></span>'+
+      '<span class="cn-c"><input class="cn-code" data-af="secret" value="'+esc(x.secret||'')+'" placeholder="Code ou mot de passe"'+ia+'><button type="button" class="btn xs" data-carnet="copier" data-k="secret"'+d+'>Copier</button></span>'+
+      '<button type="button" class="btn ghost xs cn-x" data-carnet="suppr"'+d+' aria-label="Supprimer">×</button>'+
+      '<input class="cn-nt" data-af="note" value="'+esc(x.note||'')+'" placeholder="Note" autocomplete="off"></div>';}
+  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><b class="cn-titre">'+esc(nomSec(k))+'</b><span style="flex:1"></span><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>';
+    var tous=l.map(function(x,i){return [x,i];});
+    var nouveaux=tous.filter(function(p){return !(p[0].libelle||p[0].identifiant||p[0].secret||p[0].note);});
+    var pleins=tous.filter(function(p){return nouveaux.indexOf(p)<0;});
+    if(!tous.length)return h+'<p class="note">Aucun code pour l’instant.</p>';
     var ordre=GROUPES.map(function(g){return g[0];}).concat(['Autres']);
-    return h+ordre.map(function(g){var it=pleins.filter(function(p){return groupeDe(p[0])===g;});if(!it.length)return '';return '<div class="cn-g"><div class="pl">'+g+'</div>'+it.map(function(p){return ligneHtml(p[0],k,p[1]);}).join('')+'</div>';}).join('')+
-      '<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'" style="margin-top:8px">+ Ajouter un code</button>';}
+    return h+ordre.map(function(g){var it=pleins.filter(function(p){return groupeDe(p[0])===g;});if(!it.length)return '';return '<div class="cn-g"><div class="pl">'+g+'</div>'+it.map(function(p){return ligneEdit(p[0],k,p[1]);}).join('')+'</div>';}).join('')+
+      (nouveaux.length?'<div class="cn-g"><div class="pl">Nouveau</div>'+nouveaux.map(function(p){return ligneEdit(p[0],k,p[1]);}).join('')+'</div>':'')+
+      '<p class="note">Tout s’enregistre tout seul.</p>';}
   function carteSec(k,titre,sous){var l=secCarnet(k).filter(function(x){return x.libelle||x.secret||x.identifiant;});
     return '<button type="button" class="cn-carte" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'<span class="cn-apercu">'+(l.length?esc(l.slice(0,4).map(function(x){return x.libelle||'Code';}).join(', '))+(l.length>4?'…':''):'Vide')+'</span></button>';}
   async function paramsFrais(){try{var f=await lireDepot();G.D=f.data;G.sha=f.sha;garderCopie();appliquer(cloner(f.data));return true;}catch(e){return false;}}
@@ -1970,11 +1988,11 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
         if(!lignes.join('').trim())return erreurCarnet('Le cadre est vide : clique dedans puis colle la liste (Cmd + V).');if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
         if(!(await sauverCarnet(true)))return;CARNET.imp=false;CARNET.ouvertApres=null;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
       if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
-      if(a==='retour'){if(CARNET.edit)await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
+      if(a==='retour'){await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
       if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
       if(a==='finedit'){await sauverCarnet();CARNET.edit=false;renderCarnet();return;}
       if(a==='ajouter'){CARNET.edit=true;secCarnet(k2).push({libelle:'',identifiant:'',secret:'',note:''});renderCarnet();var l=document.querySelectorAll('#carnet-corps [data-sec="'+k2+'"][data-acces] [data-af="libelle"]');if(l.length)l[l.length-1].focus();return;}
-      if(a==='suppr'){if(!confirmer(b))return;secCarnet(k2).splice(i,1);await sauverCarnet();renderCarnet();return;}
+      if(a==='suppr'){if(!confirmer(b))return;secCarnet(k2).splice(i,1);renderCarnet();await sauverCarnet();return;}
       if(a==='voir'){CARNET.montrer[k2+'|'+i]=!CARNET.montrer[k2+'|'+i];renderCarnet();return;}
       if(a==='copier'){var val=(secCarnet(k2)[i]||{})[b.dataset.k]||'';if(!val)return;try{await navigator.clipboard.writeText(val);toast('Copié');}catch(x){toast('Copie impossible sur cet appareil');}return;}
       if(a==='fermer'){await sauverCarnet(true);verrouiller();return;}
