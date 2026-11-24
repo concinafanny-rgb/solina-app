@@ -1898,7 +1898,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var vide=function(x){return !(x.libelle||x.identifiant||x.secret||x.note);};
     var c={moi:CARNET.data.moi.filter(function(x){return !vide(x);}),biens:{}};
     Object.keys(CARNET.data.biens).forEach(function(k){c.biens[k]=CARNET.data.biens[k].filter(function(x){return !vide(x);});});
-    var ch=await chiffrer(CARNET.cle,c);S.params.carnet=ch;CARNET.src=ch;saveParams();if(!silence)toast('Enregistré et chiffré');
+    var ch=await chiffrer(CARNET.cle,c);S.params.carnet=ch;CARNET.src=ch;var ok=await saveParams();CARNET.src=S.params.carnet;if(ok===false){toast('Pas enregistré : vérifie ta connexion et réessaie');return false;}if(!silence)toast('Enregistré');return true;
   }
   var sauverT=null;function sauverBientot(){clearTimeout(sauverT);sauverT=setTimeout(function(){sauverCarnet(true);},700);}
   function secCarnet(k){if(k==='moi')return CARNET.data.moi;var id=k.slice(2);return CARNET.data.biens[id]||(CARNET.data.biens[id]=[]);}
@@ -1924,6 +1924,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<button type="button" class="btn sm" data-carnet="ajouter" data-sec="'+esc(k)+'" style="margin-top:8px">+ Ajouter un code</button>';}
   function carteSec(k,titre,sous){var l=secCarnet(k).filter(function(x){return x.libelle||x.secret||x.identifiant;});
     return '<button type="button" class="cn-carte" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'<span class="cn-apercu">'+(l.length?esc(l.slice(0,4).map(function(x){return x.libelle||'Code';}).join(', '))+(l.length>4?'…':''):'Vide')+'</span></button>';}
+  async function paramsFrais(){try{var f=await lireDepot();G.D=f.data;G.sha=f.sha;garderCopie();appliquer(cloner(f.data));return true;}catch(e){return false;}}
   function renderCarnet(){
     var el=$('carnet-corps');if(!el)return;
     if(!coffreDispo()){el.innerHTML='<p class="note">Le Carnet n’est pas disponible sur cet appareil.</p>';return;}
@@ -1946,6 +1947,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var b=e.target.closest('[data-carnet]');if(!b)return;e.preventDefault();var a=b.dataset.carnet;
     try{
       if(a==='nouveaupin'){var p1=$('cn-p1').value,p2=$('cn-p2').value;if(!/^\d{4}$/.test(p1))return erreurCarnet('4 chiffres.');if(p1!==p2)return erreurCarnet('Les deux codes ne sont pas identiques.');
+        b.disabled=true;await paramsFrais();if(S.params.carnetSel){renderCarnet();$('cn-pin').value=p1;$('carnet-corps').querySelector('[data-carnet="ouvrir"]').click();return;}b.disabled=false;
         var data={moi:[],biens:{}};
         if(S.params.carnet){if(!lirePin()){CARNET.etape='vide';renderCarnet();return erreurCarnet('Sur cet appareil, je ne retrouve pas tes anciens codes. Fais cette étape sur l’appareil où tu as ouvert le Carnet la dernière fois, ou repars d’un Carnet vide.');}
           b.disabled=true;b.textContent='Ouverture…';var vieille;try{vieille=await ouvrirPin(p1);}catch(x){CARNET.etape='vide';renderCarnet();return erreurCarnet('Ce n’est pas ton code habituel. Réessaie, ou repars d’un Carnet vide.');}
@@ -1955,8 +1957,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
         CARNET.cle=cle;CARNET.data=null;CARNET.src=null;CARNET.depuis=Date.now();CARNET.etape='';renderCarnet();toast('Code enregistré');return;}
       if(a==='vide'){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Sûre ? Les codes déjà entrés seront perdus. Toucher pour confirmer';return;}S.params.carnet=null;saveParams();CARNET.etape='';renderCarnet();return;}
       if(a==='ouvrir'){var v=$('cn-pin').value;if(!/^\d{4}$/.test(v))return erreurCarnet('4 chiffres.');if(CARNET.bloque&&Date.now()<CARNET.bloque)return erreurCarnet('Trop d’essais. Attends une minute.');b.disabled=true;b.textContent='Ouverture…';var k=await clePin(v,S.params.carnetSel);
-        try{await dechiffrer(k,S.params.carnetTest);}catch(x){CARNET.essais=(CARNET.essais||0)+1;if(CARNET.essais>=5){CARNET.essais=0;CARNET.bloque=Date.now()+60000;}renderCarnet();return erreurCarnet('Code faux.');}
-        CARNET.essais=0;CARNET.cle=k;CARNET.depuis=Date.now();renderCarnet();return;}
+        var bon=false;try{await dechiffrer(k,S.params.carnetTest);bon=true;}catch(x){}if(!bon&&await paramsFrais()&&S.params.carnetSel){k=await clePin(v,S.params.carnetSel);try{await dechiffrer(k,S.params.carnetTest);bon=true;}catch(x){}}
+        if(!bon){CARNET.essais=(CARNET.essais||0)+1;if(CARNET.essais>=5){CARNET.essais=0;CARNET.bloque=Date.now()+60000;}renderCarnet();return erreurCarnet('Code faux.');}
+        CARNET.data=null;CARNET.essais=0;CARNET.cle=k;CARNET.depuis=Date.now();renderCarnet();return;}
       if(!carnetActif()){renderCarnet();return;}
       CARNET.depuis=Date.now();lireCarnet();var k2=b.dataset.sec,i=Number(b.dataset.i);
       if(a==='import'){CARNET.imp=true;renderCarnet();var t0=$('cn-imp');if(t0)t0.focus();return;}
@@ -1964,8 +1967,8 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       if(a==='importok'){var lignes=($('cn-imp').value||'').split(/\r?\n/),cur=null,n=0,inconnus=[];
         lignes.forEach(function(l){l=l.trim();if(!l)return;if(l.charAt(0)==='#'){var nm=l.replace(/^#+/,'').trim().toLowerCase();cur=null;if(nm.indexOf('maison solina')>=0){cur='moi';return;}var bb=S.biens.filter(function(x){var xn=(x.nom||'').toLowerCase();return xn&&(xn===nm||xn.indexOf(nm)>=0||nm.indexOf(xn)>=0);})[0];if(bb)cur='b:'+bb.id;else inconnus.push(nm);return;}
           if(!cur)return;var pt=l.split('|').map(function(x){return x.trim();});secCarnet(cur).push({libelle:pt[0]||'',identifiant:pt[1]||'',secret:pt[2]||'',note:pt.slice(3).join(' | ')});n++;});
-        if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
-        await sauverCarnet(true);CARNET.imp=false;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
+        if(!lignes.join('').trim())return erreurCarnet('Le cadre est vide : clique dedans puis colle la liste (Cmd + V).');if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
+        if(!(await sauverCarnet(true)))return;CARNET.imp=false;CARNET.ouvertApres=null;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
       if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
       if(a==='retour'){if(CARNET.edit)await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
       if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
@@ -2233,7 +2236,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   function toutEnvoyer(){Object.keys(enCours).forEach(function(k){clearTimeout(timers[k]);enCours[k]();});vider();}
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')toutEnvoyer();});
   window.addEventListener('pagehide',toutEnvoyer);
-  function saveParams(){var base=(G.D&&G.D.params)||{},ch={};Object.keys(S.params).forEach(function(k){if(S.params[k]!==base[k])ch[k]=S.params[k];});enregistrer(function(d){d.params=Object.assign({},d.params,ch);},'paramètres');renderFinance();}
+  function saveParams(){var base=(G.D&&G.D.params)||{},ch={};Object.keys(S.params).forEach(function(k){if(S.params[k]!==base[k])ch[k]=S.params[k];});var pr=enregistrer(function(d){d.params=Object.assign({},d.params,ch);},'paramètres');renderFinance();return pr;}
 
   /* Connexion de l'appareil */
   function etat(on){var st=$('dbstatus');st.classList.toggle('on',on);st.innerHTML='<i></i><span>'+(on?'Synchronisé':'Hors connexion')+'</span>';}
