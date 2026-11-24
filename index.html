@@ -568,6 +568,8 @@ h2,h3{font-weight:500;letter-spacing:0}
 .cn-carte{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
 .cn-carte[hidden]{display:none}
 .cn-carte:hover{border-color:var(--taupe)}
+.cn-carte.vide{box-shadow:inset 4px 0 0 #C8553D}
+.cn-carte.plein{box-shadow:inset 4px 0 0 #6E9B6A}
 .cn-carte b{color:var(--brun)}
 .cn-carte small{color:var(--taupe);font-size:12px}
 .cn-apercu{font-size:12px;color:var(--brun);opacity:.75;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1063,7 +1065,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
         <option value="perdu">En pause</option>
       </select></div>
     <div class="field" id="field-raison" hidden><label for="f-raison">Pourquoi en pause</label><select id="f-raison"><option value="">À préciser</option></select></div>
-    <div class="field" id="field-pseudo"><label for="f-pseudo">Pseudo sur l'annonce (Leboncoin, AlloVoisins, PAP)</label><input id="f-pseudo" autocomplete="off" placeholder="Le nom affiché sur l'annonce"></div>
+    <div class="field" id="field-pseudo"><label for="f-pseudo">Pseudo sur l'annonce (Leboncoin, PAP)</label><input id="f-pseudo" autocomplete="off" placeholder="Le nom affiché sur l'annonce"></div>
     <div class="two"><div class="field"><label for="f-canal">Canal</label><select id="f-canal"></select></div><div class="field"><label for="f-source">De la part de</label><input id="f-source" placeholder="Nom de la personne qui recommande, précision" autocomplete="off"></div></div>
     <div class="actions" id="f-liens" hidden></div>
     <div class="field"><label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Ce qu'il faut retenir : le bien, la situation, ce qui a été dit…"></textarea><button type="button" class="btn sm" id="f-copier" style="margin-top:6px">Copier le message</button></div>
@@ -1215,7 +1217,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   var TYPES={prospect:'Prospect',client:'Client',prestataire:'Prestataire',apporteur:'Apporteur d\'affaires',prescripteur:'Prescripteur',partenaire:'Partenaire'};
   var COULEURS_TYPE={'prospect': '#D9799F', 'client': '#C8553D', 'prestataire': '#6E9B6A', 'partenaire': '#5B83B0', 'prescripteur': '#D4A72C', 'apporteur': '#8E6BB0'};
   function couleurType(t){return COULEURS_TYPE[t]||'#BB9F89';}
-  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','AlloVoisins','LinkedIn','Envoi courrier']],['Réseau et partenaires',['Flyers et cartes commerçants','Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre','Instagram','Publicité']],['Autre',['Autre']]];
+  var BRANCHES=[['Prospection : c\'est moi qui agis',['Leboncoin','LinkedIn','Envoi courrier']],['Réseau et partenaires',['Flyers et cartes commerçants','Agences immobilières','Notaires et conseillers','Apporteurs d\'affaires','Partenaires et artisans','Réseau CLF','Groupes Facebook','Événements']],['Ils viennent à moi',['Réseau co-hôtes Airbnb','Site internet','Formulaire estimation','Fiche Google','Recommandation','Rencontre','Instagram','Publicité']],['Autre',['Autre']]];
   var ETAPES_PRESC=[['a_contacter','À contacter'],['mail','Mail envoyé'],['relance','Relancé'],['rencontre','Appel ou visite'],['discussion','En discussion'],['signe','Partenaire'],['perdu','En pause']];
   var ETAPE_PART_ANCIENNE={contacte:'mail',rdv:'rencontre',devis:'discussion'};
   var ETAPES=[['a_contacter','À contacter'],['contacte','Déjà contacté'],['a_relancer','À relancer'],['rdv','RDV pris'],['visite','RDV fait + propal'],['signature','En cours'],['signe','Signé'],['perdu','En pause']];
@@ -1931,7 +1933,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   function lireCarnetSiOuvert(){if(COURANT==='carnet'&&CARNET.data)lireCarnet();}
   function secCarnet(k){if(k==='moi')return CARNET.data.moi;var id=k.slice(2);return CARNET.data.biens[id]||(CARNET.data.biens[id]=[]);}
   function accesHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i];
-    return '<div class="acces" data-acces="'+i+'" data-sec="'+esc(k)+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Boîte à clés, Airbnb, chauffage…" autocomplete="off"><button type="button" class="btn ghost xs" data-carnet="suppr" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Supprimer">Supprimer</button></div>'+
+    return '<div class="acces" data-acces="'+i+'" data-sec="'+esc(k)+'"><div class="acces-l"><input data-af="libelle" list="dl-acces" value="'+esc(x.libelle||'')+'" placeholder="Nom" autocomplete="off"><button type="button" class="btn ghost xs" data-carnet="suppr" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Supprimer">Supprimer</button></div>'+
       '<div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="identifiant">Copier</button></span></div>'+
       '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="text" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
       '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
@@ -1962,9 +1964,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<p class="note">Tout s’enregistre tout seul.</p>';}
   function ficheAccesHtml(k){var a=((CARNET.data.acces||{})[k])||{};
     return '<div class="cn-acces"><div class="cn-gh"><span class="pl">Fiche d’accès pour un intervenant</span><button type="button" class="btn sm" data-carnet="copieracces" data-sec="'+esc(k)+'">Copier la fiche</button></div>'+
-      '<textarea data-acc="texte" data-sec="'+esc(k)+'" rows="3" placeholder="Comment entrer : portail, bâtiment, étage, où se trouve la boîte à clés, consignes…">'+esc(a.texte||'')+'</textarea>'+
-      '<textarea data-acc="videos" data-sec="'+esc(k)+'" rows="2" placeholder="Liens des vidéos d’accès, un par ligne">'+esc(a.videos||'')+'</textarea>'+
-      '<p class="note" style="margin:4px 0 0">La fiche copiée contient l’adresse, ce texte, les codes du groupe « Entrer dans le logement », le wifi et les vidéos.</p></div>';}
+      '<textarea data-acc="texte" data-sec="'+esc(k)+'" rows="3" placeholder="Comment entrer">'+esc(a.texte||'')+'</textarea>'+
+      '<textarea data-acc="videos" data-sec="'+esc(k)+'" rows="2" placeholder="Vidéos d’accès (liens)">'+esc(a.videos||'')+'</textarea>'+
+      '</div>';}
   function texteAcces(k){var b=byId(S.biens,k.slice(2))||{},a=((CARNET.data.acces||{})[k])||{},l=secCarnet(k);
     var codes=l.filter(function(x){return (x.secret||x.identifiant)&&(groupeDe(x)==='Entrer dans le logement'||/wifi|wi-fi/i.test(x.libelle||''));});
     var t=['Accès : '+nomSec(k)];var adr=[b.adresse,b.ville].filter(Boolean).join(', ');if(adr)t.push(adr);
@@ -1973,7 +1975,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var v=(a.videos||'').split(/\n/).map(function(x){return x.trim();}).filter(Boolean);if(v.length){t.push('','Vidéos :');v.forEach(function(x){t.push(x);});}
     return t.join('\n');}
   function carteSec(k,titre,sous){var l=secCarnet(k).filter(function(x){return x.libelle||x.secret||x.identifiant;});
-    return '<button type="button" class="cn-carte" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'<span class="cn-apercu">'+(l.length?esc(l.slice(0,4).map(function(x){return x.libelle||'Code';}).join(', '))+(l.length>4?'…':''):'Vide')+'</span></button>';}
+    return '<button type="button" class="cn-carte '+(l.length?'plein':'vide')+'" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'</button>';}
   async function paramsFrais(){try{var f=await lireDepot();G.D=f.data;G.sha=f.sha;garderCopie();appliquer(cloner(f.data));return true;}catch(e){return false;}}
   function renderCarnet(){
     var el=$('carnet-corps');if(!el)return;
