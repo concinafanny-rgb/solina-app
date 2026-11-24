@@ -574,6 +574,11 @@ h2,h3{font-weight:500;letter-spacing:0}
 #cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
 .cn-titre{font-size:17px;color:var(--brun)}
 .cn-g{margin-bottom:14px}
+.cn-titre-in{flex:1 1 auto;min-width:120px;max-width:420px;font:inherit;font-weight:600;font-size:17px;color:var(--brun);background:transparent;border:1px solid transparent;border-radius:8px;padding:4px 8px}
+.cn-titre-in:hover,.cn-titre-in:focus{border-color:var(--line);background:var(--card);outline:none}
+.cn-acces{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:4px 0 16px}
+.cn-acces textarea{width:100%;box-sizing:border-box;font:inherit;font-size:14px;color:var(--brun);background:var(--creme-2);border:1px solid transparent;border-radius:8px;padding:7px 9px;margin-top:6px;resize:vertical}
+.cn-masques{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
 .cn-etat{font-size:12px;color:var(--taupe)}
 .cn-gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .cn-grp{flex:0 0 165px;max-width:165px;font:inherit;font-size:12px;color:var(--taupe);background:transparent;border:1px solid var(--line);border-radius:8px;padding:4px 6px}
@@ -1912,7 +1917,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     SAUVE.encours=true;clearTimeout(sauverT);etatCarnet('Enregistrement…');var ok=true,cle=CARNET.cle,data=CARNET.data;
     var vide=function(x){return !(x.libelle||x.identifiant||x.secret||x.note);};
     try{do{SAUVE.encore=false;
-      var c={moi:data.moi.filter(function(x){return !vide(x);}),biens:{}};
+      var c={moi:data.moi.filter(function(x){return !vide(x);}),biens:{},noms:data.noms||{},masques:data.masques||[],acces:data.acces||{}};
       Object.keys(data.biens).forEach(function(k){c.biens[k]=data.biens[k].filter(function(x){return !vide(x);});});
       S.params.carnet=await chiffrer(cle,c);
       if((await saveParams())===false){ok=false;break;}
@@ -1932,7 +1937,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
   var GROUPES=[['Entrer dans le logement',/bo[iî]te|porte|digicode|serrure|alarme|portail|parking|garage|pad|nuki|cl[ée]s?\b|badge|ascenseur|poubelle|ring|interphone|cave/i],['Comptes et plateformes',/airbnb|booking|abritel|vrbo|channel|mail|site|instagram|facebook|banque|mairie|taxe|compte|login|identifiant|beds24|lodgify|smoobu|google|canva|urssaf|impots/i],['Équipements',/wifi|wi-fi|internet|box|chauffage|clim|compteur|eau|[ée]lectri|gaz|tv|t[ée]l[ée]|piscine|spa|volet|coffre/i]];
   function groupeDe(x){if(x.groupe)return x.groupe;var t=(x.libelle||'')+' '+(x.note||'');for(var g=0;g<GROUPES.length;g++)if(GROUPES[g][1].test(t))return GROUPES[g][0];return 'Autres';}
-  function nomSec(k){if(k==='moi')return 'Maison Solina';var b=byId(S.biens,k.slice(2));return b?(b.nom||'Logement'):'Logement';}
+  function nomSec(k){var n=(CARNET.data&&CARNET.data.noms||{})[k];if(n)return n;if(k==='moi')return 'MAISON SOLINA';var b=byId(S.biens,k.slice(2));return b?(b.nom||'Logement'):'Logement';}
   function ligneHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i],d=' data-sec="'+esc(k)+'" data-i="'+i+'"';
     return '<div class="cn-l"><div class="cn-n">'+esc(x.libelle||'Sans nom')+'</div><div class="cn-v">'+
       (x.identifiant?'<button type="button" class="cn-chip" data-carnet="copier" data-k="identifiant"'+d+' title="Copier">'+esc(x.identifiant)+'<small>Copier</small></button>':'')+
@@ -1946,7 +1951,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<select class="cn-grp" data-af="groupe" aria-label="Ranger dans">'+(x.groupe||x.libelle||x.identifiant||x.secret||x.note?'':'<option value="" selected>Ranger dans…</option>')+GROUPES.map(function(g){return g[0];}).concat(['Autres']).map(function(g){var vide=!(x.groupe||x.libelle||x.identifiant||x.secret||x.note);return '<option'+(!vide&&groupeDe(x)===g?' selected':'')+'>'+g+'</option>';}).join('')+'</select>'+
       '<button type="button" class="btn ghost xs cn-x" data-carnet="suppr"'+d+' aria-label="Supprimer">×</button>'+
       '<input class="cn-nt" data-af="note" value="'+esc(x.note||'')+'" placeholder="Note" autocomplete="off"></div>';}
-  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><b class="cn-titre">'+esc(nomSec(k))+'</b><span id="cn-etat" class="cn-etat">'+esc(CARNET.etat||'')+'</span><span style="flex:1"></span><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>';
+  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><input class="cn-titre cn-titre-in" data-nomsec="'+esc(k)+'" value="'+esc(nomSec(k))+'" aria-label="Nom" autocomplete="off"><span id="cn-etat" class="cn-etat">'+esc(CARNET.etat||'')+'</span><span style="flex:1"></span><button type="button" class="btn ghost sm" data-carnet="masquer" data-sec="'+esc(k)+'">Retirer du Carnet</button><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>'+(k==='moi'?'':ficheAccesHtml(k));
     var tous=l.map(function(x,i){return [x,i];});
     var nouveaux=tous.filter(function(p){return !p[0].groupe&&!(p[0].libelle||p[0].identifiant||p[0].secret||p[0].note);});
     var pleins=tous.filter(function(p){return nouveaux.indexOf(p)<0;});
@@ -1955,6 +1960,18 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     return h+ordre.map(function(g){var it=pleins.filter(function(p){return groupeDe(p[0])===g;});return '<div class="cn-g"><div class="cn-gh"><span class="pl">'+g+'</span><button type="button" class="btn ghost xs" data-carnet="ajouter" data-sec="'+esc(k)+'" data-grp="'+esc(g)+'">+ Ajouter ici</button></div>'+it.map(function(p){return ligneEdit(p[0],k,p[1]);}).join('')+'</div>';}).join('')+
       (nouveaux.length?'<div class="cn-g"><div class="pl">Nouveau</div>'+nouveaux.map(function(p){return ligneEdit(p[0],k,p[1]);}).join('')+'</div>':'')+
       '<p class="note">Tout s’enregistre tout seul.</p>';}
+  function ficheAccesHtml(k){var a=((CARNET.data.acces||{})[k])||{};
+    return '<div class="cn-acces"><div class="cn-gh"><span class="pl">Fiche d’accès pour un intervenant</span><button type="button" class="btn sm" data-carnet="copieracces" data-sec="'+esc(k)+'">Copier la fiche</button></div>'+
+      '<textarea data-acc="texte" data-sec="'+esc(k)+'" rows="3" placeholder="Comment entrer : portail, bâtiment, étage, où se trouve la boîte à clés, consignes…">'+esc(a.texte||'')+'</textarea>'+
+      '<textarea data-acc="videos" data-sec="'+esc(k)+'" rows="2" placeholder="Liens des vidéos d’accès, un par ligne">'+esc(a.videos||'')+'</textarea>'+
+      '<p class="note" style="margin:4px 0 0">La fiche copiée contient l’adresse, ce texte, les codes du groupe « Entrer dans le logement », le wifi et les vidéos.</p></div>';}
+  function texteAcces(k){var b=byId(S.biens,k.slice(2))||{},a=((CARNET.data.acces||{})[k])||{},l=secCarnet(k);
+    var codes=l.filter(function(x){return (x.secret||x.identifiant)&&(groupeDe(x)==='Entrer dans le logement'||/wifi|wi-fi/i.test(x.libelle||''));});
+    var t=['Accès : '+nomSec(k)];var adr=[b.adresse,b.ville].filter(Boolean).join(', ');if(adr)t.push(adr);
+    if(a.texte)t.push('',a.texte.trim());
+    if(codes.length){t.push('','Codes :');codes.forEach(function(x){t.push('• '+(x.libelle||'Code')+' : '+[x.identifiant,x.secret].filter(Boolean).join(' / ')+(x.note?' ('+x.note+')':''));});}
+    var v=(a.videos||'').split(/\n/).map(function(x){return x.trim();}).filter(Boolean);if(v.length){t.push('','Vidéos :');v.forEach(function(x){t.push(x);});}
+    return t.join('\n');}
   function carteSec(k,titre,sous){var l=secCarnet(k).filter(function(x){return x.libelle||x.secret||x.identifiant;});
     return '<button type="button" class="cn-carte" data-carnet="voirsec" data-sec="'+esc(k)+'" data-cherche="'+esc((titre+' '+sous).toLowerCase())+'"><b>'+esc(titre)+'</b>'+(sous?'<small>'+esc(sous)+'</small>':'')+'<span class="cn-apercu">'+(l.length?esc(l.slice(0,4).map(function(x){return x.libelle||'Code';}).join(', '))+(l.length>4?'…':''):'Vide')+'</span></button>';}
   async function paramsFrais(){try{var f=await lireDepot();G.D=f.data;G.sha=f.sha;garderCopie();appliquer(cloner(f.data));return true;}catch(e){return false;}}
@@ -1969,10 +1986,12 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     if(!carnetActif()){el.innerHTML='<div class="card carnet-porte"><div class="coffre-ouvrir">'+champ('cn-pin','Ton code',1)+'<button type="button" class="btn primary sm" data-carnet="ouvrir">Ouvrir</button></div>'+err+'</div>';var f2=$('cn-pin');if(f2)f2.focus();return;}
     if(!CARNET.data){el.innerHTML='<p class="note">Ouverture…</p>';chargerCarnet().then(renderCarnet).catch(function(e){console.error(e);toast('Le Carnet ne s’ouvre pas');verrouiller();});return;}
     if(CARNET.vue){el.innerHTML=vueSection(CARNET.vue);return;}
+    var masq=CARNET.data.masques||[];
     var biens=S.biens.slice().sort(function(a,b){var ra=a.actif?0:(a.aSigner?1:2),rb=b.actif?0:(b.aSigner?1:2);return ra-rb||(a.nom||'').localeCompare(b.nom||'','fr');});
     el.innerHTML='<div class="carnet-bar"><input type="search" id="cn-cherche" placeholder="Chercher un logement…" autocomplete="off"><button type="button" class="btn sm" data-carnet="import">Importer une liste</button><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
       (CARNET.imp?'<div class="card" style="margin-bottom:12px"><p class="note" style="margin:0 0 8px">Colle la liste préparée par Claude. Une ligne « # Nom du logement », puis une ligne par code : Nom | identifiant | code | note.</p><textarea id="cn-imp" rows="8" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea><div class="actions"><button type="button" class="btn primary sm" data-carnet="importok">Ajouter au Carnet</button><button type="button" class="btn ghost sm" data-carnet="importnon">Annuler</button></div>'+'<p class="note err" id="cn-err" hidden></p></div>':'')+
-      '<div class="cn-grille">'+carteSec('moi','Maison Solina','Mes mails, sites, banque, logiciels')+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return carteSec('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('')+'</div>'+
+      '<div class="cn-grille">'+(masq.indexOf('moi')<0?carteSec('moi',nomSec('moi'),'Mes mails, sites, banque, logiciels'):'')+biens.filter(function(b){return masq.indexOf('b:'+b.id)<0;}).map(function(b){var pr=byId(S.contacts,b.proprietaire);return carteSec('b:'+b.id,nomSec('b:'+b.id),[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('')+'</div>'+
+      (masq.length?'<div class="cn-masques"><span class="pl">Retirés du Carnet</span>'+masq.map(function(k){return '<button type="button" class="btn ghost xs" data-carnet="remettre" data-sec="'+esc(k)+'">+ '+esc(nomSec(k))+'</button>';}).join('')+'</div>':'')+
       '<p class="note" style="margin-top:10px">Se verrouille seul après 1 heure sans l\u2019utiliser.</p>';
   }
   function lireCarnet(){document.querySelectorAll('#carnet-corps [data-acces]').forEach(function(r){var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)];if(!x)return;r.querySelectorAll('[data-af]').forEach(function(f){x[f.dataset.af]=f.value;});});}
@@ -2004,6 +2023,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
         if(!lignes.join('').trim())return erreurCarnet('Le cadre est vide : clique dedans puis colle la liste (Cmd + V).');if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
         if(!(await sauverCarnet()))return;CARNET.imp=false;CARNET.ouvertApres=null;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
       if(a==='ajmail'){CARNET.avecMail[k2+'|'+i]=true;renderCarnet();var fm=document.querySelector('#carnet-corps [data-sec="'+k2+'"][data-acces="'+i+'"] [data-af="identifiant"]');if(fm)fm.focus();return;}
+      if(a==='masquer'){if(!confirmer(b))return;CARNET.data.masques=(CARNET.data.masques||[]).concat([k2]);CARNET.vue=null;renderCarnet();sauverCarnet();return;}
+      if(a==='remettre'){CARNET.data.masques=(CARNET.data.masques||[]).filter(function(x){return x!==k2;});renderCarnet();sauverCarnet();return;}
+      if(a==='copieracces'){try{await navigator.clipboard.writeText(texteAcces(k2));toast('Fiche d’accès copiée');}catch(x){toast('Copie impossible sur cet appareil');}return;}
       if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
       if(a==='retour'){CARNET.vue=null;CARNET.edit=false;renderCarnet();window.scrollTo(0,0);sauverCarnet();return;}
       if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
@@ -2016,7 +2038,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     }catch(x){console.error(x);toast('Le Carnet a rencontré un problème');renderCarnet();}
   });
   $('carnet-corps').addEventListener('change',function(e){var r=e.target.closest('[data-acces]');if(!r||!carnetActif())return;CARNET.depuis=Date.now();var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)],avant=x?groupeDe(x):'';lireCarnet();sauverBientot();if(x&&(e.target.dataset.af==='groupe'||(e.target.dataset.af==='libelle'&&!x.groupe&&groupeDe(x)!==avant)))renderCarnet();});
-  $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
+  $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();var t0=e.target;if(CARNET.cle&&CARNET.data&&t0.dataset){if(t0.dataset.nomsec){CARNET.data.noms=CARNET.data.noms||{};CARNET.data.noms[t0.dataset.nomsec]=t0.value.trim();sauverBientot();}if(t0.dataset.acc){CARNET.data.acces=CARNET.data.acces||{};var ac=CARNET.data.acces[t0.dataset.sec]=CARNET.data.acces[t0.dataset.sec]||{};ac[t0.dataset.acc]=t0.value;sauverBientot();}}if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
   $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p1':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
