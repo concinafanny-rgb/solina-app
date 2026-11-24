@@ -1907,7 +1907,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<div class="two"><div class="field"><label>Identifiant ou mail</label><span class="acces-c"><input data-af="identifiant" value="'+esc(x.identifiant||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="identifiant">Copier</button></span></div>'+
       '<div class="field"><label>Code ou mot de passe</label><span class="acces-c"><input data-af="secret" type="'+(vu?'text':'password')+'" value="'+esc(x.secret||'')+'" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn xs" data-carnet="voir" data-sec="'+esc(k)+'" data-i="'+i+'" aria-label="Afficher">'+EYE+'</button><button type="button" class="btn xs" data-carnet="copier" data-sec="'+esc(k)+'" data-i="'+i+'" data-k="secret">Copier</button></span></div></div>'+
       '<div class="field" style="margin:0"><label>Note</label><input data-af="note" value="'+esc(x.note||'')+'" placeholder="Emplacement, consigne…" autocomplete="off"></div></div>';}
-  var GROUPES=[['Entrer dans le logement',/bo[iî]te|porte|digicode|serrure|alarme|portail|parking|garage|cl[ée]s?\b|badge|ascenseur|poubelle|ring|interphone|cave/i],['Comptes et plateformes',/airbnb|booking|abritel|vrbo|channel|mail|site|instagram|facebook|banque|mairie|taxe|compte|login|identifiant|beds24|lodgify|smoobu|google|canva|urssaf|impots/i],['Équipements',/wifi|wi-fi|internet|box|chauffage|clim|compteur|eau|[ée]lectri|gaz|tv|t[ée]l[ée]|piscine|spa|volet|coffre/i]];
+  var GROUPES=[['Entrer dans le logement',/bo[iî]te|porte|digicode|serrure|alarme|portail|parking|garage|pad|nuki|cl[ée]s?\b|badge|ascenseur|poubelle|ring|interphone|cave/i],['Comptes et plateformes',/airbnb|booking|abritel|vrbo|channel|mail|site|instagram|facebook|banque|mairie|taxe|compte|login|identifiant|beds24|lodgify|smoobu|google|canva|urssaf|impots/i],['Équipements',/wifi|wi-fi|internet|box|chauffage|clim|compteur|eau|[ée]lectri|gaz|tv|t[ée]l[ée]|piscine|spa|volet|coffre/i]];
   function groupeDe(x){var t=(x.libelle||'')+' '+(x.note||'');for(var g=0;g<GROUPES.length;g++)if(GROUPES[g][1].test(t))return GROUPES[g][0];return 'Autres';}
   function nomSec(k){if(k==='moi')return 'Maison Solina';var b=byId(S.biens,k.slice(2));return b?(b.nom||'Logement'):'Logement';}
   function ligneHtml(x,k,i){var vu=CARNET.montrer[k+'|'+i],d=' data-sec="'+esc(k)+'" data-i="'+i+'"';
@@ -1935,7 +1935,8 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     if(!CARNET.data||(S.params.carnet&&S.params.carnet!==CARNET.src)){el.innerHTML='<p class="note">Ouverture…</p>';chargerCarnet().then(renderCarnet).catch(function(e){console.error(e);toast('Le Carnet ne s’ouvre pas');verrouiller();});return;}
     if(CARNET.vue){el.innerHTML=vueSection(CARNET.vue);return;}
     var biens=S.biens.slice().sort(function(a,b){var ra=a.actif?0:(a.aSigner?1:2),rb=b.actif?0:(b.aSigner?1:2);return ra-rb||(a.nom||'').localeCompare(b.nom||'','fr');});
-    el.innerHTML='<div class="carnet-bar"><input type="search" id="cn-cherche" placeholder="Chercher un logement…" autocomplete="off"><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
+    el.innerHTML='<div class="carnet-bar"><input type="search" id="cn-cherche" placeholder="Chercher un logement…" autocomplete="off"><button type="button" class="btn sm" data-carnet="import">Importer une liste</button><button type="button" class="btn ghost sm" data-carnet="fermer">Verrouiller</button></div>'+
+      (CARNET.imp?'<div class="card" style="margin-bottom:12px"><p class="note" style="margin:0 0 8px">Colle la liste préparée par Claude. Une ligne « # Nom du logement », puis une ligne par code : Nom | identifiant | code | note.</p><textarea id="cn-imp" rows="8" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea><div class="actions"><button type="button" class="btn primary sm" data-carnet="importok">Ajouter au Carnet</button><button type="button" class="btn ghost sm" data-carnet="importnon">Annuler</button></div>'+'<p class="note err" id="cn-err" hidden></p></div>':'')+
       '<div class="cn-grille">'+carteSec('moi','Maison Solina','Mes mails, sites, banque, logiciels')+biens.map(function(b){var pr=byId(S.contacts,b.proprietaire);return carteSec('b:'+b.id,b.nom||'Logement',[b.ville,pr?fullName(pr):'',b.actif?'':(b.aSigner?'à signer':'')].filter(Boolean).join(' · '));}).join('')+'</div>'+
       '<p class="note" style="margin-top:10px">Se verrouille seul après 1 heure sans l\u2019utiliser.</p>';
   }
@@ -1958,6 +1959,13 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
         CARNET.essais=0;CARNET.cle=k;CARNET.depuis=Date.now();renderCarnet();return;}
       if(!carnetActif()){renderCarnet();return;}
       CARNET.depuis=Date.now();lireCarnet();var k2=b.dataset.sec,i=Number(b.dataset.i);
+      if(a==='import'){CARNET.imp=true;renderCarnet();var t0=$('cn-imp');if(t0)t0.focus();return;}
+      if(a==='importnon'){CARNET.imp=false;renderCarnet();return;}
+      if(a==='importok'){var lignes=($('cn-imp').value||'').split(/\r?\n/),cur=null,n=0,inconnus=[];
+        lignes.forEach(function(l){l=l.trim();if(!l)return;if(l.charAt(0)==='#'){var nm=l.replace(/^#+/,'').trim().toLowerCase();cur=null;if(nm.indexOf('maison solina')>=0){cur='moi';return;}var bb=S.biens.filter(function(x){var xn=(x.nom||'').toLowerCase();return xn&&(xn===nm||xn.indexOf(nm)>=0||nm.indexOf(xn)>=0);})[0];if(bb)cur='b:'+bb.id;else inconnus.push(nm);return;}
+          if(!cur)return;var pt=l.split('|').map(function(x){return x.trim();});secCarnet(cur).push({libelle:pt[0]||'',identifiant:pt[1]||'',secret:pt[2]||'',note:pt.slice(3).join(' | ')});n++;});
+        if(!n)return erreurCarnet('Rien à ajouter'+(inconnus.length?' : logement introuvable ('+inconnus.join(', ')+')':'')+'.');
+        await sauverCarnet(true);CARNET.imp=false;renderCarnet();toast(n+' code'+(n>1?'s':'')+' ajouté'+(n>1?'s':'')+(inconnus.length?', logement introuvable : '+inconnus.join(', '):''));return;}
       if(a==='voirsec'){CARNET.vue=k2;CARNET.edit=false;CARNET.montrer={};renderCarnet();window.scrollTo(0,0);return;}
       if(a==='retour'){if(CARNET.edit)await sauverCarnet(true);CARNET.vue=null;CARNET.edit=false;renderCarnet();return;}
       if(a==='edit'){CARNET.edit=true;renderCarnet();return;}
