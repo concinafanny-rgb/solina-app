@@ -2409,7 +2409,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var v=byId(S.vocaux,id);if(!v)return;btn.disabled=true;btn.textContent='Transcription…';
     try{var r=await fetch(urlChemin(v.fichier)+'?ref='+DEPOT.branche,{headers:Object.assign({},entetes(),{'Accept':'application/vnd.github.raw'}),cache:'no-store'});if(!r.ok)throw 0;
       var t=await transcrireNatif(new Blob([await r.arrayBuffer()],{type:v.type||'audio/mp4'}),v.type);
-      if(!t)throw 0;await save('vocaux',Object.assign({},v,{texte:t,statut:'a_traiter'}));toast('Note transcrite, Claude la range dans une minute');[60,120,200].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
+      if(!t)throw 0;await save('vocaux',Object.assign({},v,{texte:t,statut:'a_traiter'}));toast('Note transcrite, Claude la range ce soir à 19h');[60,120,200].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
     }catch(e){toast('Transcription impossible pour cette note');btn.disabled=false;btn.textContent='Transcrire';}
   }
   function blobVersB64(b){return new Promise(function(res,rej){var f=new FileReader();f.onload=function(){res(String(f.result).split(',')[1]||'');};f.onerror=rej;f.readAsDataURL(b);});}
@@ -2420,14 +2420,21 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     try{
       var id=uid('v'),ext=/webm/.test(REC.type)?'webm':'m4a',chemin='donnees/vocaux/'+id+'.'+ext;
       var b64=await blobVersB64(REC.blob);
+      var secours={id:id,chemin:chemin,b64:b64,type:REC.type,titre:$('rec-titre').value.trim()||'Note vocale',texte:$('rec-texte').value.trim(),duree:Math.round(REC.duree),date:new Date().toISOString()};try{localStorage.setItem('solina-note-attente',JSON.stringify(secours));}catch(x){}
       var r=await fetch(urlChemin(chemin),{method:'PUT',cache:'no-store',headers:Object.assign({'Content-Type':'application/json'},entetes()),body:JSON.stringify({message:'Application : note vocale',content:b64,branch:DEPOT.branche})});
       if(!r.ok)throw Err('autre','GitHub a refusé le fichier ('+r.status+')');
       var texte=$('rec-texte').value.trim();
       await save('vocaux',{id:id,titre:$('rec-titre').value.trim()||'Note vocale',date:new Date().toISOString(),duree:Math.round(REC.duree),fichier:chemin,type:REC.type,texte:texte,statut:texte?'a_traiter':'audio'});
-      $('rec').hidden=true;toast(texte?'Note envoyée, Claude la range dans une minute':'Note vocale enregistrée');if(texte)[60,120,200,320].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
+      try{localStorage.removeItem('solina-note-attente');}catch(x){}
+      $('rec').hidden=true;toast(texte?'Note envoyée, Claude la range ce soir à 19h':'Note vocale enregistrée');if(texte)[60,120,200,320].forEach(function(sec){setTimeout(function(){actualiser();},sec*1000);});
     }catch(e){toast(e.code==='echec'?'La note n\u2019a pas pu être enregistrée':(e.message&&e.message.indexOf('GitHub')===0?e.message:'Pas de connexion, la note n\u2019est pas enregistrée'));}
     btn.disabled=false;btn.textContent='Envoyer';
   }
+  async function renvoyerNoteAttente(){var n;try{n=JSON.parse(localStorage.getItem('solina-note-attente')||'null');}catch(x){n=null;}if(!n||!n.b64)return;
+    try{if(!byId(S.vocaux,n.id)){var r=await fetch(urlChemin(n.chemin),{method:'PUT',cache:'no-store',headers:Object.assign({'Content-Type':'application/json'},entetes()),body:JSON.stringify({message:'Application : note vocale récupérée',content:n.b64,branch:DEPOT.branche})});if(!r.ok&&r.status!==422)throw 0;
+      await save('vocaux',{id:n.id,titre:n.titre,date:n.date,duree:n.duree,fichier:n.chemin,type:n.type,texte:n.texte,statut:n.texte?'a_traiter':'audio'});}
+      localStorage.removeItem('solina-note-attente');toast('Ta note vocale non envoyée a été récupérée');}catch(x){}}
+  setTimeout(function(){renvoyerNoteAttente();},8000);setInterval(function(){renvoyerNoteAttente();},120000);
   async function ecouter(id,btn){
     if(LECTURE.audio&&LECTURE.id===id){LECTURE.audio.pause();LECTURE.audio=null;LECTURE.id=null;renderVocaux();return;}
     if(LECTURE.audio){LECTURE.audio.pause();}
