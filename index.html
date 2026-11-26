@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Maison Solina</title>
+<title>MS Work</title>
 <meta name="theme-color" content="#935E36">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Solina">
+<meta name="apple-mobile-web-app-title" content="MS Work">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="manifest.webmanifest">
@@ -225,6 +225,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
   .panel{padding:0 32px;max-width:1120px}
   .tabs{display:none}
   .sheet{left:auto;width:560px;border-left:1px solid var(--line);box-shadow:-20px 0 50px rgba(110,88,75,.12)}
+  #lsheet{width:min(760px,100%)}
   .toast{bottom:28px}
   h1{font-size:32px}
   .plusgrid{display:none}
@@ -576,9 +577,14 @@ h2,h3{font-weight:500;letter-spacing:0}
 #cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
 .cn-titre{font-size:17px;color:var(--brun)}
 .cn-g{margin-bottom:14px}
-.inv-cfg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.inv-cfg label{display:flex;flex-direction:column;font-size:11px;color:var(--taupe);gap:2px}
-.inv-cfg input{width:78px}
+.inv-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px 22px;align-items:start}
+.inv-l.ko{background:#F7E6E2}
+.inv-l.ko .inv-n,.inv-l.ko .inv-q{color:var(--rouge)}
+.inv-man{color:var(--rouge);font-weight:600}
+.inv-gt{margin:22px 0 4px;font-family:var(--display);font-size:20px;color:var(--brun)}
+.inv-achats{margin-top:26px}
+.inv-achats ul{margin:0;padding-left:18px}
+.inv-achats li{margin:3px 0}
 .inv-t{margin:14px 0 6px}
 .inv-st{font-size:12px;font-weight:600;color:var(--brun);margin:10px 0 4px}
 .inv-l{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:4px;background:var(--card);box-shadow:inset 4px 0 0 var(--line)}
@@ -665,8 +671,8 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
 <div class="connexion" id="connexion" hidden>
   <div class="card">
     <div class="eyebrow">Bienvenue</div>
-    <h1>Maison Solina</h1>
-    <p class="note" style="font-size:13.5px;margin:0 0 18px">Pour retrouver ton CRM sur cet appareil, colle ta clé d’accès GitHub. Tu ne le fais qu’une fois par appareil.</p>
+    <h1>MS Work</h1>
+    <p class="note" style="font-size:13.5px;margin:0 0 18px">Pour retrouver MS Work sur cet appareil, colle ta clé d’accès GitHub. Tu ne le fais qu’une fois par appareil.</p>
     <form id="cx-form">
       <label class="eyebrow" for="cx-cle">Clé d’accès</label>
       <input type="password" id="cx-cle" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
@@ -689,7 +695,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   <nav class="rail" id="rail" aria-label="Navigation"></nav>
   <main class="main">
     <div class="topbar">
-      <div class="brand"><span class="mark">Maison Solina</span><span class="sub">CRM</span></div>
+      <div class="brand"><span class="mark">MS Work</span><span class="sub">Maison Solina</span></div>
       <button type="button" class="tb-retour" id="tb-retour" aria-label="Revenir en arrière" hidden>‹</button><span class="tb-title" id="tb-title">Tableau de bord</span>
       <span class="droite"><button class="micbtn" data-micro aria-label="Enregistrer une note vocale" title="Note vocale"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><span class="statusdot" id="dbstatus"><i></i><span>Connexion…</span></span></span>
     </div>
@@ -977,6 +983,11 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     </section>
 
     <!-- CARNET -->
+    <section class="panel" data-panel="inventaire">
+      <div class="ph"><div class="pl">Mes logements</div><h1>Inventaire</h1></div>
+      <div class="chips" id="inv-biens" style="margin-top:14px;flex-wrap:wrap"></div>
+      <div id="inv" style="margin-top:18px;max-width:1280px"></div>
+    </section>
     <section class="panel" data-panel="carnet">
       <div class="ph"><div class="pl">Organisation</div><h1>Carnet</h1></div>
       <div id="carnet-corps" style="margin-top:18px;max-width:1280px"></div>
@@ -1164,28 +1175,20 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       <div class="field"><label for="l-ch">Chambres</label><input id="l-ch" type="number" min="0"></div>
       <div class="field"><label for="l-voy">Voyageurs</label><input id="l-voy" type="number" min="0"></div>
     </div>
-    <div class="two">
-      <div class="field"><label for="l-annonce">Lien de l'annonce</label><input id="l-annonce" placeholder="https://" autocomplete="off"></div>
-      <div class="field"><label for="lg-canva">Lien de la fiche Canva</label><input id="lg-canva" placeholder="https://" autocomplete="off"></div>
+    <div class="three">
+      <div class="field"><label for="l-lits">Lits</label><input id="l-lits" type="number" min="0"></div>
+      <div class="field"><label for="l-sdb">Salles de bain</label><input id="l-sdb" type="number" min="0"></div>
+      <div class="field"><label for="l-wc">WC</label><input id="l-wc" type="number" min="0"></div>
     </div>
-    <div class="field"><label for="l-photos">Lien des photos (Drive)</label><input id="l-photos" placeholder="https://" autocomplete="off"></div>
     <div id="l-signer" hidden style="border:1px dashed var(--line);border-radius:14px;padding:12px 14px">
       <h3 style="margin:0 0 8px">Bien visité : mon estimation</h3>
       <div class="two"><div class="field"><label for="l-prix">Prix / nuit estimé €</label><input id="l-prix" type="number" min="0"></div><div class="field"><label for="l-occ">Occupation estimée %</label><input id="l-occ" type="number" min="0" max="100"></div></div>
       <p class="note" id="l-estim" style="margin:6px 0 10px"></p>
       <button type="button" class="btn primary sm" id="l-activer">Signé : passer en logement actif</button>
     </div>
-    <div class="actions" id="l-liens" hidden></div>
-    <div class="field"><label for="l-notes">Notes</label><textarea id="l-notes" placeholder="Équipements, consignes de ménage, linge, consommables, particularités…"></textarea></div>
-    <p class="note" style="margin:0">Les codes et mots de passe vont dans le Carnet, jamais dans les notes.</p>
-    <div class="hr"></div>
+    <div class="field"><label for="l-notes">Notes</label><textarea id="l-notes" style="min-height:280px" placeholder="Équipements, consignes de ménage, linge, consommables, particularités…"></textarea></div>
     <datalist id="dl-acces"><option value="Boîte à clés"><option value="Porte d'entrée"><option value="Portail"><option value="Digicode"><option value="Serrure connectée"><option value="Alarme"><option value="Wifi"><option value="Mail du logement"><option value="Airbnb"><option value="Booking"><option value="Channel manager"><option value="Mairie, taxe de séjour"><option value="Parking"><option value="Chauffage"><option value="Climatisation"><option value="Compteur"><option value="Ascenseur"><option value="Boîte aux lettres"><option value="Local poubelles"><option value="Ring"><option value="Abritel"><option value="Mail"><option value="Instagram"><option value="Site internet"><option value="Banque"></datalist>
-    <div class="hr"></div>
-    <div class="section-head" style="margin:0"><h3>Inventaire</h3><button type="button" class="btn sm" id="inv-ouvrir">Ouvrir</button></div>
-    <p class="note" id="inv-resume" style="margin:4px 0 0"></p>
-    <div id="inv" hidden></div>
-    <div class="hr"></div>
-    <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
+    <div class="section-head" style="margin:10px 0 0"><h3 style="color:var(--rouge)">À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
     <div class="list" id="l-taches"></div>
     <div class="hr"></div>
     <div class="actions barre-fixe"><button class="btn primary" type="submit">Enregistrer</button><button type="button" class="btn" data-lclose>Annuler</button></div>
@@ -1216,15 +1219,16 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     reseaux:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
     logements:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
     vocaux:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+    inventaire:'<svg viewBox="0 0 24 24"><path d="M9 5h10M9 12h10M9 19h10"/><path d="M4 5l1 1 2-2M4 12l1 1 2-2M4 19l1 1 2-2"/></svg>',
     carnet:'<svg viewBox="0 0 24 24"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2M9 8h6M9 12h6"/></svg>',
     plus:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
   };
-  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection propriétaires',partenaires:'Prospection partenaires',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',carnet:'Carnet',plus:'Menu'};
+  var TITLES={accueil:'Tableau de bord',entreprise:'Mon entreprise',vocaux:'Notes',contacts:'Contacts',prospection:'Prospection propriétaires',partenaires:'Prospection partenaires',demandes:'Demandes reçues',relances:'Tâches et relances',logements:'Logements',ca:'Finances',simca:'Simulateur de CA',simprop:'Simulateur propriétaire',charges:'Charges',conso:'Opérationnel',ops:'Opérationnel',idees:'Boîte à idées',evenements:'Événements',reseaux:'Studio réseaux sociaux',carnet:'Carnet',inventaire:'Inventaire',plus:'Menu'};
   var RAIL=[
     ['Vue d\'ensemble',[['accueil','Tableau de bord'],['relances','Tâches et relances'],['contacts','Contacts'],['vocaux','Notes']]],
     ['Développement',[['prospection','Prospection proprio'],['demandes','Demandes reçues'],['partenaires','Prospection partenaires']]],
     ['Pour un propriétaire',[['simprop','Simulateur proprio']]],
-    ['Mes logements',[['logements','Logements'],['ops','Opérationnel']]],
+    ['Mes logements',[['logements','Logements'],['ops','Opérationnel'],['inventaire','Inventaire']]],
     ['Finances',[['ca','Finances']]],
     ['Communication',[['reseaux','Studio réseaux sociaux'],['evenements','Événements'],['idees','Boîte à idées']]],
     ['Organisation',[['entreprise','Mon entreprise'],['carnet','Carnet']]]
@@ -1265,7 +1269,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   /* Navigation */
   function buildNav(){
     var rail=$('rail'),tabs=$('tabs'),plus=$('plusgrid');
-    rail.innerHTML='<div class="brand"><span class="mark">Maison Solina</span></div>';
+    rail.innerHTML='<div class="brand"><span class="mark">MS Work</span></div>';
     RAIL.forEach(function(sec){
       var h=document.createElement('div');h.className='nsec';h.textContent=sec[0];rail.appendChild(h);
       sec[1].forEach(function(it){var b=document.createElement('button');b.innerHTML=ICONS[it[0]]+'<span>'+it[1]+'</span>';b.dataset.go=it[0];rail.appendChild(b);
@@ -1284,6 +1288,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     $('tb-title').textContent=TITLES[name]||'';
     try{localStorage.setItem('ms_tab',name);}catch(e){}
     if(name==='carnet')renderCarnet();
+    if(name==='inventaire')renderInv();
     window.scrollTo(0,0);
   }
   document.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b){go(b.dataset.go);}});
@@ -1895,7 +1900,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     el.innerHTML=(l.length?l.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;var t=tachesDuLogement(b.id);
       return '<button class="logc" data-log="'+esc(b.id)+'"><span class="logc-c"><h3>'+esc(b.nom||'Sans nom')+(t.length?'<span class="logc-ic sos"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9H3z"/></svg>SOS</span>':'<span class="logc-ic ok"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9H3z"/><path d="M9 15l2 2 4-4"/></svg>OK</span>')+'</h3><div class="s">'+esc([b.ville,b.typeBien,b.chambres?b.chambres+' ch.':'',p?fullName(p):''].filter(Boolean).join(' · ')||'Touche pour compléter la fiche')+'</div><div class="fait">'+(t.length?'<b>'+t.length+' à faire</b> · '+esc(t[0].titre)+(t[0].date?' ('+esc(fmtDate(t[0].date))+')':''):'Rien à faire pour l\'instant')+'</div></span></button>';}).join(''):'<div class="empty"><b>Aucun logement</b>Ajoute ton premier logement avec « + Logement ».</div>')+(aSig.length?'<div class="anciens-sep"><span>Biens visités, à signer</span></div>'+aSig.map(carteASigner).join(''):'')+(anciens.length?'<div class="anciens-sep"><span>Anciens logements</span></div>'+anciens.map(function(b){var p=b.proprietaire?byId(S.contacts,b.proprietaire):null;return '<div class="logc ancien" role="button" tabindex="0" data-log="'+esc(b.id)+'"><h3>'+esc(b.nom)+'</h3><div class="s">'+esc([b.ville,p?fullName(p):''].filter(Boolean).join(' · ')||'Plus en contrat')+'</div><div class="fait"><button type="button" class="btn xs" data-reactiver="'+esc(b.id)+'">Remettre en logement actif</button></div></div>';}).join(''):'');
   }
-  function majLiensLog(){var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva'],['l-photos','Voir les photos']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
+  function majLiensLog(){return;var h='';[['l-annonce','Ouvrir l\'annonce'],['lg-canva','Ouvrir la fiche Canva'],['l-photos','Voir les photos']].forEach(function(x){var u=$(x[0]).value.trim();if(/^https?:\/\//i.test(u))h+='<a class="btn primary sm" href="'+esc(u)+'" target="_blank" rel="noopener">'+x[1]+'</a>';});$('l-liens').innerHTML=h;$('l-liens').hidden=!h;}
   function renderTachesLog(){var el=$('l-taches');if(!el||!lEdit)return;var t=tachesDuLogement(lEdit);el.innerHTML=t.length?t.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>';}
   var lNouveau=null;
 
@@ -2058,49 +2063,58 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('carnet-corps').addEventListener('change',function(e){var r=e.target.closest('[data-acces]');if(!r||!carnetActif())return;CARNET.depuis=Date.now();var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)],avant=x?groupeDe(x):'';lireCarnet();sauverBientot();if(x&&(e.target.dataset.af==='groupe'||(e.target.dataset.af==='libelle'&&!x.groupe&&groupeDe(x)!==avant)))renderCarnet();});
   $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();var t0=e.target;if(CARNET.cle&&CARNET.data&&t0.dataset){if(t0.dataset.nomsec){CARNET.data.noms=CARNET.data.noms||{};CARNET.data.noms[t0.dataset.nomsec]=t0.value.trim();sauverBientot();}if(t0.dataset.acc){CARNET.data.acces=CARNET.data.acces||{};var ac=CARNET.data.acces[t0.dataset.sec]=CARNET.data.acces[t0.dataset.sec]||{};ac[t0.dataset.acc]=t0.value;sauverBientot();}}if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
   $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p1':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}});
-  /* ===== Inventaire du logement : ce qu'il faut (listes Opérationnel) et ce qui est présent ===== */
-  var INV={ouvert:false};
-  function invDe(b){var i=b.inv||{};var c=i.config||{};return {config:{voy:c.voy!=null?c.voy:(num(b.voyageurs)||4),lits:c.lits!=null?c.lits:Math.max(1,num(b.chambres)||1),ch:c.ch!=null?c.ch:(num(b.chambres)||1),sdb:c.sdb!=null?c.sdb:1,wc:c.wc!=null?c.wc:1},conso:Object.assign({},i.conso||{}),mobilier:Object.assign({},i.mobilier||{}),maj:i.maj||''};}
+  /* ===== Inventaire : une page, un logement à la fois, ce qui manque en rouge ===== */
+  var INV={bien:''};try{INV.bien=localStorage.getItem('ms_inv')||'';}catch(x){}
+  function biensInv(){return S.biens.filter(function(b){return b.actif!==false&&!b.aSigner;}).sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});}
+  function cfgBien(b){var ch=num(b.chambres)||1;return {voy:num(b.voyageurs)||4,ch:ch,lits:num(b.lits)||ch,sdb:num(b.sdb)||1,wc:num(b.wc)||1};}
+  function invDe(b){var i=b.inv||{};return {conso:Object.assign({},i.conso||{}),mobilier:Object.assign({},i.mobilier||{}),maj:i.maj||''};}
   function qteAvec(a,cfg){var o=OC;OC=cfg;var q=qteArticle(a);OC=o;return q;}
   function itemsMobilier(){var o=byId(S.ops,'op-mobilier');if(!o)return [];var r=[];(o.blocs||[]).forEach(function(bl){if(/fourni par/i.test(bl.titre||''))return;(bl.items||[]).forEach(function(it){r.push([bl.titre,it]);});});return r;}
-  function manquesInv(b){var iv=invDe(b),m=[];
-    S.conso.filter(function(a){return a.categorie!=='consommable';}).forEach(function(a){var q=qteAvec(a,iv.config),p=iv.conso[a.id];if(q>0&&p!=null&&p!==''&&num(p)<q)m.push(a.article+' : il en manque '+(q-num(p)));else if(q>0&&(p==null||p===''))m.push(a.article+' : à compter ('+q+' attendus)');});
-    itemsMobilier().forEach(function(x){if(iv.mobilier[x[1]]===false)m.push(x[1]);});return m;}
-  function resumeInv(b){var iv=invDe(b),art=S.conso.filter(function(a){return a.categorie!=='consommable'&&qteAvec(a,iv.config)>0;}),ok=0,man=0,vide=0;
-    art.forEach(function(a){var p=iv.conso[a.id];if(p==null||p==='')vide++;else if(num(p)>=qteAvec(a,iv.config))ok++;else man++;});
-    var mob=itemsMobilier(),mok=mob.filter(function(x){return iv.mobilier[x[1]]===true;}).length,mman=mob.filter(function(x){return iv.mobilier[x[1]]===false;}).length;
-    if(!iv.maj)return 'Pas encore fait.';return 'Dernière mise à jour '+fmtDate(iv.maj)+' : '+(ok+mok)+' complet'+(ok+mok>1?'s':'')+', '+(man+mman)+' manque'+(man+mman>1?'s':'')+', '+(vide+mob.length-mok-mman)+' à vérifier.';}
-  function renderInv(){var b=byId(S.biens,lEdit),el=$('inv');if(!el)return;if(!b){$('inv-resume').textContent='';el.hidden=true;return;}
-    $('inv-resume').textContent=resumeInv(b);$('inv-ouvrir').textContent=INV.ouvert?'Fermer':'Ouvrir';el.hidden=!INV.ouvert;if(!INV.ouvert)return;
-    var iv=invDe(b),c=iv.config;
-    var cfg='<div class="inv-cfg">'+[['voy','Voyageurs'],['lits','Lits'],['ch','Chambres'],['sdb','Salles de bain'],['wc','WC']].map(function(x){return '<label>'+x[1]+'<input type="number" min="0" data-invcfg="'+x[0]+'" value="'+esc(c[x[0]])+'"></label>';}).join('')+'</div>';
-    var h=cfg;
-    Object.keys(OPS_CAT).forEach(function(cat){if(cat==='consommable')return;var l=S.conso.filter(function(a){return a.categorie===cat&&qteAvec(a,c)>0;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!l.length)return;
-      h+='<div class="pl inv-t">'+esc(OPS_CAT[cat])+'</div>'+l.map(function(a){var q=qteAvec(a,c),p=iv.conso[a.id],st=(p==null||p==='')?'':(num(p)>=q?'ok':'ko');
-        return '<div class="inv-l '+st+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-q">il faut '+q+'</span><input type="number" min="0" inputmode="numeric" data-invart="'+esc(a.id)+'" value="'+esc(p==null?'':p)+'" placeholder="nb"></div>';}).join('');});
-    var mob=itemsMobilier(),grp='';
-    h+='<div class="pl inv-t">Mobilier et équipement</div>'+mob.map(function(x){var v=iv.mobilier[x[1]],t=(x[0]!==grp?'<div class="inv-st">'+esc(x[0])+'</div>':'');grp=x[0];
-      return t+'<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(x[1])+'</span><span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" data-invmob="1" data-it="'+esc(x[1])+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" data-invmob="0" data-it="'+esc(x[1])+'">Manque</button></span></div>';}).join('');
-    h+='<div class="actions"><button type="button" class="btn primary sm" id="inv-taches">Créer la tâche des manques</button></div>';
+  function articlesInv(cfg){return S.conso.filter(function(a){return OPS_CAT[a.categorie]&&qteAvec(a,cfg)>0;});}
+  function achatsInv(b){var iv=invDe(b),cfg=cfgBien(b),eq=[],co=[];
+    articlesInv(cfg).forEach(function(a){var q=qteAvec(a,cfg),p=iv.conso[a.id];if(p!=null&&p!==''&&num(p)<q)(a.categorie==='consommable'?co:eq).push(a.article+' : '+(q-num(p)));});
+    itemsMobilier().forEach(function(x){if(iv.mobilier[x[1]]===false)eq.push(x[1]);});return {eq:eq,co:co};}
+  function manquesInv(b){var a=achatsInv(b),m=a.eq.slice();if(a.co.length)m=m.concat(['','Courses consommables :'],a.co);return m;}
+  function nbManques(b){var a=achatsInv(b);return a.eq.length+a.co.length;}
+  function renderInv(){var el=$('inv'),ch=$('inv-biens');if(!el)return;var l=biensInv();
+    if(!byId(l,INV.bien))INV.bien=l[0]?l[0].id:'';
+    ch.innerHTML=l.map(function(b){var n=nbManques(b);return '<button type="button" class="chip'+(b.id===INV.bien?' active':'')+'" data-invbien="'+esc(b.id)+'">'+esc(b.nom||'Logement')+(n?' <span class="inv-man">'+n+'</span>':'')+'</button>';}).join('');
+    var b=byId(l,INV.bien);if(!b){el.innerHTML='<div class="empty">Aucun logement actif.</div>';return;}
+    var iv=invDe(b),c=cfgBien(b),ach=achatsInv(b),man={length:ach.eq.length+ach.co.length};
+    var h='<div class="section-head" style="margin:0"><h2>'+esc(b.nom||'Logement')+'</h2><button type="button" class="btn sm" data-invfiche="1">Compléter la fiche</button></div>'+
+      '<p class="note" style="margin:4px 0 14px">'+c.voy+' voyageurs, '+c.ch+' chambre'+(c.ch>1?'s':'')+', '+c.lits+' lit'+(c.lits>1?'s':'')+', '+c.sdb+' salle'+(c.sdb>1?'s':'')+' de bain, '+c.wc+' WC'+(iv.maj?' · mis à jour le '+fmtDate(iv.maj):'')+(man.length?' · <span class="inv-man">'+man.length+' manque'+(man.length>1?'s':'')+'</span>':'')+'</p><h3 class="inv-gt">Équipement</h3><div class="inv-grille">';
+    function blocCat(cat){var la=articlesInv(c).filter(function(a){return a.categorie===cat;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!la.length)return;
+      h+='<div><div class="pl inv-t">'+esc(OPS_CAT[cat])+'</div>'+la.map(function(a){var q=qteAvec(a,c),p=iv.conso[a.id],st=(p==null||p==='')?'':(num(p)>=q?'ok':'ko');
+        return '<div class="inv-l '+st+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-q">il faut '+q+'</span><input type="number" min="0" inputmode="numeric" data-invart="'+esc(a.id)+'" value="'+esc(p==null?'':p)+'" placeholder="nb"></div>';}).join('')+'</div>';}
+    Object.keys(OPS_CAT).forEach(function(cat){if(cat!=='consommable')blocCat(cat);});
+    var mob=itemsMobilier(),grp=null;
+    mob.forEach(function(x){var v=iv.mobilier[x[1]];if(x[0]!==grp){h+=(grp!==null?'</div>':'')+'<div><div class="pl inv-t">'+esc(x[0])+'</div>';grp=x[0];}
+      h+='<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(x[1])+'</span><span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" data-invmob="1" data-it="'+esc(x[1])+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" data-invmob="0" data-it="'+esc(x[1])+'">Manque</button></span></div>';});
+    if(grp!==null)h+='</div>';
+    h+='</div><h3 class="inv-gt">Consommables <span class="note">(courses, quantités pour un séjour plein)</span></h3><div class="inv-grille">';blocCat('consommable');h+='</div>';
+    function li(t){return t.length?'<ul>'+t.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<p class="note">Rien à acheter.</p>';}
+    h+='<div class="card inv-achats"><h3 style="margin:0 0 10px">Liste d’achats</h3><div class="inv-grille"><div><div class="pl inv-t">Équipement à acheter</div>'+li(ach.eq)+'</div><div><div class="pl inv-t">Courses consommables</div>'+li(ach.co)+'</div></div>'+
+      '<div class="actions" style="margin-top:12px"><button type="button" class="btn primary sm" id="inv-taches">Mettre la liste dans « À faire »</button></div></div>';
     el.innerHTML=h;}
-  var invT=null;function sauverInv(b,iv){iv.maj=todayISO();var nv=Object.assign({},b,{inv:iv});clearTimeout(invT);invT=setTimeout(function(){save('biens',nv).catch(function(){});},600);var k=S.biens.indexOf(b);if(k>=0)S.biens[k]=nv;$('inv-resume').textContent=resumeInv(nv);}
-  $('inv-ouvrir').addEventListener('click',function(){INV.ouvert=!INV.ouvert;renderInv();});
-  $('inv').addEventListener('change',function(e){var b=byId(S.biens,lEdit);if(!b)return;var iv=invDe(b),t=e.target;
-    if(t.dataset.invcfg){iv.config[t.dataset.invcfg]=num(t.value);sauverInv(b,iv);renderInv();return;}
-    if(t.dataset.invart){iv.conso[t.dataset.invart]=t.value===''?'':num(t.value);sauverInv(b,iv);var q=qteAvec(byId(S.conso,t.dataset.invart)||{},iv.config),r=t.closest('.inv-l');r.classList.remove('ok','ko');if(t.value!=='')r.classList.add(num(t.value)>=q?'ok':'ko');}});
-  $('inv').addEventListener('click',function(e){var bt=e.target.closest('[data-invmob]');var b=byId(S.biens,lEdit);if(!b)return;
-    if(bt){var iv=invDe(b),it=bt.dataset.it,v=bt.dataset.invmob==='1';iv.mobilier[it]=(iv.mobilier[it]===v)?null:v;if(iv.mobilier[it]===null)delete iv.mobilier[it];sauverInv(b,iv);renderInv();return;}
-    if(e.target.id==='inv-taches'){var m=manquesInv(byId(S.biens,lEdit));if(!m.length){toast('Rien ne manque, bravo');return;}
-      var ex=S.taches.filter(function(t){return t.logement===lEdit&&t.inventaire&&statutTache(t)!=='fait';})[0];
-      var doc=Object.assign(ex||{id:uid('t'),statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:'',logement:lEdit,inventaire:true,date:todayISO()},{titre:'Compléter l’inventaire : '+(b.nom||'logement'),notes:m.join('\n')});
-      save('taches',doc).then(function(){toast('Tâche créée avec '+m.length+' manque'+(m.length>1?'s':''));renderTachesLog();}).catch(function(){});}});
+  var invT=null;function sauverInv(b,iv){iv.maj=todayISO();var nv=Object.assign({},b,{inv:iv});clearTimeout(invT);invT=setTimeout(function(){save('biens',nv).catch(function(){});},600);var k=S.biens.indexOf(b);if(k>=0)S.biens[k]=nv;}
+  $('inv-biens').addEventListener('click',function(e){var bt=e.target.closest('[data-invbien]');if(!bt)return;INV.bien=bt.dataset.invbien;try{localStorage.setItem('ms_inv',INV.bien);}catch(x){}renderInv();window.scrollTo(0,0);});
+  $('inv').addEventListener('change',function(e){var b=byId(S.biens,INV.bien);if(!b)return;var iv=invDe(b),t=e.target;
+    if(t.dataset.invart){iv.conso[t.dataset.invart]=t.value===''?'':num(t.value);sauverInv(b,iv);var y=window.scrollY;renderInv();window.scrollTo(0,y);}});
+  $('inv').addEventListener('click',function(e){var b=byId(S.biens,INV.bien);if(!b)return;
+    if(e.target.closest('[data-invfiche]')){ouvrirLogement(b.id);return;}
+    var bt=e.target.closest('[data-invmob]');
+    if(bt){var iv=invDe(b),it=bt.dataset.it,v=bt.dataset.invmob==='1';iv.mobilier[it]=(iv.mobilier[it]===v)?null:v;if(iv.mobilier[it]===null)delete iv.mobilier[it];sauverInv(b,iv);var y=window.scrollY;renderInv();window.scrollTo(0,y);return;}
+    if(e.target.id==='inv-taches'){var m=manquesInv(b);if(!nbManques(b)){toast('Rien ne manque, bravo');return;}
+      var ex=S.taches.filter(function(t){return t.logement===b.id&&t.inventaire&&statutTache(t)!=='fait';})[0];
+      var doc=Object.assign(ex||{id:uid('t'),statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:'',logement:b.id,inventaire:true,date:todayISO()},{titre:'Compléter l’inventaire : '+(b.nom||'logement'),notes:m.join('\n')});
+      save('taches',doc).then(function(){toast('Liste ajoutée dans « À faire » de '+(b.nom||'ce logement'));renderTachesLog();renderInv();}).catch(function(){});}});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
-    $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';$('l-photos').value=b.lienPhotos||'';$('l-prix').value=b.prixNuit||'';$('l-occ').value=b.occupation||'';$('l-signer').hidden=!b.aSigner;majEstim();
+    $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-lits').value=b.lits||'';$('l-sdb').value=b.sdb||'';$('l-wc').value=b.wc||'';$('l-notes').value=b.notes||'';$('l-prix').value=b.prixNuit||'';$('l-occ').value=b.occupation||'';$('l-signer').hidden=!b.aSigner;majEstim();
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
     var pa0=byId(S.contacts,b.proprietaire);$('l-anniv').textContent=(pa0&&pa0.anniversaire)?'Anniversaire : '+txtAnniv(pa0.anniversaire):'';
-    majLiensLog();renderTachesLog();INV.ouvert=false;renderInv();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
+    renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
   function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;}
   var evtFiltre='';
@@ -2543,10 +2557,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('rec-annuler').addEventListener('click',annulerMicro);
   $('l-form').addEventListener('submit',function(e){
     e.preventDefault();var b=byId(S.biens,lEdit)||lNouveau;if(!b)return;var nom=$('l-nom').value.trim();if(!nom){$('l-nom').focus();return;}
-    save('biens',Object.assign({},b,{nom:nom,adresse:$('l-adresse').value.trim(),ville:$('l-ville').value.trim(),proprietaire:$('l-prop').value,typeBien:$('l-type').value.trim(),chambres:$('l-ch').value?num($('l-ch').value):'',voyageurs:$('l-voy').value?num($('l-voy').value):'',lienAnnonce:$('l-annonce').value.trim(),lienCanva:$('lg-canva').value.trim(),notes:$('l-notes').value.trim(),lienPhotos:$('l-photos').value.trim()},b.aSigner?{prixNuit:$('l-prix').value?num($('l-prix').value):'',occupation:$('l-occ').value?num($('l-occ').value):''}:{})).catch(function(){});
+    save('biens',Object.assign({},b,{nom:nom,adresse:$('l-adresse').value.trim(),ville:$('l-ville').value.trim(),proprietaire:$('l-prop').value,typeBien:$('l-type').value.trim(),chambres:$('l-ch').value?num($('l-ch').value):'',voyageurs:$('l-voy').value?num($('l-voy').value):'',lits:$('l-lits').value?num($('l-lits').value):'',sdb:$('l-sdb').value?num($('l-sdb').value):'',wc:$('l-wc').value?num($('l-wc').value):'',notes:$('l-notes').value.trim()},b.aSigner?{prixNuit:$('l-prix').value?num($('l-prix').value):'',occupation:$('l-occ').value?num($('l-occ').value):''}:{})).catch(function(){});
     lNouveau=null;toast('Logement enregistré');
   });
-  ['l-annonce','lg-canva','l-photos'].forEach(function(id){$(id).addEventListener('input',majLiensLog);});
   function majEstim(){var b=byId(S.biens,lEdit)||lNouveau||{};var loy=num($('l-prix').value)*30*num($('l-occ').value)/100,com=loy*(num(b.commission)||25)/100;$('l-estim').textContent=loy?'Environ '+eur(loy)+' de loyers par mois pour le propriétaire, et '+eur(com)+' de commission par mois pour toi.':'Mets un prix par nuit et un taux d\u2019occupation pour voir l\u2019estimation.';}
   ['l-prix','l-occ'].forEach(function(id){$(id).addEventListener('input',majEstim);});
   $('l-activer').addEventListener('click',function(){var b=byId(S.biens,lEdit);if(!b){toast('Enregistre d\u2019abord le logement');return;}save('biens',Object.assign({},b,{actif:true,aSigner:false})).catch(function(){});toast((b.nom||'Le logement')+' est maintenant un logement actif');fermerLogement();});
