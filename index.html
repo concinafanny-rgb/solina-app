@@ -582,6 +582,8 @@ h2,h3{font-weight:500;letter-spacing:0}
 .cn-g{margin-bottom:14px}
 .inv-grille{columns:340px;column-gap:22px}
 .inv-grille>div{break-inside:avoid;margin-bottom:10px}
+.inv-2col{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 22px}
+.inv-2col .inv-l{padding:3px 10px;margin-bottom:3px}
 .inv-grille .inv-l{padding:3px 10px;margin-bottom:3px}
 .inv-grille .inv-l input{min-height:30px;padding:3px 8px}
 .inv-grille .inv-t{margin:4px 0 4px}
@@ -2079,7 +2081,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   function itemsMobilier(){var o=byId(S.ops,'op-mobilier');if(!o)return [];var r=[];(o.blocs||[]).forEach(function(bl){if(/fourni par/i.test(bl.titre||''))return;(bl.items||[]).forEach(function(it){r.push([bl.titre,it]);});});return r;}
   function articlesInv(cfg){return S.conso.filter(function(a){return OPS_CAT[a.categorie]&&qteAvec(a,cfg)>0;});}
   function achatsInv(b){var iv=invDe(b),cfg=cfgBien(b),eq=[],co=[];
-    articlesInv(cfg).forEach(function(a){var q=qteAvec(a,cfg),p=iv.conso[a.id];if(p!=null&&p!==''&&num(p)<q)(a.categorie==='consommable'?co:eq).push(a.article+' : '+(q-num(p)));});
+    articlesInv(cfg).forEach(function(a){var q=qteAvec(a,cfg),p=iv.conso[a.id];if(a.categorie==='consommable'){if(p==='racheter')co.push(a.article);return;}if(p!=null&&p!==''&&num(p)<q)eq.push(a.article+' : '+(q-num(p)));});
     itemsMobilier().forEach(function(x){if(iv.mobilier[x[1]]===false)eq.push(x[1]);});return {eq:eq,co:co};}
   function manquesInv(b){var a=achatsInv(b),m=a.eq.slice();if(a.co.length)m=m.concat(['','Courses consommables :'],a.co);return m;}
   function nbManques(b){var a=achatsInv(b);return a.eq.length+a.co.length;}
@@ -2097,7 +2099,9 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     var mob=itemsMobilier();GR.forEach(function(g,gi){var its=mob.filter(function(x){for(var k=0;k<gi;k++)if(GR[k][1].test(x[0]))return false;return g[1].test(x[0]);});if(!its.length)return;var st=null;
       h+='<div><div class="pl inv-t">'+esc(g[0])+'</div>'+its.map(function(x){var v=iv.mobilier[x[1]],t=x[0]!==st?'<div class="inv-st">'+esc(x[0])+'</div>':'';st=x[0];
         return t+'<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(x[1])+'</span><span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" data-invmob="1" data-it="'+esc(x[1])+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" data-invmob="0" data-it="'+esc(x[1])+'">Manque</button></span></div>';}).join('')+'</div>';});
-    h+='</div><h3 class="inv-gt">Consommables</h3><div class="inv-grille">';blocCat('consommable');h+='</div>';
+    var lc=articlesInv(c).filter(function(a){return a.categorie==='consommable';}).sort(function(a,b){return num(a.ordre)-num(b.ordre);}),mi=Math.floor(lc.length/2);
+    function ligneCo(a){var p=iv.conso[a.id];return '<div class="inv-l '+(p==='assez'?'ok':p==='racheter'?'ko':'')+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-b"><button type="button" class="btn xs'+(p==='assez'?' primary':'')+'" data-invco="assez" data-it="'+esc(a.id)+'">Assez</button><button type="button" class="btn xs'+(p==='racheter'?' danger':'')+'" data-invco="racheter" data-it="'+esc(a.id)+'">À racheter</button></span></div>';}
+    if(lc.length)h+='</div><h3 class="inv-gt">Consommables</h3><div class="inv-2col"><div>'+lc.slice(0,mi).map(ligneCo).join('')+'</div><div>'+lc.slice(mi).map(ligneCo).join('')+'</div></div>';else h+='</div>';
     function li(t){return t.length?'<ul>'+t.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<p class="note">Rien à acheter.</p>';}
     h+='<div class="card inv-achats"><h3 style="margin:0 0 10px">Liste d’achats</h3><div class="inv-grille"><div><div class="pl inv-t">Équipement à acheter</div>'+li(ach.eq)+'</div><div><div class="pl inv-t">Courses consommables</div>'+li(ach.co)+'</div></div>'+
       '<div class="actions" style="margin-top:12px"><button type="button" class="btn primary sm" id="inv-taches">Mettre la liste dans « À faire »</button></div></div>';
@@ -2109,6 +2113,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('inv').addEventListener('click',function(e){var b=byId(S.biens,INV.bien);if(!b)return;
     if(e.target.closest('[data-invfiche]')){ouvrirLogement(b.id);return;}
     var bt=e.target.closest('[data-invmob]');
+    var bc=e.target.closest('[data-invco]');if(bc){var iv2=invDe(b),k=bc.dataset.it;iv2.conso[k]=iv2.conso[k]===bc.dataset.invco?'':bc.dataset.invco;sauverInv(b,iv2);var y2=window.scrollY;renderInv();window.scrollTo(0,y2);return;}
     if(bt){var iv=invDe(b),it=bt.dataset.it,v=bt.dataset.invmob==='1';iv.mobilier[it]=(iv.mobilier[it]===v)?null:v;if(iv.mobilier[it]===null)delete iv.mobilier[it];sauverInv(b,iv);var y=window.scrollY;renderInv();window.scrollTo(0,y);return;}
     if(e.target.id==='inv-taches'){var m=manquesInv(b);if(!nbManques(b)){toast('Rien ne manque, bravo');return;}
       var ex=S.taches.filter(function(t){return t.logement===b.id&&t.inventaire&&statutTache(t)!=='fait';})[0];
