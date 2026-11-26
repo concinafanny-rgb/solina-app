@@ -576,6 +576,18 @@ h2,h3{font-weight:500;letter-spacing:0}
 #cn-cherche{flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--brun)}
 .cn-titre{font-size:17px;color:var(--brun)}
 .cn-g{margin-bottom:14px}
+.inv-cfg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.inv-cfg label{display:flex;flex-direction:column;font-size:11px;color:var(--taupe);gap:2px}
+.inv-cfg input{width:78px}
+.inv-t{margin:14px 0 6px}
+.inv-st{font-size:12px;font-weight:600;color:var(--brun);margin:10px 0 4px}
+.inv-l{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:4px;background:var(--card);box-shadow:inset 4px 0 0 var(--line)}
+.inv-l.ok{box-shadow:inset 4px 0 0 #6E9B6A}
+.inv-l.ko{box-shadow:inset 4px 0 0 #C8553D}
+.inv-n{flex:1;min-width:0;font-size:14px}
+.inv-q{font-size:12px;color:var(--taupe);white-space:nowrap}
+.inv-l input{width:84px;flex:none}
+.inv-b{display:flex;gap:4px;flex:none}
 .cn-titre-in{flex:1 1 auto;min-width:120px;max-width:420px;font:inherit;font-weight:600;font-size:17px;color:var(--brun);background:transparent;border:1px solid transparent;border-radius:8px;padding:4px 8px}
 .cn-titre-in:hover,.cn-titre-in:focus{border-color:var(--line);background:var(--card);outline:none}
 .cn-acces{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:4px 0 16px}
@@ -1168,6 +1180,10 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     <p class="note" style="margin:0">Les codes et mots de passe vont dans le Carnet, jamais dans les notes.</p>
     <div class="hr"></div>
     <datalist id="dl-acces"><option value="Boîte à clés"><option value="Porte d'entrée"><option value="Portail"><option value="Digicode"><option value="Serrure connectée"><option value="Alarme"><option value="Wifi"><option value="Mail du logement"><option value="Airbnb"><option value="Booking"><option value="Channel manager"><option value="Mairie, taxe de séjour"><option value="Parking"><option value="Chauffage"><option value="Climatisation"><option value="Compteur"><option value="Ascenseur"><option value="Boîte aux lettres"><option value="Local poubelles"><option value="Ring"><option value="Abritel"><option value="Mail"><option value="Instagram"><option value="Site internet"><option value="Banque"></datalist>
+    <div class="hr"></div>
+    <div class="section-head" style="margin:0"><h3>Inventaire</h3><button type="button" class="btn sm" id="inv-ouvrir">Ouvrir</button></div>
+    <p class="note" id="inv-resume" style="margin:4px 0 0"></p>
+    <div id="inv" hidden></div>
     <div class="hr"></div>
     <div class="section-head" style="margin:0"><h3>À faire pour ce logement</h3><button type="button" class="btn sm" data-tachelog>+ Tâche</button></div>
     <div class="list" id="l-taches"></div>
@@ -1953,7 +1969,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
       '<select class="cn-grp" data-af="groupe" aria-label="Ranger dans">'+(x.groupe||x.libelle||x.identifiant||x.secret||x.note?'':'<option value="" selected>Ranger dans…</option>')+GROUPES.map(function(g){return g[0];}).concat(['Autres']).map(function(g){var vide=!(x.groupe||x.libelle||x.identifiant||x.secret||x.note);return '<option'+(!vide&&groupeDe(x)===g?' selected':'')+'>'+g+'</option>';}).join('')+'</select>'+
       '<button type="button" class="btn ghost xs cn-x" data-carnet="suppr"'+d+' aria-label="Supprimer">×</button>'+
       '<input class="cn-nt" data-af="note" value="'+esc(x.note||'')+'" placeholder="Note" autocomplete="off"></div>';}
-  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><input class="cn-titre cn-titre-in" data-nomsec="'+esc(k)+'" value="'+esc(nomSec(k))+'" aria-label="Nom" autocomplete="off"><span id="cn-etat" class="cn-etat">'+esc(CARNET.etat||'')+'</span><span style="flex:1"></span><button type="button" class="btn ghost sm" data-carnet="masquer" data-sec="'+esc(k)+'">Retirer du Carnet</button><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>'+(k==='moi'?'':ficheAccesHtml(k));
+  function vueSection(k){var l=secCarnet(k),h='<div class="carnet-bar"><button type="button" class="btn ghost sm" data-carnet="retour">‹ Tous</button><input class="cn-titre cn-titre-in" data-nomsec="'+esc(k)+'" value="'+esc(nomSec(k))+'" aria-label="Nom" autocomplete="off"><span id="cn-etat" class="cn-etat">'+esc(CARNET.etat||'')+'</span><span style="flex:1"></span><button type="button" class="btn ghost sm" data-carnet="masquer" data-sec="'+esc(k)+'">Retirer du Carnet</button><button type="button" class="btn primary sm" data-carnet="ajouter" data-sec="'+esc(k)+'">+ Ajouter un code</button></div>'+'';
     var tous=l.map(function(x,i){return [x,i];});
     var nouveaux=tous.filter(function(p){return !p[0].groupe&&!(p[0].libelle||p[0].identifiant||p[0].secret||p[0].note);});
     var pleins=tous.filter(function(p){return nouveaux.indexOf(p)<0;});
@@ -2042,13 +2058,49 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('carnet-corps').addEventListener('change',function(e){var r=e.target.closest('[data-acces]');if(!r||!carnetActif())return;CARNET.depuis=Date.now();var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)],avant=x?groupeDe(x):'';lireCarnet();sauverBientot();if(x&&(e.target.dataset.af==='groupe'||(e.target.dataset.af==='libelle'&&!x.groupe&&groupeDe(x)!==avant)))renderCarnet();});
   $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();var t0=e.target;if(CARNET.cle&&CARNET.data&&t0.dataset){if(t0.dataset.nomsec){CARNET.data.noms=CARNET.data.noms||{};CARNET.data.noms[t0.dataset.nomsec]=t0.value.trim();sauverBientot();}if(t0.dataset.acc){CARNET.data.acces=CARNET.data.acces||{};var ac=CARNET.data.acces[t0.dataset.sec]=CARNET.data.acces[t0.dataset.sec]||{};ac[t0.dataset.acc]=t0.value;sauverBientot();}}if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
   $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p1':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}});
+  /* ===== Inventaire du logement : ce qu'il faut (listes Opérationnel) et ce qui est présent ===== */
+  var INV={ouvert:false};
+  function invDe(b){var i=b.inv||{};var c=i.config||{};return {config:{voy:c.voy!=null?c.voy:(num(b.voyageurs)||4),lits:c.lits!=null?c.lits:Math.max(1,num(b.chambres)||1),ch:c.ch!=null?c.ch:(num(b.chambres)||1),sdb:c.sdb!=null?c.sdb:1,wc:c.wc!=null?c.wc:1},conso:Object.assign({},i.conso||{}),mobilier:Object.assign({},i.mobilier||{}),maj:i.maj||''};}
+  function qteAvec(a,cfg){var o=OC;OC=cfg;var q=qteArticle(a);OC=o;return q;}
+  function itemsMobilier(){var o=byId(S.ops,'op-mobilier');if(!o)return [];var r=[];(o.blocs||[]).forEach(function(bl){if(/fourni par/i.test(bl.titre||''))return;(bl.items||[]).forEach(function(it){r.push([bl.titre,it]);});});return r;}
+  function manquesInv(b){var iv=invDe(b),m=[];
+    S.conso.filter(function(a){return a.categorie!=='consommable';}).forEach(function(a){var q=qteAvec(a,iv.config),p=iv.conso[a.id];if(q>0&&p!=null&&p!==''&&num(p)<q)m.push(a.article+' : il en manque '+(q-num(p)));else if(q>0&&(p==null||p===''))m.push(a.article+' : à compter ('+q+' attendus)');});
+    itemsMobilier().forEach(function(x){if(iv.mobilier[x[1]]===false)m.push(x[1]);});return m;}
+  function resumeInv(b){var iv=invDe(b),art=S.conso.filter(function(a){return a.categorie!=='consommable'&&qteAvec(a,iv.config)>0;}),ok=0,man=0,vide=0;
+    art.forEach(function(a){var p=iv.conso[a.id];if(p==null||p==='')vide++;else if(num(p)>=qteAvec(a,iv.config))ok++;else man++;});
+    var mob=itemsMobilier(),mok=mob.filter(function(x){return iv.mobilier[x[1]]===true;}).length,mman=mob.filter(function(x){return iv.mobilier[x[1]]===false;}).length;
+    if(!iv.maj)return 'Pas encore fait.';return 'Dernière mise à jour '+fmtDate(iv.maj)+' : '+(ok+mok)+' complet'+(ok+mok>1?'s':'')+', '+(man+mman)+' manque'+(man+mman>1?'s':'')+', '+(vide+mob.length-mok-mman)+' à vérifier.';}
+  function renderInv(){var b=byId(S.biens,lEdit),el=$('inv');if(!el)return;if(!b){$('inv-resume').textContent='';el.hidden=true;return;}
+    $('inv-resume').textContent=resumeInv(b);$('inv-ouvrir').textContent=INV.ouvert?'Fermer':'Ouvrir';el.hidden=!INV.ouvert;if(!INV.ouvert)return;
+    var iv=invDe(b),c=iv.config;
+    var cfg='<div class="inv-cfg">'+[['voy','Voyageurs'],['lits','Lits'],['ch','Chambres'],['sdb','Salles de bain'],['wc','WC']].map(function(x){return '<label>'+x[1]+'<input type="number" min="0" data-invcfg="'+x[0]+'" value="'+esc(c[x[0]])+'"></label>';}).join('')+'</div>';
+    var h=cfg;
+    Object.keys(OPS_CAT).forEach(function(cat){if(cat==='consommable')return;var l=S.conso.filter(function(a){return a.categorie===cat&&qteAvec(a,c)>0;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!l.length)return;
+      h+='<div class="pl inv-t">'+esc(OPS_CAT[cat])+'</div>'+l.map(function(a){var q=qteAvec(a,c),p=iv.conso[a.id],st=(p==null||p==='')?'':(num(p)>=q?'ok':'ko');
+        return '<div class="inv-l '+st+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-q">il faut '+q+'</span><input type="number" min="0" inputmode="numeric" data-invart="'+esc(a.id)+'" value="'+esc(p==null?'':p)+'" placeholder="nb"></div>';}).join('');});
+    var mob=itemsMobilier(),grp='';
+    h+='<div class="pl inv-t">Mobilier et équipement</div>'+mob.map(function(x){var v=iv.mobilier[x[1]],t=(x[0]!==grp?'<div class="inv-st">'+esc(x[0])+'</div>':'');grp=x[0];
+      return t+'<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(x[1])+'</span><span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" data-invmob="1" data-it="'+esc(x[1])+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" data-invmob="0" data-it="'+esc(x[1])+'">Manque</button></span></div>';}).join('');
+    h+='<div class="actions"><button type="button" class="btn primary sm" id="inv-taches">Créer la tâche des manques</button></div>';
+    el.innerHTML=h;}
+  var invT=null;function sauverInv(b,iv){iv.maj=todayISO();var nv=Object.assign({},b,{inv:iv});clearTimeout(invT);invT=setTimeout(function(){save('biens',nv).catch(function(){});},600);var k=S.biens.indexOf(b);if(k>=0)S.biens[k]=nv;$('inv-resume').textContent=resumeInv(nv);}
+  $('inv-ouvrir').addEventListener('click',function(){INV.ouvert=!INV.ouvert;renderInv();});
+  $('inv').addEventListener('change',function(e){var b=byId(S.biens,lEdit);if(!b)return;var iv=invDe(b),t=e.target;
+    if(t.dataset.invcfg){iv.config[t.dataset.invcfg]=num(t.value);sauverInv(b,iv);renderInv();return;}
+    if(t.dataset.invart){iv.conso[t.dataset.invart]=t.value===''?'':num(t.value);sauverInv(b,iv);var q=qteAvec(byId(S.conso,t.dataset.invart)||{},iv.config),r=t.closest('.inv-l');r.classList.remove('ok','ko');if(t.value!=='')r.classList.add(num(t.value)>=q?'ok':'ko');}});
+  $('inv').addEventListener('click',function(e){var bt=e.target.closest('[data-invmob]');var b=byId(S.biens,lEdit);if(!b)return;
+    if(bt){var iv=invDe(b),it=bt.dataset.it,v=bt.dataset.invmob==='1';iv.mobilier[it]=(iv.mobilier[it]===v)?null:v;if(iv.mobilier[it]===null)delete iv.mobilier[it];sauverInv(b,iv);renderInv();return;}
+    if(e.target.id==='inv-taches'){var m=manquesInv(byId(S.biens,lEdit));if(!m.length){toast('Rien ne manque, bravo');return;}
+      var ex=S.taches.filter(function(t){return t.logement===lEdit&&t.inventaire&&statutTache(t)!=='fait';})[0];
+      var doc=Object.assign(ex||{id:uid('t'),statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:'',logement:lEdit,inventaire:true,date:todayISO()},{titre:'Compléter l’inventaire : '+(b.nom||'logement'),notes:m.join('\n')});
+      save('taches',doc).then(function(){toast('Tâche créée avec '+m.length+' manque'+(m.length>1?'s':''));renderTachesLog();}).catch(function(){});}});
   function ouvrirLogement(id){
     lEdit=id;var b=byId(S.biens,id)||(lNouveau&&lNouveau.id===id?lNouveau:null);if(!b)return;
     $('l-titre-h').textContent=b.nom||'Logement';$('l-nom').value=b.nom||'';$('l-adresse').value=b.adresse||'';$('l-ville').value=b.ville||'';
     $('l-type').value=b.typeBien||'';$('l-ch').value=b.chambres||'';$('l-voy').value=b.voyageurs||'';$('l-annonce').value=b.lienAnnonce||'';$('lg-canva').value=b.lienCanva||'';$('l-notes').value=b.notes||'';$('l-photos').value=b.lienPhotos||'';$('l-prix').value=b.prixNuit||'';$('l-occ').value=b.occupation||'';$('l-signer').hidden=!b.aSigner;majEstim();
     $('l-prop').innerHTML='<option value="">Non renseigné</option>'+S.contacts.filter(function(c){return c.type==='client'||c.type==='prospect';}).sort(function(a,c){return fullName(a).localeCompare(fullName(c),'fr');}).map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===b.proprietaire?' selected':'')+'>'+esc(fullName(c))+'</option>';}).join('');
     var pa0=byId(S.contacts,b.proprietaire);$('l-anniv').textContent=(pa0&&pa0.anniversaire)?'Anniversaire : '+txtAnniv(pa0.anniversaire):'';
-    majLiensLog();renderTachesLog();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
+    majLiensLog();renderTachesLog();INV.ouvert=false;renderInv();$('lsheet').classList.add('open');document.body.style.overflow='hidden';
   }
   function fermerLogement(){$('lsheet').classList.remove('open');document.body.style.overflow='';lEdit=null;lNouveau=null;}
   var evtFiltre='';
