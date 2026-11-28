@@ -2072,17 +2072,37 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   $('carnet-corps').addEventListener('change',function(e){var r=e.target.closest('[data-acces]');if(!r||!carnetActif())return;CARNET.depuis=Date.now();var x=secCarnet(r.dataset.sec)[Number(r.dataset.acces)],avant=x?groupeDe(x):'';lireCarnet();sauverBientot();if(x&&(e.target.dataset.af==='groupe'||(e.target.dataset.af==='libelle'&&!x.groupe&&groupeDe(x)!==avant)))renderCarnet();});
   $('carnet-corps').addEventListener('input',function(e){if(CARNET.cle)CARNET.depuis=Date.now();var t0=e.target;if(CARNET.cle&&CARNET.data&&t0.dataset){if(t0.dataset.nomsec){CARNET.data.noms=CARNET.data.noms||{};CARNET.data.noms[t0.dataset.nomsec]=t0.value.trim();sauverBientot();}if(t0.dataset.acc){CARNET.data.acces=CARNET.data.acces||{};var ac=CARNET.data.acces[t0.dataset.sec]=CARNET.data.acces[t0.dataset.sec]||{};ac[t0.dataset.acc]=t0.value;sauverBientot();}}if(CARNET.cle&&CARNET.data&&e.target.closest('[data-acces]')){lireCarnet();sauverBientot();}if(e.target.id==='cn-cherche'){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('#carnet-corps .cn-carte').forEach(function(c){c.hidden=q&&c.dataset.cherche.indexOf(q)<0;});}});
   $('carnet-corps').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var t=e.target,go2={'cn-pin':'ouvrir','cn-p1':'nouveaupin'}[t.id];e.preventDefault();if(go2){var bt=$('carnet-corps').querySelector('[data-carnet="'+go2+'"]');if(bt)bt.click();}});
-  /* ===== Inventaire : une page, un logement à la fois, ce qui manque en rouge ===== */
+  /* ===== Inventaire : d'après les fiches Canva « Liste des équipements » et « Checklist des consommables » ===== */
   var INV={bien:''};try{INV.bien=localStorage.getItem('ms_inv')||'';}catch(x){}
+  var INV_EQ=[
+    ['Salon',['Canapé confortable cocooning','Table basse','Meuble TV','Smart TV','Étagère / bibliothèque','Rideaux / voilages']],
+    ['Chambres',['Lit 140 minimum, 160 conseillé ★','Matelas 30 kg/m³ ou 21 cm mini','Tables de chevet','Lampes de chevet (USB)','Rideaux occultants','Armoire / dressing','Miroir','Coffre-fort','Lit bébé et chaise haute']],
+    ['Salle à manger',['Table à manger','Chaises (1 par voyageur)','Buffet / console']],
+    ['Terrasse',['Table extérieure / salon de jardin','Parasol / store','Parasol de plage','Transats','Petite étagère extérieure','Guirlandes solaires','Plancha ou barbecue']],
+    ['Décoration et confort',['Tableaux / cadres photos','Plantes vertes','Coussins décoratifs','Tapis (salon / chambre)','Lampes d’ambiance']],
+    ['Divers équipements',['Trousse de premiers secours','Jeux de société / livres','Box wifi (avec chaînes internationales) ★','Enceinte Bluetooth ★','Câbles de recharge universels','Adaptateurs électriques ★','Multiprise / rallonge','Porte-manteau d’entrée','Bureau + chaise (espace de travail)','Seau à champagne','Boîte à clés ou serrure connectée']],
+    ['Sécurité',['Détecteur de fumée','Alarme piscine','Extincteur','Détecteur de monoxyde (si gaz)']],
+    ['Gros électroménager',['Réfrigérateur et congélateur','Lave-vaisselle ★','Lave-linge et étendoir','Plaque de cuisson','Four et micro-ondes','Hotte aspirante','Climatisation ★']],
+    ['Petit électroménager',['Bouilloire','Grille-pain','Cafetière Nespresso ★','Mixeur / blender','Mousseur à lait électrique','Aspirateur de qualité','Seau et serpillière de qualité','Fer + table à repasser','Sèche-cheveux','Ventilateur','Chauffage dans chaque pièce']],
+    ['Rangement et entretien',['Cintres','Panières','Panier à linge','Balai et pelle','Étagères','Placard propriétaire fermé à clé']],
+    ['Ustensiles : préparation',['Couteau de chef, à pain, d’office','2 planches à découper','Économe, râpe, ciseaux','Fouet, pince, cuillère en bois','Verre doseur, presse-agrumes','Carafe d’eau']],
+    ['Ustensiles : service et rangement',['Écumoire, louche, spatules','Passoire, essoreuse à salade','Ouvre-boîte, tire-bouchon','Égouttoir à vaisselle','Dessous de plat, maniques','Boîtes de conservation','Poubelle de tri avec couvercle','1 saladier et 1 plat à four','Plateau de service','Sous-verres','Nappe et sets de table']],
+    ['Salle de bain',['Douche / baignoire','Rideau / paroi de douche','Porte-PQ + panier range autre PQ','Porte-serviettes et patères','Miroir mural + tablette','Poubelle de salle de bain','Brosse WC + déboucheur (aussi WC séparés)','Sèche-serviettes électrique ★']]];
+  /* quantités : l = par lit, v = par voyageur, s = par salle de bain, t = tableau selon 2,4,6,8,10,12 voyageurs */
+  var INV_QTE=[
+    ['Literie',[['Parures complètes','l',3],['Protège matelas','l',3],['Oreillers','l',4],['Protège oreillers','l',4],['Couettes','l',1],['Plaids','l',1]]],
+    ['Serviettes et torchons',[['Grandes serviettes (corps)','v',3],['Serviettes moyennes (cheveux)','v',3],['Petites serviettes (mains)','v',3],['Serviettes de plage','v',2],['Torchons de cuisine + microfibre','t',[4,6,8,10,12,14]],['Tapis de bain','s',3]]],
+    ['La table et la cuisine',[['Assiettes plates','v',2],['Assiettes creuses','v',2],['Assiettes à dessert','v',2],['Verres à eau','v',2],['Verres à vin','v',2],['Flûtes ★','v',1],['Verres à apéritif ★','v',1],['Bols','v',2],['Mugs','v',2],['Tasses expresso','v',2],['Fourchettes','v',2],['Couteaux','v',2],['Cuillères','v',2],['Petites cuillères','v',2],['Couteaux à steak','v',1],['Poêles','t',[2,2,2,3,3,4]],['Casseroles avec couvercle','t',[2,3,3,4,4,5]],['Cocottes ou faitouts','t',[1,1,1,2,2,2]]]]];
+  var INV_CO=[[['Cuisine',['Éponges','Liquide vaisselle','Pastilles lave-vaisselle','Sel lave-vaisselle','Liquide de rinçage','Sacs poubelle','Sel / poivre','Huile d’olive','Sucre','Capsules Nespresso','Thé et infusions','Dosettes lessive','Essuie-tout','Film, alu et papier cuisson','Vinaigre','Pulco','Allumettes / briquet','Biscuits']],['WC',['Papier toilette','Savon main','Désodorisant WC','Gel WC']]],
+    [['Général',['Boîte de mouchoirs','Ampoules de rechange','Piles de rechange','Diffuseur senteur + recharges','Désodorisant textile','Microfibres','Produit multi-usage','Produit vitres','Nettoyant sol','Vinaigre blanc','Sacs aspirateur','Gants de ménage']],['Salle de bain',['Shampoing et gel douche Prija','Savon main','Coton-tiges','Coton','Kit de secours','Anti-moustique','Tampons + serviettes hygiéniques']],['Panier de bienvenue',['Bouteille de vin','Eau plate','Eau gazeuse','Chips Socca']]]];
   function biensInv(){return S.biens.filter(function(b){return b.actif!==false&&!b.aSigner;}).sort(function(a,b){return (a.nom||'').localeCompare(b.nom||'','fr');});}
-  function cfgBien(b){var ch=num(b.chambres)||1;return {voy:num(b.voyageurs)||4,ch:ch,lits:num(b.lits)||ch,sdb:num(b.sdb)||1,wc:num(b.wc)||1};}
-  function invDe(b){var i=b.inv||{};return {conso:Object.assign({},i.conso||{}),mobilier:Object.assign({},i.mobilier||{}),maj:i.maj||''};}
-  function qteAvec(a,cfg){var o=OC;OC=cfg;var q=qteArticle(a);OC=o;return q;}
-  function itemsMobilier(){var o=byId(S.ops,'op-mobilier');if(!o)return [];var r=[];(o.blocs||[]).forEach(function(bl){if(/fourni par/i.test(bl.titre||''))return;(bl.items||[]).forEach(function(it){r.push([bl.titre,it]);});});return r;}
-  function articlesInv(cfg){return S.conso.filter(function(a){return OPS_CAT[a.categorie]&&qteAvec(a,cfg)>0;});}
-  function achatsInv(b){var iv=invDe(b),cfg=cfgBien(b),eq=[],co=[];
-    articlesInv(cfg).forEach(function(a){var q=qteAvec(a,cfg),p=iv.conso[a.id];if(a.categorie==='consommable'){if(p==='racheter')co.push(a.article);return;}if(p!=null&&p!==''&&num(p)<q)eq.push(a.article+' : '+(q-num(p)));});
-    itemsMobilier().forEach(function(x){if(iv.mobilier[x[1]]===false)eq.push(x[1]);});return {eq:eq,co:co};}
+  function cfgBien(b){var ch=num(b.chambres)||1;return {voy:num(b.voyageurs)||4,lits:num(b.lits)||ch,sdb:num(b.sdb)||1};}
+  function invDe(b){var i=b.inv||{};return {qte:Object.assign({},i.qte||{}),eq:Object.assign({},i.eq||{}),co:Object.assign({},i.co||{}),maj:i.maj||''};}
+  function qteInv(r,c){if(r[1]==='l')return r[2]*c.lits;if(r[1]==='v')return r[2]*c.voy;if(r[1]==='s')return r[2]*c.sdb;return r[2][Math.min(5,Math.max(0,Math.ceil(c.voy/2)-1))];}
+  function achatsInv(b){var iv=invDe(b),c=cfgBien(b),eq=[],co=[];
+    INV_QTE.forEach(function(g){g[1].forEach(function(r){var p=iv.qte[r[0]],q=qteInv(r,c);if(p!=null&&p!==''&&num(p)<q)eq.push(r[0].replace(' ★','')+' : '+(q-num(p)));});});
+    INV_EQ.forEach(function(g){g[1].forEach(function(it){if(iv.eq[it]===false)eq.push(it.replace(' ★',''));});});
+    INV_CO.forEach(function(col){col.forEach(function(g){g[1].forEach(function(it){if(iv.co[g[0]+'|'+it]==='racheter')co.push(it);});});});return {eq:eq,co:co};}
   function manquesInv(b){var a=achatsInv(b),m=a.eq.slice();if(a.co.length)m=m.concat(['','Courses consommables :'],a.co);return m;}
   function nbManques(b){var a=achatsInv(b);return a.eq.length+a.co.length;}
   function renderInv(){var el=$('inv'),ch=$('inv-biens');if(!el)return;var l=biensInv();
@@ -2090,31 +2110,24 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     ch.innerHTML=l.map(function(b){var n=nbManques(b);return '<button type="button" class="chip'+(b.id===INV.bien?' active':'')+'" data-invbien="'+esc(b.id)+'">'+esc(b.nom||'Logement')+(n?' <span class="inv-man">'+n+'</span>':'')+'</button>';}).join('');
     var b=byId(l,INV.bien);if(!b){el.innerHTML='<div class="empty">Aucun logement actif.</div>';return;}
     var iv=invDe(b),c=cfgBien(b),ach=achatsInv(b);
-    var h='<div class="inv-grille">';
-    function blocCat(cat){var la=articlesInv(c).filter(function(a){return a.categorie===cat;}).sort(function(a,b){return num(a.ordre)-num(b.ordre);});if(!la.length)return;
-      h+='<div><div class="pl inv-t">'+esc(OPS_CAT[cat])+'</div>'+la.map(function(a){var q=qteAvec(a,c),p=iv.conso[a.id],st=(p==null||p==='')?'':(num(p)>=q?'ok':'ko');
-        return '<div class="inv-l '+st+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-q">il faut '+q+'</span><input type="number" min="0" inputmode="numeric" data-invart="'+esc(a.id)+'" value="'+esc(p==null?'':p)+'" placeholder="nb"></div>';}).join('')+'</div>';}
-    Object.keys(OPS_CAT).forEach(function(cat){if(cat!=='consommable')blocCat(cat);});
-    var GR=[['Salon, salle à manger et terrasse',/salon|salle à manger|terrasse|déco/i],['Chambres et salle de bain',/chambre|salle de bain/i],['Cuisine et électroménager',/électroménager|ustensile|cuisine/i],['Divers et sécurité',/./]];
-    var mob=itemsMobilier();GR.forEach(function(g,gi){var its=mob.filter(function(x){for(var k=0;k<gi;k++)if(GR[k][1].test(x[0]))return false;return g[1].test(x[0]);});if(!its.length)return;var st=null;
-      h+='<div><div class="pl inv-t">'+esc(g[0])+'</div>'+its.map(function(x){var v=iv.mobilier[x[1]],t=x[0]!==st?'<div class="inv-st">'+esc(x[0])+'</div>':'';st=x[0];
-        return t+'<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(x[1])+'</span><span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" data-invmob="1" data-it="'+esc(x[1])+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" data-invmob="0" data-it="'+esc(x[1])+'">Manque</button></span></div>';}).join('')+'</div>';});
-    var lc=articlesInv(c).filter(function(a){return a.categorie==='consommable';}).sort(function(a,b){return num(a.ordre)-num(b.ordre);}),mi=Math.floor(lc.length/2);
-    function ligneCo(a){var p=iv.conso[a.id];return '<div class="inv-l '+(p==='assez'?'ok':p==='racheter'?'ko':'')+'"><span class="inv-n">'+esc(a.article)+'</span><span class="inv-b"><button type="button" class="btn xs'+(p==='assez'?' primary':'')+'" data-invco="assez" data-it="'+esc(a.id)+'">Assez</button><button type="button" class="btn xs'+(p==='racheter'?' danger':'')+'" data-invco="racheter" data-it="'+esc(a.id)+'">À racheter</button></span></div>';}
-    if(lc.length)h+='</div><h3 class="inv-gt">Consommables</h3><div class="inv-2col"><div>'+lc.slice(0,mi).map(ligneCo).join('')+'</div><div>'+lc.slice(mi).map(ligneCo).join('')+'</div></div>';else h+='</div>';
+    function pm(key,v,attr){return '<span class="inv-b"><button type="button" class="btn xs'+(v===true?' primary':'')+'" '+attr+'="1" data-it="'+esc(key)+'">Présent</button><button type="button" class="btn xs'+(v===false?' danger':'')+'" '+attr+'="0" data-it="'+esc(key)+'">Manque</button></span>';}
+    var h='<h3 class="inv-gt" style="margin-top:4px">Équipements</h3><div class="inv-grille">'+INV_EQ.map(function(g){return '<div><div class="pl inv-t">'+esc(g[0])+'</div>'+g[1].map(function(it){var v=iv.eq[it];return '<div class="inv-l '+(v===true?'ok':v===false?'ko':'')+'"><span class="inv-n">'+esc(it)+'</span>'+pm(it,v,'data-inveq')+'</div>';}).join('')+'</div>';}).join('')+'</div>';
+    h+='<h3 class="inv-gt">Quantités selon la capacité</h3><div class="inv-grille">'+INV_QTE.map(function(g){return '<div><div class="pl inv-t">'+esc(g[0])+'</div>'+g[1].map(function(r){var q=qteInv(r,c),p=iv.qte[r[0]],st=(p==null||p==='')?'':(num(p)>=q?'ok':'ko');
+      return '<div class="inv-l '+st+'"><span class="inv-n">'+esc(r[0])+'</span><span class="inv-q">il faut '+q+'</span><input type="number" min="0" inputmode="numeric" data-invqte="'+esc(r[0])+'" value="'+esc(p==null?'':p)+'" placeholder="nb"></div>';}).join('')+'</div>';}).join('')+'</div>';
+    h+='<h3 class="inv-gt">Consommables</h3><div class="inv-2col">'+INV_CO.map(function(col){return '<div>'+col.map(function(g){return '<div class="pl inv-t">'+esc(g[0])+'</div>'+g[1].map(function(it){var k=g[0]+'|'+it,p=iv.co[k];
+      return '<div class="inv-l '+(p==='assez'?'ok':p==='racheter'?'ko':'')+'"><span class="inv-n">'+esc(it)+'</span><span class="inv-b"><button type="button" class="btn xs'+(p==='assez'?' primary':'')+'" data-invco="assez" data-it="'+esc(k)+'">Assez</button><button type="button" class="btn xs'+(p==='racheter'?' danger':'')+'" data-invco="racheter" data-it="'+esc(k)+'">À racheter</button></span></div>';}).join('');}).join('')+'</div>';}).join('')+'</div>';
     function li(t){return t.length?'<ul>'+t.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<p class="note">Rien à acheter.</p>';}
-    h+='<div class="card inv-achats"><h3 style="margin:0 0 10px">Liste d’achats</h3><div class="inv-grille"><div><div class="pl inv-t">Équipement à acheter</div>'+li(ach.eq)+'</div><div><div class="pl inv-t">Courses consommables</div>'+li(ach.co)+'</div></div>'+
+    h+='<div class="card inv-achats"><h3 style="margin:0 0 10px">Liste d’achats</h3><div class="inv-2col"><div><div class="pl inv-t">Équipement à acheter</div>'+li(ach.eq)+'</div><div><div class="pl inv-t">Courses consommables</div>'+li(ach.co)+'</div></div>'+
       '<div class="actions" style="margin-top:12px"><button type="button" class="btn primary sm" id="inv-taches">Mettre la liste dans « À faire »</button></div></div>';
     el.innerHTML=h;}
   var invT=null;function sauverInv(b,iv){iv.maj=todayISO();var nv=Object.assign({},b,{inv:iv});clearTimeout(invT);invT=setTimeout(function(){save('biens',nv).catch(function(){});},600);var k=S.biens.indexOf(b);if(k>=0)S.biens[k]=nv;}
+  function rendreSurPlace(){var y=window.scrollY;renderInv();window.scrollTo(0,y);}
   $('inv-biens').addEventListener('click',function(e){var bt=e.target.closest('[data-invbien]');if(!bt)return;INV.bien=bt.dataset.invbien;try{localStorage.setItem('ms_inv',INV.bien);}catch(x){}renderInv();window.scrollTo(0,0);});
   $('inv').addEventListener('change',function(e){var b=byId(S.biens,INV.bien);if(!b)return;var iv=invDe(b),t=e.target;
-    if(t.dataset.invart){iv.conso[t.dataset.invart]=t.value===''?'':num(t.value);sauverInv(b,iv);var y=window.scrollY;renderInv();window.scrollTo(0,y);}});
-  $('inv').addEventListener('click',function(e){var b=byId(S.biens,INV.bien);if(!b)return;
-    if(e.target.closest('[data-invfiche]')){ouvrirLogement(b.id);return;}
-    var bt=e.target.closest('[data-invmob]');
-    var bc=e.target.closest('[data-invco]');if(bc){var iv2=invDe(b),k=bc.dataset.it;iv2.conso[k]=iv2.conso[k]===bc.dataset.invco?'':bc.dataset.invco;sauverInv(b,iv2);var y2=window.scrollY;renderInv();window.scrollTo(0,y2);return;}
-    if(bt){var iv=invDe(b),it=bt.dataset.it,v=bt.dataset.invmob==='1';iv.mobilier[it]=(iv.mobilier[it]===v)?null:v;if(iv.mobilier[it]===null)delete iv.mobilier[it];sauverInv(b,iv);var y=window.scrollY;renderInv();window.scrollTo(0,y);return;}
+    if(t.dataset.invqte){iv.qte[t.dataset.invqte]=t.value===''?'':num(t.value);sauverInv(b,iv);rendreSurPlace();}});
+  $('inv').addEventListener('click',function(e){var b=byId(S.biens,INV.bien);if(!b)return;var iv=invDe(b);
+    var be=e.target.closest('[data-inveq]');if(be){var k=be.dataset.it,v=be.dataset.inveq==='1';if(iv.eq[k]===v)delete iv.eq[k];else iv.eq[k]=v;sauverInv(b,iv);rendreSurPlace();return;}
+    var bc=e.target.closest('[data-invco]');if(bc){var k2=bc.dataset.it;if(iv.co[k2]===bc.dataset.invco)delete iv.co[k2];else iv.co[k2]=bc.dataset.invco;sauverInv(b,iv);rendreSurPlace();return;}
     if(e.target.id==='inv-taches'){var m=manquesInv(b);if(!nbManques(b)){toast('Rien ne manque, bravo');return;}
       var ex=S.taches.filter(function(t){return t.logement===b.id&&t.inventaire&&statutTache(t)!=='fait';})[0];
       var doc=Object.assign(ex||{id:uid('t'),statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:'',logement:b.id,inventaire:true,date:todayISO()},{titre:'Compléter l’inventaire : '+(b.nom||'logement'),notes:m.join('\n')});
