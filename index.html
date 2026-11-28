@@ -2119,15 +2119,23 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
     function li(t){return t.length?'<ul>'+t.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<p class="note">Rien à acheter.</p>';}
     h+='<div class="card inv-achats"><h3 style="margin:0 0 10px">Liste d’achats</h3><div class="inv-2col"><div><div class="pl inv-t">Équipement à acheter</div>'+li(ach.eq)+'</div><div><div class="pl inv-t">Courses consommables</div>'+li(ach.co)+'</div></div>'+
       '<div class="actions" style="margin-top:12px"><button type="button" class="btn primary sm" id="inv-taches">Mettre la liste dans « À faire »</button></div></div>';
+    var tl=tachesDuLogement(b.id);
+    h+='<div class="card inv-achats"><h3 style="margin:0 0 10px;color:var(--rouge)">À faire dans le logement</h3>'+
+      '<div style="display:flex;gap:8px;margin-bottom:10px"><input id="inv-ajout" placeholder="Ce que tu remarques : ampoule grillée, joint à refaire…" autocomplete="off" style="flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px"><button type="button" class="btn primary sm" id="inv-ajouter">Ajouter</button></div>'+
+      '<div class="list">'+(tl.length?tl.map(taskRow).join(''):'<div class="empty" style="padding:8px">Rien à faire pour ce logement.</div>')+'</div></div>';
     el.innerHTML=h;}
+  function ajouterAFaire(){var b=byId(S.biens,INV.bien),f=$('inv-ajout');if(!b||!f)return;var t=f.value.trim();if(!t){f.focus();return;}
+    save('taches',{id:uid('t'),titre:t,statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:b.proprietaire||'',logement:b.id,date:'',notes:''}).then(function(){toast('Ajouté dans « À faire » de '+(b.nom||'ce logement'));rendreSurPlace();var f2=$('inv-ajout');if(f2)f2.focus();}).catch(function(){});f.value='';}
   var invT=null;function sauverInv(b,iv){iv.maj=todayISO();var nv=Object.assign({},b,{inv:iv});clearTimeout(invT);invT=setTimeout(function(){save('biens',nv).catch(function(){});},600);var k=S.biens.indexOf(b);if(k>=0)S.biens[k]=nv;}
   function rendreSurPlace(){var y=window.scrollY;renderInv();window.scrollTo(0,y);}
+  $('inv').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='inv-ajout'){e.preventDefault();ajouterAFaire();}});
   $('inv-biens').addEventListener('click',function(e){var bt=e.target.closest('[data-invbien]');if(!bt)return;INV.bien=bt.dataset.invbien;try{localStorage.setItem('ms_inv',INV.bien);}catch(x){}renderInv();window.scrollTo(0,0);});
   $('inv').addEventListener('change',function(e){var b=byId(S.biens,INV.bien);if(!b)return;var iv=invDe(b),t=e.target;
     if(t.dataset.invqte){iv.qte[t.dataset.invqte]=t.value===''?'':num(t.value);sauverInv(b,iv);rendreSurPlace();}});
   $('inv').addEventListener('click',function(e){var b=byId(S.biens,INV.bien);if(!b)return;var iv=invDe(b);
     var be=e.target.closest('[data-inveq]');if(be){var k=be.dataset.it,v=be.dataset.inveq==='1';if(iv.eq[k]===v)delete iv.eq[k];else iv.eq[k]=v;sauverInv(b,iv);rendreSurPlace();return;}
     var bc=e.target.closest('[data-invco]');if(bc){var k2=bc.dataset.it;if(iv.co[k2]===bc.dataset.invco)delete iv.co[k2];else iv.co[k2]=bc.dataset.invco;sauverInv(b,iv);rendreSurPlace();return;}
+    if(e.target.id==='inv-ajouter'){ajouterAFaire();return;}
     if(e.target.id==='inv-taches'){var m=manquesInv(b);if(!nbManques(b)){toast('Rien ne manque, bravo');return;}
       var ex=S.taches.filter(function(t){return t.logement===b.id&&t.inventaire&&statutTache(t)!=='fait';})[0];
       var doc=Object.assign(ex||{id:uid('t'),statut:'a_faire',fait:false,importante:false,repeter:'',categorie:'logements',contact:'',logement:b.id,inventaire:true,date:todayISO()},{titre:'Compléter l’inventaire : '+(b.nom||'logement'),notes:m.join('\n')});
@@ -2287,7 +2295,7 @@ input.pin{letter-spacing:.5em;font-size:20px;text-align:center;max-width:160px}
   document.addEventListener('change',function(e){var t=e.target;if(!t.dataset||t.dataset.budm===undefined)return;var B=(S.params.budget&&typeof S.params.budget==='object')?JSON.parse(JSON.stringify(S.params.budget)):{};var a=B[budAn]||[];while(a.length<12)a.push('');a[Number(t.dataset.budm)]=t.value===''?'':num(t.value);B[budAn]=a;S.params.budget=B;saveParams();});
   document.addEventListener('click',function(e){var b=e.target.closest('[data-budan]');if(b){budAn+=Number(b.dataset.budan);renderBudget();}});
   function renderFinance(){renderBiens();renderCA();renderCharges();renderBudget();}
-  function renderAll(){renderEvenements();renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();}
+  function renderAll(){renderEvenements();renderEntreprise();renderLogements();renderTachesLog();renderLiens();renderVocaux();renderHome();renderContacts();renderPlan();renderKanban();renderRelances();renderTasks();renderFinance();renderConso();renderIdees();renderPosts();if(COURANT==='inventaire'){var ae=document.activeElement;if(!(ae&&ae.closest&&ae.closest('#inv')&&/INPUT/.test(ae.tagName)))rendreSurPlace();}}
 
   /* ===== Données : fichier donnees/crm.json du dépôt privé, lu et écrit via l'API GitHub ===== */
   var DEPOT={proprio:'concinafanny-rgb',nom:'maison-solina',chemin:'donnees/crm.json',branche:'main'};
